@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -541,6 +541,13 @@
       display: flex; align-items: center; justify-content: center;
       border: 1px solid var(--gold); color: var(--gold);
       font-size: 1.25rem;
+      border-radius: 50%;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .why-card:hover .why-icon {
+      background: rgba(201, 169, 98, 0.1);
+      border-color: var(--gold);
+      transform: scale(1.08) rotate(5deg);
     }
     .why-card h3 {
       font-size: 0.9375rem; color: var(--white); margin-bottom: 0.5rem;
@@ -892,27 +899,54 @@
 
       <div class="why-grid">
         <div class="why-card reveal">
-          <div class="why-icon" aria-hidden="true">?</div>
+          <div class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:1.65rem; height:1.65rem;">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 11 2 2 4-4"/>
+            </svg>
+          </div>
           <h3>Trusted by Customers</h3>
           <p>Families and investors who value quality, clarity, and long-term trust in every purchase.</p>
         </div>
         <div class="why-card reveal reveal-delay-1">
-          <div class="why-icon" aria-hidden="true">?</div>
+          <div class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:1.65rem; height:1.65rem;">
+              <path d="m9 11 3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
           <h3>Transparent Transactions</h3>
           <p>Clear pricing, RERA-registered projects, and documentation you can verify at every step.</p>
         </div>
         <div class="why-card reveal reveal-delay-2">
-          <div class="why-icon" aria-hidden="true">?</div>
+          <div class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:1.65rem; height:1.65rem;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
           <h3>Prime Locations</h3>
           <p>Strategic land acquisition in high-growth corridors with proven appreciation potential.</p>
         </div>
         <div class="why-card reveal reveal-delay-1">
-          <div class="why-icon" aria-hidden="true">?</div>
+          <div class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:1.65rem; height:1.65rem;">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
           <h3>Experienced Team</h3>
           <p>Architects, engineers, and legal experts with decades of combined industry expertise.</p>
         </div>
         <div class="why-card reveal reveal-delay-2">
-          <div class="why-icon" aria-hidden="true">?</div>
+          <div class="why-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:1.65rem; height:1.65rem;">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+            </svg>
+          </div>
           <h3>Customer Support</h3>
           <p>Dedicated relationship managers from booking through handover and beyond.</p>
         </div>
