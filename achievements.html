@@ -551,39 +551,41 @@
     /* Achievements */
     .achievements {
       background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
-      padding: 5rem 1.5rem;
+      padding: 6rem 1.5rem;
     }
     .achievements-grid {
       display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
-      margin-top: 3rem;
+      margin-top: 4rem;
     }
-    .achievement-item { text-align: center; }
+    .achievement-item { 
+      text-align: center; 
+      padding: 3.5rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      transition: transform 0.4s var(--transition), border-color 0.4s var(--transition), box-shadow 0.4s var(--transition);
+    }
+    .achievement-item:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201, 169, 98, 0.5);
+      box-shadow: 0 20px 40px rgba(201, 169, 98, 0.2);
+    }
     .achievement-num {
       font-family: var(--font-display);
-      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-size: clamp(2.75rem, 5vw, 4rem);
       font-weight: 700; color: var(--gold);
-      line-height: 1;
+      line-height: 1.1;
+      text-shadow: 0 4px 20px rgba(201, 169, 98, 0.25);
+      margin-bottom: 0.75rem;
     }
     .achievement-num span { font-size: 0.5em; color: var(--gold-light); }
     .achievement-item p {
-      margin-top: 0.75rem; font-size: 0.875rem;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+      margin-top: 0.75rem; font-size: 0.8125rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--white);
+      font-weight: 600;
     }
-    .awards-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-      margin-top: 4rem;
-    }
-    .award-card {
-      padding: 2rem; text-align: center;
-      border: 1px solid rgba(201, 169, 98, 0.2);
-      background: rgba(5, 13, 26, 0.5);
-    }
-    .award-card .award-year {
-      font-size: 0.75rem; color: var(--gold); letter-spacing: 0.15em;
-      margin-bottom: 0.5rem;
-    }
-    .award-card h4 { color: var(--white); font-size: 1rem; font-weight: 600; }
-    .award-card p { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.5rem; }
 
     /* Testimonials */
     .testimonials { background: var(--navy-deep); overflow: hidden; }
@@ -841,7 +843,7 @@
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .gallery-item.wide { grid-column: span 1; aspect-ratio: 1; }
       .gallery-item.tall { grid-row: span 1; }
-      .awards-row { grid-template-columns: 1fr; }
+
       .contact-grid { grid-template-columns: 1fr; }
     }
   </style>
@@ -907,26 +909,7 @@
           <div class="achievement-num">Many More</div>
           <p>Awards &amp; Recognitions</p>
         </div>
-      </div>
-
-      <div class="awards-row">
-        <div class="award-card reveal">
-          <p class="award-year">—</p>
-          <h4>Your Award Title</h4>
-          <p>Organization / year — update when ready</p>
-        </div>
-        <div class="award-card reveal reveal-delay-1">
-          <p class="award-year">—</p>
-          <h4>Your Award Title</h4>
-          <p>Organization / year — update when ready</p>
-        </div>
-        <div class="award-card reveal reveal-delay-2">
-          <p class="award-year">—</p>
-          <h4>Your Award Title</h4>
-          <p>Organization / year — update when ready</p>
-        </div>
-      </div>
-    </div>
+      </div></div>
   </section>
   </main>
   <footer class="site-footer">
