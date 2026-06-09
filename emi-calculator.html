@@ -718,13 +718,13 @@
         // Update WhatsApp CTA
         const waText = `Hello ARK Infra! I have calculated my loan details using the website EMI calculator:
 
-ðŸ¡ Property Value: ₹${formatIndianNumber(propertyPrice)}
-ðŸ’° Down Payment: ₹${formatIndianNumber(downPayment)}
-ðŸ¤ Loan Principal: ₹${formatIndianNumber(loanPrincipal)}
-ðŸ“ˆ Interest Rate: ${annualInterest}%
-â± Loan Tenure: ${tenureYears} Years
+Property Value: ₹${formatIndianNumber(propertyPrice)}
+Down Payment: ₹${formatIndianNumber(downPayment)}
+Loan Principal: ₹${formatIndianNumber(loanPrincipal)}
+Interest Rate: ${annualInterest}%
+Loan Tenure: ${tenureYears} Years
 -----------------------------------
-ðŸ“Š Estimated Monthly EMI: ₹${formatIndianNumber(Math.round(emi))}/month
+Estimated Monthly EMI: ₹${formatIndianNumber(Math.round(emi))}/month
 
 I would like to enquire about plots and site visit options.`;
         whatsappCta.href = `https://wa.me/918125547801?text=${encodeURIComponent(waText)}`;

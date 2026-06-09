@@ -357,109 +357,539 @@
         });
       });
 
-      // Handle WhatsApp Redirection if parameters exist
+      // Setup dynamic CSS styles for simulated call UI
+      const callStyle = document.createElement('style');
+      callStyle.textContent = `
+        .whatsapp-redirect-container {
+          background: rgba(37, 211, 102, 0.08);
+          border: 1px solid rgba(37, 211, 102, 0.25);
+          border-radius: 6px;
+          padding: 1.75rem;
+          margin-bottom: 2rem;
+          max-width: 38rem;
+          width: 100%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .whatsapp-redirect-title {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.65rem;
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          color: #25D366;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        .whatsapp-redirect-title svg {
+          width: 24px;
+          height: 24px;
+          fill: currentColor;
+        }
+        .whatsapp-redirect-text {
+          font-size: 0.9rem;
+          color: var(--text-body);
+          margin-bottom: 1.25rem;
+          line-height: 1.5;
+        }
+        .whatsapp-manual-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #25D366;
+          color: #fff;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-size: 0.75rem;
+          padding: 0.75rem 1.5rem;
+          border-radius: 2px;
+          transition: background 0.3s, transform 0.3s;
+        }
+        .whatsapp-manual-btn:hover {
+          background: #20ba5a;
+          transform: translateY(-2px);
+          color: #fff;
+        }
+        .call-notification {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          background: rgba(201, 169, 98, 0.08);
+          border: 1px solid rgba(201, 169, 98, 0.2);
+          border-radius: 4px;
+          padding: 1rem 1.5rem;
+          margin: 1.5rem auto 2.5rem;
+          max-width: 38rem;
+          width: 100%;
+          color: var(--gold-light);
+          font-size: 0.9rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          animation: fadeInCall 0.5s ease-out;
+        }
+        .pulse-dot {
+          width: 8px;
+          height: 8px;
+          background: #25d366;
+          border-radius: 50%;
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+          animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+          0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+          70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
+          100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .call-overlay {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          z-index: 11000;
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+          transform: translateY(40px);
+        }
+        .call-overlay.active {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        .call-box {
+          background: rgba(10, 22, 40, 0.95);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(201, 169, 98, 0.3);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+          border-radius: 16px;
+          width: 320px;
+          padding: 2.25rem 1.5rem;
+          text-align: center;
+        }
+        @media (max-width: 480px) {
+          .call-overlay {
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            justify-content: center;
+            align-items: center;
+          }
+          .call-box {
+            width: 100%;
+            max-width: 100%;
+            padding: 1.75rem 1rem;
+          }
+          .call-header {
+            margin-bottom: 1.5rem;
+          }
+          .call-avatar {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 0.75rem;
+          }
+          .call-header h2 {
+            font-size: 1.4rem;
+          }
+        }
+        .call-header {
+          margin-bottom: 2.5rem;
+        }
+        .call-avatar {
+          width: 88px;
+          height: 88px;
+          border-radius: 50%;
+          background: var(--white);
+          border: 3px solid var(--gold);
+          margin: 0 auto 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .call-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          padding: 4px;
+        }
+        .call-avatar::before {
+          content: "";
+          position: absolute;
+          inset: -6px;
+          border-radius: 50%;
+          border: 2px solid var(--gold);
+          opacity: 0;
+          animation: ripple-pulse 2s infinite;
+        }
+        @keyframes ripple-pulse {
+          0% { transform: scale(0.95); opacity: 1; }
+          100% { transform: scale(1.35); opacity: 0; }
+        }
+        .call-header h2 {
+          font-family: var(--font-display);
+          font-size: 1.6rem;
+          color: var(--white);
+          margin-bottom: 0.4rem;
+          letter-spacing: 0.02em;
+        }
+        .call-header p {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .call-actions {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin-top: 1rem;
+          gap: 1.5rem;
+        }
+        .call-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.65rem;
+          color: var(--white);
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.2s;
+          outline: none;
+          flex: 1;
+        }
+        .call-btn:hover {
+          transform: scale(1.08);
+        }
+        .call-btn svg {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          padding: 15px;
+          color: var(--white);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          transition: box-shadow 0.3s;
+        }
+        .call-btn.decline svg {
+          background: #ea4335;
+        }
+        .call-btn.decline:hover svg {
+          box-shadow: 0 4px 20px rgba(234, 67, 53, 0.6);
+        }
+        .call-btn.accept svg {
+          background: #34a853;
+          animation: phone-shake 0.8s infinite alternate;
+        }
+        .call-btn.accept:hover svg {
+          box-shadow: 0 4px 20px rgba(52, 168, 83, 0.6);
+        }
+        @keyframes phone-shake {
+          0% { transform: rotate(-8deg); }
+          100% { transform: rotate(8deg); }
+        }
+        .call-box.active-call .call-btn.accept {
+          display: none;
+        }
+        .call-box.active-call .call-avatar::before {
+          animation: none;
+        }
+        .call-box.active-call .call-actions {
+          justify-content: center;
+        }
+        @keyframes fadeInCall {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `;
+      document.head.appendChild(callStyle);
+
+      // Create the call overlay element immediately so it's always ready
+      const callOverlay = document.createElement('div');
+      callOverlay.id = 'callOverlay';
+      callOverlay.className = 'call-overlay';
+      callOverlay.setAttribute('role', 'dialog');
+      callOverlay.setAttribute('aria-modal', 'true');
+      callOverlay.setAttribute('aria-label', 'Incoming Call from ARK Infra');
+      callOverlay.innerHTML = `
+        <div class="call-box" id="callBox">
+          <div class="call-header">
+            <div class="call-avatar">
+              <img src="images/logo.jpg" alt="ARK Infra Logo">
+            </div>
+            <h2>ARK Infra Hotline</h2>
+            <p id="callStatus">Incoming Call...</p>
+          </div>
+          <div class="call-actions">
+            <button class="call-btn decline" id="declineBtn" aria-label="Decline Call">
+              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-1.01.49-1.94 1.15-2.77 1.93-.21.2-.52.28-.82.16L.51 14.7a.992.992 0 0 1-.51-.83c0-.26.1-.51.27-.68C3.76 9.62 7.63 7.5 12 7.5s8.24 2.12 11.73 5.69c.18.17.27.42.27.68 0 .37-.2.71-.51.83l-2.74 1.11c-.3.12-.61.04-.82-.16-.83-.78-1.76-1.44-2.77-1.93-.33-.16-.56-.51-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+              <span id="declineText">Decline</span>
+            </button>
+            <button class="call-btn accept" id="acceptBtn" aria-label="Accept Call">
+              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.57a.987.987 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+              <span>Accept</span>
+            </button>
+          </div>
+          <div id="callCaption" style="margin-top: 1.5rem; color: var(--gold-light); font-size: 0.95rem; line-height: 1.5; font-style: italic; display: none; padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(201,169,98,0.1);"></div>
+        </div>
+      `;
+      document.body.appendChild(callOverlay);
+
+      // Sound generator logic using real iPhone ringtone audio
+      let ringtoneAudio = null;
+
+      function startRinging() {
+        try {
+          ringtoneAudio = new Audio('iphone-ringtone.m4a');
+          ringtoneAudio.loop = true;
+          ringtoneAudio.play().catch(e => {
+            console.error('Ringtone playback blocked or failed:', e);
+          });
+        } catch (e) {
+          console.error('Ringtone error:', e);
+        }
+      }
+
+      // Preload voice assets immediately
+      const enAudio = new Audio('announcement.mp3');
+      const teAudio = new Audio('announcement-te.mp3');
+
+      function stopRinging() {
+        if (ringtoneAudio) {
+          ringtoneAudio.pause();
+          ringtoneAudio = null;
+        }
+      }
+
+      function playHangupSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          
+          osc.frequency.value = 425;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.setValueAtTime(0, ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime + 0.6);
+          gain.gain.setValueAtTime(0, ctx.currentTime + 0.9);
+          
+          osc.start();
+          osc.stop(ctx.currentTime + 1.1);
+          setTimeout(() => ctx.close(), 1500);
+        } catch(e) {}
+      }
+
+      let callTimerInterval = null;
+      let callSeconds = 0;
+      let activeCallAudio = null;
+
+      function formatCallTime(secs) {
+        const m = Math.floor(secs / 60).toString().padStart(2, '0');
+        const s = (secs % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      }
+
+      function triggerSimulatedCall() {
+        const callNotification = document.getElementById('callNotification');
+        if (callNotification) {
+          callNotification.style.display = 'none';
+        }
+        callOverlay.classList.add('active');
+        startRinging();
+      }
+
+      // Handle WhatsApp Redirect URL
+      let whatsappUrl = '';
       const params = new URLSearchParams(window.location.search);
-      if (params.get('whatsapp') === 'true') {
+      const isWhatsAppRedirect = params.get('whatsapp') === 'true';
+
+      if (isWhatsAppRedirect) {
         const name = params.get('name') || '';
         const email = params.get('email') || '';
         const phone = params.get('phone') || '';
         const message = params.get('message') || '';
+        const whatsappText = `Hello ARK Infra! I am ${name}. I just filled out the contact form on your website. Here are my details:\n\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`;
+        whatsappUrl = `https://wa.me/918125547801?text=${encodeURIComponent(whatsappText)}`;
+      } else {
+        whatsappUrl = 'https://wa.me/918125547801';
+      }
 
-        const whatsappText = `Hello ARK Infra! I am ${name}. I just filled out the contact form on your website. Here are my details:\n\n✉ Email: ${email}\n☎ Phone: ${phone}\nðŸ’¬ Message: ${message}`;
-        const whatsappUrl = `https://wa.me/918125547801?text=${encodeURIComponent(whatsappText)}`;
+      function hangUpCall() {
+        stopRinging();
+        if (activeCallAudio) {
+          activeCallAudio.pause();
+          activeCallAudio = null;
+        }
+        if (callTimerInterval) {
+          clearInterval(callTimerInterval);
+          callTimerInterval = null;
+        }
+        playHangupSound();
+        callOverlay.classList.remove('active');
+        setTimeout(() => {
+          document.getElementById('callBox').classList.remove('active-call');
+          document.getElementById('callStatus').textContent = 'Incoming Call...';
+          document.getElementById('declineText').textContent = 'Decline';
+          document.getElementById('callCaption').style.display = 'none';
+          
+          // Redirect to WhatsApp after the call ends
+          const finalUrl = whatsappUrl || 'https://wa.me/918125547801';
+          window.location.href = finalUrl;
+        }, 500);
+      }
 
+      document.getElementById('declineBtn').addEventListener('click', hangUpCall);
+      
+      document.getElementById('acceptBtn').addEventListener('click', () => {
+        stopRinging();
+        
+        const callBox = document.getElementById('callBox');
+        const callStatus = document.getElementById('callStatus');
+        const declineText = document.getElementById('declineText');
+        const callCaption = document.getElementById('callCaption');
+        
+        callBox.classList.add('active-call');
+        declineText.textContent = 'End Call';
+        
+        callSeconds = 0;
+        callStatus.textContent = '00:00';
+        callTimerInterval = setInterval(() => {
+          callSeconds++;
+          callStatus.textContent = formatCallTime(callSeconds);
+        }, 1000);
+        
+        const announceTextEn = "Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.";
+        const announceTextTe = "ఆర్క్ ఇన్ఫ్రాను సంప్రదించినందుకు ధన్యవాదాలు: కలలను నిర్మించడం మరియు మైలురాళ్లను సృష్టించడం. మా సీఈఓ శ్రీ కోనతాల హనుమంతరావు (అరుణ్) మరియు మా సపోర్ట్ టీమ్ 24 గంటల్లో మిమ్మల్ని సంప్రదిస్తారు.";
+        
+        // Show English caption first
+        callCaption.textContent = announceTextEn;
+        callCaption.style.display = 'block';
+        
+        // Play English voice announcement first
+        activeCallAudio = enAudio;
+        activeCallAudio.play().catch(e => {
+          console.error("Audio playback error:", e);
+          setTimeout(hangUpCall, 15000);
+        });
+        
+        // When English announcement ends, play Telugu announcement sequentially
+        activeCallAudio.onended = function () {
+          callCaption.textContent = announceTextTe;
+          
+          activeCallAudio = teAudio;
+          activeCallAudio.play().catch(e => {
+            console.error("Audio playback error:", e);
+            setTimeout(hangUpCall, 10000);
+          });
+          
+          // Hang up call 2 seconds after Telugu voice message ends
+          activeCallAudio.onended = function () {
+            setTimeout(hangUpCall, 2000);
+          };
+        };
+      });
+
+      const mainSection = document.querySelector('.support-section') || document.querySelector('.thankyou-section');
+      const thankyouDesc = document.querySelector('.thankyou-desc');
+
+      if (isWhatsAppRedirect) {
         // Create a beautiful redirect container
-        const mainSection = document.querySelector('.thankyou-section');
         if (mainSection) {
           const redirectBanner = document.createElement('div');
           redirectBanner.className = 'whatsapp-redirect-container';
-          
-          // CSS style block for the banner
-          const style = document.createElement('style');
-          style.textContent = `
-            .whatsapp-redirect-container {
-              background: rgba(37, 211, 102, 0.08);
-              border: 1px solid rgba(37, 211, 102, 0.25);
-              border-radius: 6px;
-              padding: 1.75rem;
-              margin-bottom: 2rem;
-              max-width: 38rem;
-              width: 100%;
-              text-align: center;
-              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-              animation: slideDown 0.5s ease-out;
-            }
-            @keyframes slideDown {
-              from { transform: translateY(-20px); opacity: 0; }
-              to { transform: translateY(0); opacity: 1; }
-            }
-            .whatsapp-redirect-title {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 0.65rem;
-              font-family: var(--font-display);
-              font-size: 1.5rem;
-              color: #25D366;
-              font-weight: 600;
-              margin-bottom: 0.5rem;
-            }
-            .whatsapp-redirect-title svg {
-              width: 24px;
-              height: 24px;
-              fill: currentColor;
-            }
-            .whatsapp-redirect-text {
-              font-size: 0.9rem;
-              color: var(--text-body);
-              margin-bottom: 1.25rem;
-              line-height: 1.5;
-            }
-            .whatsapp-manual-btn {
-              display: inline-flex;
-              align-items: center;
-              gap: 0.5rem;
-              background: #25D366;
-              color: #fff;
-              font-weight: 600;
-              text-transform: uppercase;
-              letter-spacing: 0.08em;
-              font-size: 0.75rem;
-              padding: 0.75rem 1.5rem;
-              border-radius: 2px;
-              transition: background 0.3s, transform 0.3s;
-            }
-            .whatsapp-manual-btn:hover {
-              background: #20ba5a;
-              transform: translateY(-2px);
-              color: #fff;
-            }
-          `;
-          document.head.appendChild(style);
-
           redirectBanner.innerHTML = `
             <div class="whatsapp-redirect-title">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Opening WhatsApp chat...
             </div>
             <div class="whatsapp-redirect-text">
-              We are connecting you to WhatsApp with your details prefilled. 
+              We are connecting you to WhatsApp in a new tab. 
               Please click "Send" in WhatsApp to start chatting with our team!
             </div>
-            <a href="${whatsappUrl}" class="whatsapp-manual-btn">
+            <a href="${whatsappUrl}" target="_blank" class="whatsapp-manual-btn">
               <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor; margin-right: 5px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               Chat on WhatsApp Now
             </a>
           `;
-          
-          // Insert the banner at the top of the thankyou section
           mainSection.insertBefore(redirectBanner, mainSection.firstChild);
         }
 
-        // Redirect after a 2.5 second delay
-        setTimeout(() => {
-          window.location.href = whatsappUrl;
-        }, 2500);
+        // Create the countdown notification banner
+        const callNotification = document.createElement('div');
+        callNotification.id = 'callNotification';
+        callNotification.className = 'call-notification';
+        callNotification.innerHTML = `
+          <span class="pulse-dot"></span>
+          <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... Keep this tab open!</span>
+        `;
+        if (thankyouDesc) {
+          thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
+        } else if (mainSection) {
+          mainSection.appendChild(callNotification);
+        }
+
+        // Start 5 seconds auto countdown
+        let timeLeft = 5;
+        const countdownEl = document.getElementById('callCountdown');
+        const countdownInterval = setInterval(() => {
+          timeLeft--;
+          if (countdownEl) {
+            countdownEl.textContent = timeLeft;
+          }
+          if (timeLeft <= 0) {
+            clearInterval(countdownInterval);
+            triggerSimulatedCall();
+          }
+        }, 1000);
+
+      } else {
+        // DIRECT OPEN / TEST MODE
+        // Show a premium developer/testing bar at the top of the thankyou card
+        const testNotification = document.createElement('div');
+        testNotification.id = 'callNotification';
+        testNotification.className = 'call-notification';
+        testNotification.style.background = 'rgba(201, 169, 98, 0.12)';
+        testNotification.style.border = '1px dashed var(--gold)';
+        testNotification.innerHTML = `
+          <span class="pulse-dot" style="background: var(--gold); box-shadow: 0 0 0 0 rgba(201,169,98,0.4); animation: none;"></span>
+          <span style="color: var(--white); font-weight: 500;">Direct Test Mode: You opened this file directly.</span>
+          <button id="startTestCallBtn" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.75rem; letter-spacing: 0.08em; border-radius: 4px; box-shadow: none; margin-left: auto;">
+            📞 Test Hotline Call
+          </button>
+        `;
+
+        if (thankyouDesc) {
+          thankyouDesc.parentNode.insertBefore(testNotification, thankyouDesc.nextSibling);
+        } else if (mainSection) {
+          mainSection.appendChild(testNotification);
+        }
+
+        // Click handler triggers the call immediately and bypasses autoplay restriction
+        const startTestCallBtn = document.getElementById('startTestCallBtn');
+        if (startTestCallBtn) {
+          startTestCallBtn.addEventListener('click', () => {
+            testNotification.style.display = 'none';
+            triggerSimulatedCall();
+          });
+        }
       }
     })();
   </script>
