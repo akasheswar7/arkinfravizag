@@ -847,13 +847,16 @@
           mainSection.insertBefore(redirectBanner, mainSection.firstChild);
         }
 
-        // Create the countdown notification banner
+        // Create the hotline notification banner
         const callNotification = document.createElement('div');
         callNotification.id = 'callNotification';
         callNotification.className = 'call-notification';
         callNotification.innerHTML = `
           <span class="pulse-dot"></span>
-          <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... (Click anywhere on the page to enable sound)</span>
+          <span style="color: var(--white); font-weight: 500;">Hotline: You have an incoming demonstration call from CEO & Support!</span>
+          <button id="startCallBtn" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.75rem; letter-spacing: 0.08em; border-radius: 4px; box-shadow: none; margin-left: auto;">
+            📞 Receive Call
+          </button>
         `;
         if (thankyouDesc) {
           thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
@@ -861,19 +864,14 @@
           mainSection.appendChild(callNotification);
         }
 
-        // Start 5 seconds auto countdown
-        let timeLeft = 5;
-        const countdownEl = document.getElementById('callCountdown');
-        const countdownInterval = setInterval(() => {
-          timeLeft--;
-          if (countdownEl) {
-            countdownEl.textContent = timeLeft;
-          }
-          if (timeLeft <= 0) {
-            clearInterval(countdownInterval);
+        // Click handler triggers the call immediately and bypasses autoplay restriction
+        const startCallBtn = document.getElementById('startCallBtn');
+        if (startCallBtn) {
+          startCallBtn.addEventListener('click', () => {
+            callNotification.style.display = 'none';
             triggerSimulatedCall();
-          }
-        }, 1000);
+          });
+        }
 
       } else {
         // DIRECT OPEN / TEST MODE
