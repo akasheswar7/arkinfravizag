@@ -651,59 +651,18 @@
       `;
       document.body.appendChild(callOverlay);
 
-      // Programmatic synthesized ringtone using Web Audio API (guaranteed to work on all browsers/devices)
-      let ringtoneInterval = null;
-      let audioCtx = null;
+      // Sound generator logic using real iPhone ringtone audio
+      let ringtoneAudio = null;
 
       function startRinging() {
         try {
-          if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          }
-          if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-          }
-
-          function playOneRing() {
-            if (!audioCtx || audioCtx.state === 'closed') return;
-
-            const osc1 = audioCtx.createOscillator();
-            const osc2 = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-
-            osc1.type = 'sine';
-            osc1.frequency.value = 400; // 400 Hz
-
-            osc2.type = 'sine';
-            osc2.frequency.value = 450; // 450 Hz
-
-            osc1.connect(gainNode);
-            osc2.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-
-            const now = audioCtx.currentTime;
-
-            // Double ring pattern (Indian/UK style: 0.4s ring, 0.2s pause, 0.4s ring)
-            gainNode.gain.setValueAtTime(0, now);
-            gainNode.gain.linearRampToValueAtTime(0.08, now + 0.05);
-            gainNode.gain.setValueAtTime(0.08, now + 0.45);
-            gainNode.gain.linearRampToValueAtTime(0, now + 0.5);
-
-            gainNode.gain.linearRampToValueAtTime(0.08, now + 0.7);
-            gainNode.gain.setValueAtTime(0.08, now + 1.1);
-            gainNode.gain.linearRampToValueAtTime(0, now + 1.15);
-
-            osc1.start(now);
-            osc2.start(now);
-
-            osc1.stop(now + 1.25);
-            osc2.stop(now + 1.25);
-          }
-
-          playOneRing();
-          ringtoneInterval = setInterval(playOneRing, 3000);
+          ringtoneAudio = new Audio('iphone-ringtone.m4a');
+          ringtoneAudio.loop = true;
+          ringtoneAudio.play().catch(e => {
+            console.error('Ringtone playback blocked or failed:', e);
+          });
         } catch (e) {
-          console.error("Synthesized ringtone error:", e);
+          console.error('Ringtone error:', e);
         }
       }
 
@@ -712,6 +671,7 @@
       const teAudio = new Audio('announcement-te.mp3');
 
       // Unlock browser audio restrictions on first user interaction
+      let audioCtx = null;
       const unlockAudio = () => {
         document.removeEventListener('click', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
@@ -726,9 +686,9 @@
       document.addEventListener('touchstart', unlockAudio);
 
       function stopRinging() {
-        if (ringtoneInterval) {
-          clearInterval(ringtoneInterval);
-          ringtoneInterval = null;
+        if (ringtoneAudio) {
+          ringtoneAudio.pause();
+          ringtoneAudio = null;
         }
       }
 
