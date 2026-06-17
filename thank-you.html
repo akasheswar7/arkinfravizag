@@ -278,7 +278,7 @@
     <div class="success-icon">✓</div>
     <h1 class="thankyou-title">Thank You!</h1>
     <p class="thankyou-desc">
-      Thank you for contacting ARK Infra Vizag. Our CEO will contact you within 24 hours.
+      Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.
     </p>
 
     <h2 class="flyer-heading">ARK Infra Price List Flyer</h2>
@@ -670,6 +670,20 @@
       const enAudio = new Audio('announcement.mp3');
       const teAudio = new Audio('announcement-te.mp3');
 
+      // Unlock browser audio restrictions on first user interaction
+      const unlockAudio = () => {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          if (ctx.state === 'suspended') {
+            ctx.resume();
+          }
+        } catch (e) {}
+      };
+      document.addEventListener('click', unlockAudio);
+      document.addEventListener('touchstart', unlockAudio);
+
       function stopRinging() {
         if (ringtoneAudio) {
           ringtoneAudio.pause();
@@ -777,8 +791,8 @@
           callStatus.textContent = formatCallTime(callSeconds);
         }, 1000);
         
-        const announceTextEn = "Thank you for contacting ARK Infra Vizag. Our CEO will contact you within 24 hours.";
-        const announceTextTe = "ARK Infra Vizag \u0C28\u0C41 \u0C38\u0C02\u0C2A\u0C4D\u0C30\u0C26\u0C3F\u0C02\u0C1A\u0C3F\u0C28\u0C02\u0C26\u0C41\u0C15\u0C41 \u0C27\u0C28\u0C4D\u0C2F\u0C35\u0C3E\u0C26\u0C3E\u0C32\u0C41. \u0C2E\u0C3E CEO \u0C2E\u0C3F\u0C2E\u0C4D\u0C2E\u0C32\u0C4D\u0C28\u0C3F 24 \u0C17\u0C02\u0C1F\u0C32\u0C4D\u0C32\u0C4B \u0C38\u0C02\u0C2A\u0C4D\u0C30\u0C26\u0C3F\u0C38\u0C4D\u0C24\u0C3E\u0C30\u0C41.";
+        const announceTextEn = "Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.";
+        const announceTextTe = "ఆర్క్ ఇన్ఫ్రాను సంప్రదించినందుకు ధన్యవాదాలు: కలలను నిర్మించడం మరియు మైలురాళ్లను సృష్టించడం. మా సీఈఓ శ్రీ కోనతాల హనుమంతరావు (అరుణ్) మరియు మా సపోర్ట్ టీమ్ 24 గంటల్లో మిమ్మల్ని సంప్రదిస్తారు.";
         
         // Show English caption first
         callCaption.textContent = announceTextEn;
@@ -839,7 +853,7 @@
         callNotification.className = 'call-notification';
         callNotification.innerHTML = `
           <span class="pulse-dot"></span>
-          <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... Keep this tab open!</span>
+          <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... (Click anywhere on the page to enable sound)</span>
         `;
         if (thankyouDesc) {
           thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
