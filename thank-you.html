@@ -847,33 +847,54 @@
           mainSection.insertBefore(redirectBanner, mainSection.firstChild);
         }
 
-        // Create the countdown notification banner
-        const callNotification = document.createElement('div');
-        callNotification.id = 'callNotification';
-        callNotification.className = 'call-notification';
-        callNotification.innerHTML = `
-          <span class="pulse-dot"></span>
-          <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... Keep this tab open!</span>
+        // Create success modal dynamically to unlock audio context on click
+        const successModal = document.createElement('div');
+        successModal.className = 'modal open';
+        successModal.id = 'successModal';
+        successModal.style.cssText = 'display: flex; align-items: center; justify-content: center; z-index: 11000; position: fixed; inset: 0; background: rgba(5, 13, 26, 0.9);';
+        successModal.innerHTML = `
+          <div class="modal-content" style="text-align: center; max-width: 400px; padding: 2.5rem; background: var(--navy); border: 1px solid rgba(201, 169, 98, 0.3); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <div style="font-size: 3.5rem; color: var(--gold); margin-bottom: 1rem; line-height: 1;">✓</div>
+            <h3 style="font-family: var(--font-display); font-size: 2rem; color: var(--white); margin-bottom: 0.5rem;">Message Sent!</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.5;">Your inquiry has been successfully sent to our CEO.</p>
+            <button id="closeSuccessBtn" class="btn btn-primary" style="width: 100%; border-radius: 4px;">Proceed</button>
+          </div>
         `;
-        if (thankyouDesc) {
-          thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
-        } else if (mainSection) {
-          mainSection.appendChild(callNotification);
-        }
+        document.body.appendChild(successModal);
 
-        // Start 5 seconds auto countdown
-        let timeLeft = 5;
-        const countdownEl = document.getElementById('callCountdown');
-        const countdownInterval = setInterval(() => {
-          timeLeft--;
-          if (countdownEl) {
-            countdownEl.textContent = timeLeft;
+        // Click handler to start countdown and play ringtone with sound
+        document.getElementById('closeSuccessBtn').addEventListener('click', () => {
+          successModal.classList.remove('open');
+          successModal.style.display = 'none';
+
+          // Create the countdown notification banner
+          const callNotification = document.createElement('div');
+          callNotification.id = 'callNotification';
+          callNotification.className = 'call-notification';
+          callNotification.innerHTML = `
+            <span class="pulse-dot"></span>
+            <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... Keep this tab open!</span>
+          `;
+          if (thankyouDesc) {
+            thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
+          } else if (mainSection) {
+            mainSection.appendChild(callNotification);
           }
-          if (timeLeft <= 0) {
-            clearInterval(countdownInterval);
-            triggerSimulatedCall();
-          }
-        }, 1000);
+
+          // Start 5 seconds auto countdown
+          let timeLeft = 5;
+          const countdownEl = document.getElementById('callCountdown');
+          const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (countdownEl) {
+              countdownEl.textContent = timeLeft;
+            }
+            if (timeLeft <= 0) {
+              clearInterval(countdownInterval);
+              triggerSimulatedCall();
+            }
+          }, 1000);
+        });
 
       } else {
         // DIRECT OPEN / TEST MODE
