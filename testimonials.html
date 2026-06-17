@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -326,7 +327,7 @@
       gap: 0.5rem;
     }
     .showcase-bullets li::before {
-      content: "?";
+      content: "\2713";
       color: var(--gold);
       font-weight: bold;
     }
@@ -766,7 +767,7 @@
       line-height: 1.4;
     }
     .highlights-col ul li::before {
-      content: "?";
+      content: "\2726";
       color: var(--gold-light);
       font-size: 0.75rem;
       margin-top: 0.15rem;
@@ -894,47 +895,32 @@
         <div class="testimonial-track" id="testimonialTrack">
           <div class="testimonial-slide">
             <div class="testimonial-card">
-              <div class="testimonial-stars" aria-hidden="true">?????</div>
-              <blockquote>Quality construction, clear communication, and a smooth buying experience — exactly what we hoped for from a premium developer.</blockquote>
+              <blockquote>"We don't just facilitate property investments &mdash; we help families, businesses, and investors secure their future with confidence and trust."</blockquote>
               <div class="testimonial-author">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=112&q=80" alt="" width="56" height="56">
+                <img src="images/md-ramakrishna.jpg" alt="Adari Ramakrishna" width="56" height="56">
                 <div>
-                  <strong>Residential Client</strong>
-                  <span>Homeowner · Add real name when ready</span>
+                  <strong>Adari Ramakrishna</strong>
+                  <span>Managing Director, ARK Infra &nbsp;|&nbsp; <a href="md-details.html" style="color: var(--gold); text-decoration: underline; text-underline-offset: 4px;">Read Bio</a></span>
                 </div>
               </div>
             </div>
           </div>
           <div class="testimonial-slide">
             <div class="testimonial-card">
-              <div class="testimonial-stars" aria-hidden="true">?????</div>
-              <blockquote>Professional team, transparent paperwork, and confidence in the investment — highly recommended for commercial and residential buyers.</blockquote>
+              <blockquote>"Every project we deliver is a promise fulfilled &mdash; built on integrity, driven by excellence, and designed for the future."</blockquote>
               <div class="testimonial-author">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=112&q=80" alt="" width="56" height="56">
+                <img src="images/ceo-arun.png" alt="Konathala Hanumantharao (Arun)" width="56" height="56">
                 <div>
-                  <strong>Investor</strong>
-                  <span>Commercial property · Add real name when ready</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="testimonial-slide">
-            <div class="testimonial-card">
-              <div class="testimonial-stars" aria-hidden="true">?????</div>
-              <blockquote>From site visit to handover, the ARK Infra team was responsive, respectful, and committed to delivering on their promises.</blockquote>
-              <div class="testimonial-author">
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=112&q=80" alt="" width="56" height="56">
-                <div>
-                  <strong>Plot Owner</strong>
-                  <span>Residential layout · Add real name when ready</span>
+                  <strong>Konathala Hanumantharao (Arun)</strong>
+                  <span>CEO, ARK Infra &nbsp;|&nbsp; <a href="ceo-details.html" style="color: var(--gold); text-decoration: underline; text-underline-offset: 4px;">Read Bio</a></span>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="slider-controls">
-          <button class="slider-btn" id="prevSlide" aria-label="Previous testimonial">?</button>
-          <button class="slider-btn" id="nextSlide" aria-label="Next testimonial">?</button>
+          <button class="slider-btn" id="prevSlide" aria-label="Previous testimonial">&larr;</button>
+          <button class="slider-btn" id="nextSlide" aria-label="Next testimonial">&rarr;</button>
         </div>
         <div class="slider-dots" id="sliderDots" role="tablist"></div>
       </div>
@@ -949,11 +935,13 @@
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">

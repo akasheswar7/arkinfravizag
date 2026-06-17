@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -326,7 +327,7 @@
       gap: 0.5rem;
     }
     .showcase-bullets li::before {
-      content: "?";
+      content: "\2713";
       color: var(--gold);
       font-weight: bold;
     }
@@ -541,6 +542,13 @@
       display: flex; align-items: center; justify-content: center;
       border: 1px solid var(--gold); color: var(--gold);
       font-size: 1.25rem;
+      border-radius: 50%;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .why-card:hover .why-icon {
+      background: rgba(201, 169, 98, 0.1);
+      border-color: var(--gold);
+      transform: scale(1.08) rotate(5deg);
     }
     .why-card h3 {
       font-size: 0.9375rem; color: var(--white); margin-bottom: 0.5rem;
@@ -766,7 +774,7 @@
       line-height: 1.4;
     }
     .highlights-col ul li::before {
-      content: "?";
+      content: "\2726";
       color: var(--gold-light);
       font-size: 0.75rem;
       margin-top: 0.15rem;
@@ -888,19 +896,21 @@
     <div class="container">
       <p class="section-label reveal">About Us</p>
       <h2 class="section-title reveal">A Legacy of Trust &amp; Excellence</h2>
-      <p class="section-desc reveal">Founded with a vision to redefine urban living, ARK Infra has grown into one of India's most respected real estate brands — delivering landmark projects that stand the test of time.</p>
+      <p class="section-desc reveal">Founded with a vision to redefine urban living, ARK Infra has grown into one of India's most respected real estate brands &mdash; delivering landmark projects that stand the test of time.</p>
 
       <div class="about-grid">
-        <div class="about-image reveal">
-          <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80" alt="ARK Infra luxury residential tower" width="800" height="1000" loading="lazy">
-          <div class="about-image-accent" aria-hidden="true"></div>
+        <div>
+          <div class="about-image reveal">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80" alt="ARK Infra luxury residential tower" width="800" height="1000" loading="lazy">
+            <div class="about-image-accent" aria-hidden="true"></div>
+          </div>
           <div class="about-stats-inline">
             <div class="stat-box">
               <strong>20+</strong>
               <span>Years of Excellence</span>
             </div>
             <div class="stat-box">
-              <strong>50+</strong>
+              <strong>1K+</strong>
               <span>Projects &amp; Developments</span>
             </div>
           </div>
@@ -909,23 +919,47 @@
           <div class="vision-mission reveal reveal-delay-1">
             <div class="vm-card">
               <h3>Our Vision</h3>
-              <p>To be the most trusted and admired real estate company in India and beyond — creating sustainable communities where families thrive and businesses flourish.</p>
+              <p>To be the most trusted and admired real estate company in India and beyond &mdash; creating sustainable communities where families thrive and businesses flourish.</p>
             </div>
             <div class="vm-card">
               <h3>Our Mission</h3>
-              <p>To deliver premium properties with transparent processes, prime locations, and uncompromising quality — exceeding expectations at every stage of the customer journey.</p>
+              <p>To deliver premium properties with transparent processes, prime locations, and uncompromising quality &mdash; exceeding expectations at every stage of the customer journey.</p>
             </div>
           </div>
           <p class="reveal reveal-delay-2" style="margin-top:2rem;color:var(--text-muted);font-size:0.9375rem;">
-            ARK Infra is building a portfolio of luxury apartments, residential layouts, and commercial properties — guided by transparent processes, prime locations, and a customer-first approach. Add your company story and cities here when ready.
+            ARK Infra is building a portfolio of luxury apartments, residential layouts, and commercial properties &mdash; guided by transparent processes, prime locations, and a customer-first approach. Add your company story and cities here when ready.
           </p>
         </div>
       </div>
 
       <blockquote class="ceo-message reveal">
-        <p>Real estate is not merely about buildings — it is about building trust. At ARK Infra, we have spent nearly two decades earning the confidence of thousands of families. Every handshake, every document, every delivery date matters. That is the standard we hold ourselves to — today and for generations to come.</p>
-        <footer>— Konathala Hanumantharao (Arun), CEO, ARK Infra &nbsp;|&nbsp; <a href="ceo-details.html" style="color: var(--gold); text-decoration: underline; text-underline-offset: 4px; font-size: 0.8125rem; font-family: var(--font-sans); letter-spacing: 0.05em; text-transform: uppercase;">Read Bio</a></footer>
+        <p>Real estate is not merely about buildings &mdash; it is about building trust. At ARK Infra, we have spent nearly two decades earning the confidence of thousands of families. Every handshake, every document, every delivery date matters. That is the standard we hold ourselves to &mdash; today and for generations to come.</p>
+        <footer>&mdash; Konathala Hanumantharao (Arun), CEO, ARK Infra &nbsp;|&nbsp; <a href="ceo-details.html" style="color: var(--gold); text-decoration: underline; text-underline-offset: 4px; font-size: 0.8125rem; font-family: var(--font-sans); letter-spacing: 0.05em; text-transform: uppercase;">Read Bio</a></footer>
       </blockquote>
+
+      <!-- Leadership Team Section -->
+      <div style="margin-top: 5rem;">
+        <p class="section-label reveal">Leadership Team</p>
+        <h2 class="section-title reveal">Our Leaders</h2>
+        <p class="section-desc reveal">Meet the visionaries directing ARK Infra's path toward premium real estate developments.</p>
+        
+        <div class="hero-cards-grid">
+          <!-- Card 1: Managing Director -->
+          <a href="md-details.html" class="hero-card reveal" id="mdCard">
+            <img class="profile-photo" src="images/md-ramakrishna.jpg" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
+            <p class="profile-role">Managing Director</p>
+            <h2 class="profile-name">Adari Ramakrishna</h2>
+            <p class="profile-quote">"We don't just facilitate property investments-we help families, businesses, and investors secure their future with confidence and trust."</p>
+          </a>
+          <!-- Card 2: CEO -->
+          <a href="ceo-details.html" class="hero-card reveal reveal-delay-1" id="ceoCard">
+            <img class="profile-photo" src="images/ceo-arun.png" alt="Konathala Hanumantharao (Arun), CEO, ARK Infra" width="140" height="140">
+            <p class="profile-role">CEO</p>
+            <h2 class="profile-name">Konathala Hanumantharao (Arun)</h2>
+            <p class="profile-quote">"Every project we deliver is a promise fulfilled-built on integrity, driven by excellence, and designed for the future."</p>
+          </a>
+        </div>
+      </div>
     </div>
   </section>
   </main>
@@ -933,15 +967,18 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="index.html" class="logo">
+          
           <img class="logo-badge-img" src="images/logo.jpg" alt="ARK Infra Logo" aria-hidden="true">
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">

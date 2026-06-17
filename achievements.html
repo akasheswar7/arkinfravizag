@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -326,7 +327,7 @@
       gap: 0.5rem;
     }
     .showcase-bullets li::before {
-      content: "?";
+      content: "\2713";
       color: var(--gold);
       font-weight: bold;
     }
@@ -799,7 +800,7 @@
       line-height: 1.4;
     }
     .highlights-col ul li::before {
-      content: "?";
+      content: "\2726";
       color: var(--gold-light);
       font-size: 0.75rem;
       margin-top: 0.15rem;
@@ -944,7 +945,7 @@
               <path d="M8 6h2v2H8zm6 0h2v2h-2zm-6 4h2v2H8zm6 0h2v2h-2z"/>
             </svg>
           </div>
-          <div class="achievement-num">50+</div>
+          <div class="achievement-num">1K+</div>
           <p>Projects Completed</p>
         </div>
         <div class="achievement-item reveal reveal-delay-2">
@@ -983,11 +984,13 @@
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">

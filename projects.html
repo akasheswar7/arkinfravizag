@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -1249,11 +1250,13 @@
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">
@@ -1398,6 +1401,40 @@
         modal.addEventListener('click', function (e) { if (e.target === modal) closeModals(); });
       });
                   const projectsData = [
+        {
+          title: "Gokulavanam",
+          desc: "A Premium Open Plot Venture near Anakapalle",
+          image: "images/gokulavanam.jpg",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "TLP Approved", "Anakapalle"],
+          layoutFeatures: [
+            "TLP Approved Layout",
+            "Loan Facility Available",
+            "Clear Title & Documentation",
+            "Wide Roads & Well Planned Layout",
+            "Pollution-Free Environment",
+            "Ideal for Investment & Dream Home"
+          ],
+          projectHighlights: [
+            "TLP Approved Layout",
+            "Plot Price: \u20B912,500/- Per Sq. Yard",
+            "Special Payment Plan: 1st Payment \u20B91 Lakh, 2nd Payment \u20B92 Lakh",
+            "Limited Period Offer!",
+            "Contact: 81792 42683"
+          ],
+          locationHighlights: [
+            "Near Anakapalle, Andhra Pradesh",
+            "200 Meters from Collector Bungalow",
+            "3 KM from NH-16",
+            "6 KM from Collector Office",
+            "7 KM from Anakapalle",
+            "17 KM from Gajuwaka",
+            "Adjacent to 400 Acres Auto Nagar SEZ",
+            "Near MIMSE Park",
+            "Rapidly Developing Investment Corridor"
+          ]
+        },
         {
           title: "Alakananda - Highway City",
           desc: "VMRDA & AP RERA Approved Layout at Tallapalem",

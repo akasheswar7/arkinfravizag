@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="About ARK Infra. Explore our premium gated layouts, ongoing developments, quality standards, and interact with our AI Assistant.">
-  <title>About ARK Infra | Showcase &amp; AI Assistant</title>
+  <title>Support Center & AI Assistant | ARK Infra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -541,6 +542,13 @@
       display: flex; align-items: center; justify-content: center;
       border: 1px solid var(--gold); color: var(--gold);
       font-size: 1.25rem;
+      border-radius: 50%;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .why-card:hover .why-icon {
+      background: rgba(201, 169, 98, 0.1);
+      border-color: var(--gold);
+      transform: scale(1.08) rotate(5deg);
     }
     .why-card h3 {
       font-size: 0.9375rem; color: var(--white); margin-bottom: 0.5rem;
@@ -827,6 +835,8 @@
       .projects-grid { grid-template-columns: repeat(2, 1fr); }
       .why-grid { grid-template-columns: repeat(2, 1fr); }
       .achievements-grid { grid-template-columns: repeat(2, 1fr); }
+      .hero-cards-grid { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
+      .hero-card { max-width: 28rem; width: 100%; text-align: left; }
     }
     @media (max-width: 768px) {
       .nav-desktop { display: none; }
@@ -843,6 +853,60 @@
       .gallery-item.tall { grid-row: span 1; }
       .awards-row { grid-template-columns: 1fr; }
       .contact-grid { grid-template-columns: 1fr; }
+    }
+  
+    /* Leadership cards styling */
+    .hero-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 56rem;
+      margin: 3rem auto 0;
+      align-items: stretch;
+    }
+    .hero-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .hero-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201, 169, 98, 0.55);
+      box-shadow: 0 10px 30px rgba(201, 169, 98, 0.15);
+    }
+    .hero-card::before {
+      content: ""; position: absolute; top: 0; left: 0;
+      width: 4rem; height: 4px; background: var(--gold);
+    }
+    .profile-photo {
+      width: 120px; height: 120px; border-radius: 50%;
+      object-fit: cover; object-position: center 20%;
+      border: 3px solid var(--gold);
+      margin-bottom: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .profile-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem; color: var(--white); margin-bottom: 0.25rem;
+    }
+    .profile-role {
+      font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem;
+    }
+    .profile-quote {
+      font-size: 0.9375rem; color: var(--text-muted); font-style: italic;
+      line-height: 1.7; border-left: 2px solid var(--gold);
+      padding-left: 1rem;
+      margin-top: auto;
     }
   </style>
 </head>
@@ -892,6 +956,31 @@
       <!-- The chatbot JS will inject the full chat window structure here -->
     </div>
 
+    <!-- Leadership Team Section -->
+    <div class="container" style="margin-top: 5rem; margin-bottom: 5rem;">
+      <p class="section-label reveal">Leadership Team</p>
+      <h2 class="section-title reveal">Our Leaders</h2>
+      <p class="section-desc reveal">Meet the visionaries directing ARK Infra's path toward premium real estate developments.</p>
+      
+      <div class="hero-cards-grid">
+        <!-- Card 1: Managing Director -->
+        <a href="md-details.html" class="hero-card reveal" id="mdCard">
+          <img class="profile-photo" src="images/md-ramakrishna.jpg" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
+          <p class="profile-role">Managing Director</p>
+          <h2 class="profile-name">Adari Ramakrishna</h2>
+          <p class="profile-quote">"We don't just facilitate property investments-we help families, businesses, and investors secure their future with confidence and trust."</p>
+        </a>
+        <!-- Card 2: CEO -->
+        <a href="ceo-details.html" class="hero-card reveal reveal-delay-1" id="ceoCard">
+          <img class="profile-photo" src="images/ceo-arun.png" alt="Konathala Hanumantharao (Arun), CEO, ARK Infra" width="140" height="140">
+          <p class="profile-role">CEO</p>
+          <h2 class="profile-name">Konathala Hanumantharao (Arun)</h2>
+          <p class="profile-quote">"Every project we deliver is a promise fulfilled-built on integrity, driven by excellence, and designed for the future."</p>
+        </a>
+      </div>
+    </div>
+    </div>
+
   </main>
 
     <footer class="site-footer">
@@ -902,11 +991,13 @@
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">

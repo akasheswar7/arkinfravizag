@@ -31,7 +31,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -104,10 +104,11 @@
       background: rgba(5, 13, 26, 0.98);
       padding: 2rem 1.5rem;
       transform: translateX(100%);
-      transition: transform var(--transition);
+      transition: transform var(--transition), visibility var(--transition);
       z-index: 999;
+      visibility: hidden;
     }
-    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
     .nav-mobile a {
       display: block; padding: 1rem 0;
       font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -892,22 +893,23 @@
 
       <div class="contact-grid">
         <div style="flex-grow: 1;">
-          <p style="margin-bottom:1.5rem;color:var(--text-muted);font-size:0.9375rem;">Contact <strong style="color:var(--white);">Konathala Hanumantharao (Arun)</strong>, CEO — call or WhatsApp on the same number.</p>
+          <p style="margin-bottom:1.5rem;color:var(--text-muted);font-size:0.9375rem;">Contact <strong style="color:var(--white);">Konathala Hanumantharao (Arun)</strong>, CEO - call or WhatsApp on the same number.</p>
           <div style="display:flex; flex-direction:column; gap:1.5rem;">
-            <p>☎ CEO Phone: <a href="tel:+918125547801" style="color:var(--gold); text-decoration:underline;">+91 81255 47801</a></p>
-            <p>✉ Email: <a href="mailto:arkinfraproperties@gmail.com" style="color:var(--gold); text-decoration:underline;">arkinfraproperties@gmail.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+918125547801" style="color:var(--gold); text-decoration:underline;">+91 81255 47801</a></p>
+            <p><strong>Email:</strong> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" style="color:var(--gold); text-decoration:underline;">arkinfraproperties@gmail.com</a></p>
           </div>
         </div>
         <!-- 
-          Web3Forms Integration
-          Submits messages directly to your email without exposing it.
-          To activate, replace the access_key value below with your free Web3Forms access key.
+          FormSubmit.co Integration
+          Submits messages directly to your email.
         -->
-        <form class="contact-form reveal reveal-delay-1" id="contactForm" action="https://api.web3forms.com/submit" method="POST" aria-label="Contact form">
-          <!-- Web3Forms Configurations -->
-          <input type="hidden" name="access_key" id="web3FormsKey" value="ce803366-11d8-4a3e-abff-0b9032be4144">
-          <input type="hidden" name="subject" value="New Contact Inquiry - ARK Infra">
-          <input type="hidden" name="redirect" id="formRedirect" value="https://ark-infra-7.netlify.app/thank-you.html">
+        <form class="contact-form reveal reveal-delay-1" id="contactForm" action="https://formsubmit.co/arkinfraproperties@gmail.com" method="POST" aria-label="Contact form">
+          <!-- FormSubmit Configurations -->
+          <input type="hidden" name="_next" id="formRedirect" value="https://ark-infra-7.netlify.app/thank-you.html">
+          <input type="hidden" name="_subject" value="New Contact Inquiry - ARK Infra">
+          <input type="hidden" name="_autoresponse" value="Thank you for contacting ARK Infra Vizag. Our CEO will contact you within 24 hours.">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
           <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
           <input type="text" name="name" placeholder="Your Name" required autocomplete="name">
@@ -928,11 +930,13 @@
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
-        <div class="footer-social" aria-label="Social media">
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">in</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">ig</a>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">fb</a>
-          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">yt</a>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
         </div>
       </div>
       <div class="footer-col">
@@ -1046,57 +1050,47 @@
       document.querySelectorAll('.modal').forEach(function (modal) {
         modal.addEventListener('click', function (e) { if (e.target === modal) closeModals(); });
       });
-      // Configure Web3Forms dynamic redirect page
-      const redirectInput = document.getElementById('formRedirect');
-      if (redirectInput) {
-        if (window.location.protocol.startsWith('http')) {
-          redirectInput.value = window.location.origin + '/thank-you.html';
-        } else {
-          redirectInput.value = 'https://ark-infra-7.netlify.app/thank-you.html';
-        }
-      }
 
-      // Intercept contact form submission, send via fetch, and redirect to thank-you page with query params
+      // Configure FormSubmit.co dynamic redirect page on submission to include query parameters for WhatsApp
       const contactForm = document.getElementById('contactForm');
       if (contactForm) {
         contactForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          
-          const submitBtn = contactForm.querySelector('button[type="submit"]');
-          const originalBtnText = submitBtn.textContent;
-          submitBtn.textContent = 'Sending...';
-          submitBtn.disabled = true;
-
           const formData = new FormData(contactForm);
+          const name = formData.get('name') || '';
+          const email = formData.get('email') || '';
+          const phone = formData.get('phone') || '';
+          const message = formData.get('message') || '';
 
-          fetch(contactForm.action, {
-            method: 'POST',
-            body: formData
-          })
-          .then(response => {
-            if (response.ok) {
-              const name = formData.get('name') || '';
-              const email = formData.get('email') || '';
-              const phone = formData.get('phone') || '';
-              const message = formData.get('message') || '';
-              
-              // Redirect to thank-you page with form values for WhatsApp prefill
-              const thankYouUrl = `thank-you.html?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&message=${encodeURIComponent(message)}&whatsapp=true`;
-              window.location.href = thankYouUrl;
-            } else {
-              alert('Could not submit form. Please check details and try again.');
-              submitBtn.textContent = originalBtnText;
-              submitBtn.disabled = false;
-            }
-          })
-          .catch(error => {
-            console.error('Error submitting form:', error);
-            alert('A network error occurred. Please try again.');
-            submitBtn.textContent = originalBtnText;
-            submitBtn.disabled = false;
-          });
+          // Determine the base redirect URL dynamically based on current page path (so it works on subpaths like GitHub Pages)
+          const currentUrl = window.location.href.split('?')[0].split('#')[0];
+          const nextBaseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1) + 'thank-you.html';
+          
+          // Construct next URL with form values for WhatsApp prefill
+          const nextUrlWithParams = `${nextBaseUrl}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&message=${encodeURIComponent(message)}&whatsapp=true`;
+          
+          const redirectInput = document.getElementById('formRedirect');
+          if (redirectInput) {
+            redirectInput.value = nextUrlWithParams;
+          }
+
+          const submitBtn = contactForm.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            submitBtn.textContent = 'Sending...';
+            // Delay disabling slightly so the browser registers the submit action
+            setTimeout(function () { submitBtn.disabled = true; }, 1);
+          }
+
+          if (window.location.protocol === 'file:') {
+            // FormSubmit does not support file:/// protocol. 
+            // Bypass submission and redirect directly to simulated local thank-you page.
+            e.preventDefault();
+            setTimeout(function () {
+              window.location.href = nextUrlWithParams;
+            }, 600);
+          }
         });
       }
+
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') {
           closeModals();
