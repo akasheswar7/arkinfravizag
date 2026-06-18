@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -587,7 +587,7 @@
     .award-card p { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.5rem; }
 
     /* Testimonials */
-    .testimonials { background: var(--navy-deep); overflow: hidden; }
+    .testimonials { background: var(--navy-deep); overflow: hidden; width: 100%; }
     .testimonial-slider {
       margin-top: 3rem; position: relative;
     }
@@ -830,6 +830,11 @@
       .achievements-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 768px) {
+      .reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
       .nav-desktop { display: none; }
       .menu-toggle { display: flex; }
       .footer-grid { grid-template-columns: 1fr; }
