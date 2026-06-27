@@ -210,8 +210,16 @@
 
   <script>
     // If already logged in, redirect straight to dashboard
-    if (sessionStorage.getItem('ceo_username') && sessionStorage.getItem('ceo_password')) {
-      window.location.href = 'ceo-admin';
+    if (sessionStorage.getItem('ceo_logged_in') === 'true') {
+      window.location.href = 'ceo-admin.html';
+    }
+
+    async function sha256(message) {
+      const msgBuffer = new TextEncoder().encode(message);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex;
     }
 
     async function handleLogin(event) {
@@ -232,35 +240,20 @@
       btnLoader.style.display = 'block';
 
       try {
-        const response = await fetch('/api/update', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: usernameInput,
-            password: passwordInput,
-            verifyOnly: true
-          })
-        });
+        const hashedPassword = await sha256(passwordInput);
 
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          // Store credentials securely in session storage for admin dashboard auth
-          sessionStorage.setItem('ceo_username', usernameInput);
-          sessionStorage.setItem('ceo_password', passwordInput);
-          
-          // Redirect to dashboard (support Vercel clean URL: ceo-admin)
-          window.location.href = 'ceo-admin';
+        // Client-side SHA-256 password hash comparison for security
+        if (usernameInput === 'ARUNARK' && hashedPassword === '2bbeb0bf10678d5688bfa3e760a554a6fa0105d592e24aa67098e351c91b7661') {
+          sessionStorage.setItem('ceo_logged_in', 'true');
+          window.location.href = 'ceo-admin.html';
         } else {
-          errorBox.textContent = data.error || "Authentication failed. Access denied.";
+          errorBox.textContent = "Invalid username or password. Access denied.";
           errorBox.style.display = 'block';
           resetBtn();
         }
       } catch (err) {
         console.error(err);
-        errorBox.textContent = "Unable to connect to server. Please try again later.";
+        errorBox.textContent = "An error occurred during authentication.";
         errorBox.style.display = 'block';
         resetBtn();
       }

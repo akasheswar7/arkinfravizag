@@ -337,12 +337,13 @@
 
   <script>
     // 1. Session Auth Protection
-    const usernameInput = sessionStorage.getItem('ceo_username');
-    const passwordInput = sessionStorage.getItem('ceo_password');
+    const isLoggedIn = sessionStorage.getItem('ceo_logged_in') === 'true';
 
-    if (!usernameInput || !passwordInput) {
-      window.location.href = 'ceo-login';
+    if (!isLoggedIn) {
+      window.location.href = 'ceo-login.html';
     }
+
+    const KV_URL = 'https://kvdb.io/K6K7vQv7u2R1Q2m8Q2p7Q1/arkinfra_active_update';
 
     // 2. Fetch Active Update on Load
     window.addEventListener('DOMContentLoaded', fetchActiveUpdate);
@@ -352,22 +353,22 @@
       const textarea = document.getElementById('updateText');
       
       try {
-        const response = await fetch('/api/update');
-        const data = await response.json();
+        const response = await fetch(KV_URL);
+        if (response.status === 404) {
+          activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
+          activeTextEl.classList.add('empty');
+          return;
+        }
+        const text = await response.text();
         
-        if (response.ok) {
-          const text = data.update || "";
-          if (text) {
-            activeTextEl.textContent = `"${text}"`;
-            activeTextEl.classList.remove('empty');
-            textarea.value = text;
-            updateCount();
-          } else {
-            activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
-            activeTextEl.classList.add('empty');
-          }
+        if (text && text.trim()) {
+          activeTextEl.textContent = `"${text.trim()}"`;
+          activeTextEl.classList.remove('empty');
+          textarea.value = text.trim();
+          updateCount();
         } else {
-          activeTextEl.textContent = "Error loading current announcement status.";
+          activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
+          activeTextEl.classList.add('empty');
         }
       } catch (err) {
         console.error(err);
@@ -402,19 +403,10 @@
       }
 
       try {
-        const response = await fetch('/api/update', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            username: usernameInput,
-            password: passwordInput,
-            update: updateValue
-          })
+        const response = await fetch(KV_URL, {
+          method: 'PUT',
+          body: updateValue
         });
-
-        const data = await response.json();
 
         if (response.ok) {
           showNotification(
@@ -427,11 +419,11 @@
           }
           fetchActiveUpdate();
         } else {
-          showNotification(data.error || "Failed to process request. Please login again.", "error");
+          showNotification("Failed to update database. Please try again.", "error");
         }
       } catch (err) {
         console.error(err);
-        showNotification("Connection lost. Failed to contact update server.", "error");
+        showNotification("Connection lost. Failed to contact update database.", "error");
       } finally {
         publishBtn.disabled = false;
         clearBtn.disabled = false;
@@ -452,15 +444,12 @@
       notifyBox.className = `notify notify-${type}`;
       notifyBox.textContent = msg;
       notifyBox.style.display = 'block';
-      
-      // Auto scroll to top of card to make notification visible
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function handleSignOut() {
-      sessionStorage.removeItem('ceo_username');
-      sessionStorage.removeItem('ceo_password');
-      window.location.href = '/';
+      sessionStorage.removeItem('ceo_logged_in');
+      window.location.href = 'ceo-login.html';
     }
   </script>
 </body>
