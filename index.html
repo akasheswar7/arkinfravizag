@@ -964,10 +964,212 @@
       font-size: 0.9rem;
       line-height: 1.5;
     }
+
+    /* Premium Preloader Styles */
+    .logo-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #ffffff;
+      z-index: 999999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+    }
+
+    .logo-preloader.fade-out {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-100%);
+    }
+
+    .preloader-ring {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border: 1px solid rgba(201, 169, 98, 0.05);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preloader-ring::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid transparent;
+      border-top-color: var(--gold);
+      border-bottom-color: var(--gold-dark);
+      border-radius: 50%;
+      animation: preloaderRotateRing 3.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+    }
+
+    .preloader-logo-container {
+      position: relative;
+      width: 250px;
+      height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: scale(0.85);
+      filter: blur(15px);
+      animation: preloaderRevealLogo 2.5s cubic-bezier(0.25, 1, 0.5, 1) 0.6s forwards;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .preloader-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .preloader-logo-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -150%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4) 30%,
+        rgba(201, 169, 98, 0.6) 50%,
+        rgba(255, 255, 255, 0.4) 70%,
+        transparent
+      );
+      transform: skewX(-25deg);
+      animation: preloaderLightSweep 1.8s cubic-bezier(0.3, 0.8, 0.3, 1) 2.5s forwards;
+    }
+
+    .preloader-progress-container {
+      width: 180px;
+      height: 3px;
+      background: rgba(201, 169, 98, 0.1);
+      margin-top: 1.5rem;
+      border-radius: 2px;
+      overflow: hidden;
+      opacity: 0;
+      animation: preloaderFadeInProgress 1s ease 1s forwards;
+    }
+
+    .preloader-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      border-radius: 2px;
+      animation: preloaderFillProgress 2.5s cubic-bezier(0.65, 0, 0.35, 1) 1.2s forwards;
+    }
+
+    .preloader-tagline-text {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--navy-deep);
+      opacity: 0;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      animation: preloaderFadeInTagline 1.5s ease 2.2s forwards;
+    }
+
+    @keyframes preloaderRotateRing {
+      0% {
+        transform: rotate(0deg) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(360deg) scale(1.05);
+        opacity: 0;
+      }
+    }
+
+    @keyframes preloaderRevealLogo {
+      0% {
+        opacity: 0;
+        transform: scale(0.85);
+        filter: blur(15px);
+      }
+      30% {
+        opacity: 0.5;
+        filter: blur(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0px);
+      }
+    }
+
+    @keyframes preloaderLightSweep {
+      0% {
+        left: -150%;
+      }
+      100% {
+        left: 150%;
+      }
+    }
+
+    @keyframes preloaderFadeInProgress {
+      to { opacity: 1; }
+    }
+
+    @keyframes preloaderFillProgress {
+      to { width: 100%; }
+    }
+
+    @keyframes preloaderFadeInTagline {
+      to { opacity: 0.7; }
+    }
+
+    /* Skip/Lock Utilities */
+    .preloader-skipped .logo-preloader {
+      display: none !important;
+    }
+    .preloader-active-lock body {
+      overflow: hidden !important;
+      height: 100vh !important;
+    }
   </style>
   <link rel="stylesheet" href="chatbot.css">
 </head>
 <body>
+  <!-- Inline script to check visited state immediately before rendering body to prevent flicker -->
+  <script>
+    (function () {
+      const visited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+      if (visited) {
+        document.documentElement.classList.add('preloader-skipped');
+      } else {
+        document.documentElement.classList.add('preloader-active-lock');
+      }
+    })();
+  </script>
+
+  <!-- Premium Logo Preloader / Splash Screen -->
+  <div class="logo-preloader" id="logoPreloader">
+    <div class="preloader-ring"></div>
+    <div class="preloader-logo-container">
+      <img class="preloader-logo-img" src="images/logo.jpg" alt="ARK Infra Logo">
+    </div>
+    <div class="preloader-progress-container">
+      <div class="preloader-progress-bar"></div>
+    </div>
+    <div class="preloader-tagline-text">Building Trust, Creating Spaces</div>
+  </div>
+
   <!--
     -----------------------------------------------------------
     UPDATE LATER — search this file for:  YOUR_
@@ -1400,6 +1602,32 @@
         }
       }
       checkLiveUpdates();
+
+      // Handle Preloader transition and clean up scroll locks
+      function initPreloaderTransition() {
+        const preloader = document.getElementById('logoPreloader');
+        if (!preloader) return;
+        
+        const isVisited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+        if (isVisited) {
+          preloader.style.display = 'none';
+          document.documentElement.classList.remove('preloader-active-lock');
+          return;
+        }
+
+        // Wait 3.5 seconds (duration of preloader animations + shine effect) then slide up/fade out
+        setTimeout(() => {
+          preloader.classList.add('fade-out');
+          document.documentElement.classList.remove('preloader-active-lock');
+          sessionStorage.setItem('arkinfra_preloader_shown', 'true');
+          
+          // Remove from DOM entirely after transition completes (0.8 seconds transition duration)
+          setTimeout(() => {
+            preloader.remove();
+          }, 800);
+        }, 3500);
+      }
+      initPreloaderTransition();
     })();
   </script>
   <script src="chatbot.js"></script>
