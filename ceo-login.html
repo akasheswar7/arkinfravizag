@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CEO Portal Login | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --gold: #c9a962;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      background-image: radial-gradient(circle at center, var(--navy) 0%, var(--navy-deep) 100%);
+      color: var(--text-body);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(201, 169, 98, 0.05);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      text-align: center;
+    }
+
+    .logo-badge {
+      width: 4rem;
+      height: 4rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      border-radius: 4px;
+      object-fit: contain;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(5, 13, 26, 0.5);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: inherit;
+      font-size: 0.9375rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 8px rgba(201, 169, 98, 0.2);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      border: none;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+
+    .btn-login:hover {
+      box-shadow: 0 8px 24px rgba(201, 169, 98, 0.3);
+      opacity: 0.95;
+    }
+
+    .btn-login:active {
+      transform: scale(0.98);
+    }
+
+    .error-msg {
+      display: none;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(220, 38, 38, 0.3);
+      color: #f87171;
+      padding: 0.75rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
+
+    .loader {
+      display: none;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid rgba(5, 13, 26, 0.2);
+      border-top-color: var(--navy-deep);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 1.5rem;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <img class="logo-badge" src="images/logo.jpg" alt="ARK Infra Logo">
+    <h1 class="title">ARK Portal</h1>
+    <p class="subtitle">AUTHORIZED CEO ACCESS ONLY</p>
+
+    <div class="error-msg" id="errorBox">Invalid username or password. Please try again.</div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="label" for="username">Username</label>
+        <input class="input-field" type="text" id="username" required autocomplete="username">
+      </div>
+
+      <div class="form-group">
+        <label class="label" for="password">Password</label>
+        <input class="input-field" type="password" id="password" required autocomplete="current-password">
+      </div>
+
+      <button class="btn-login" type="submit" id="submitBtn">
+        <span id="btnText">Sign In</span>
+        <div class="loader" id="btnLoader"></div>
+      </button>
+    </form>
+
+    <a href="/" class="back-link">&larr; Back to Website</a>
+  </div>
+
+  <script>
+    // If already logged in, redirect straight to dashboard
+    if (sessionStorage.getItem('ceo_username') && sessionStorage.getItem('ceo_password')) {
+      window.location.href = 'ceo-admin';
+    }
+
+    async function handleLogin(event) {
+      event.preventDefault();
+      
+      const usernameInput = document.getElementById('username').value.trim();
+      const passwordInput = document.getElementById('password').value.trim();
+      
+      const errorBox = document.getElementById('errorBox');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+      
+      // Hide error, show loader
+      errorBox.style.display = 'none';
+      submitBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnLoader.style.display = 'block';
+
+      try {
+        const response = await fetch('/api/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: usernameInput,
+            password: passwordInput,
+            verifyOnly: true
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Store credentials securely in session storage for admin dashboard auth
+          sessionStorage.setItem('ceo_username', usernameInput);
+          sessionStorage.setItem('ceo_password', passwordInput);
+          
+          // Redirect to dashboard (support Vercel clean URL: ceo-admin)
+          window.location.href = 'ceo-admin';
+        } else {
+          errorBox.textContent = data.error || "Authentication failed. Access denied.";
+          errorBox.style.display = 'block';
+          resetBtn();
+        }
+      } catch (err) {
+        console.error(err);
+        errorBox.textContent = "Unable to connect to server. Please try again later.";
+        errorBox.style.display = 'block';
+        resetBtn();
+      }
+    }
+
+    function resetBtn() {
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnLoader = document.getElementById('btnLoader');
+      
+      submitBtn.disabled = false;
+      btnText.style.display = 'block';
+      btnLoader.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

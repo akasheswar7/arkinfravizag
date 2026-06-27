@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -913,6 +913,55 @@
       .footer-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; text-align: center; }
     }
+
+    /* CEO Update Banner */
+    .ceo-update-banner {
+      margin-top: var(--header-h);
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-align: center;
+      position: relative;
+      z-index: 100;
+      border-bottom: 1px solid rgba(5, 13, 26, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .ceo-update-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: var(--navy-deep);
+      color: var(--gold);
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .ceo-update-pulse {
+      width: 6px;
+      height: 6px;
+      background-color: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+      animation: updatePulse 1.5s infinite ease-in-out;
+    }
+    @keyframes updatePulse {
+      0% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.8); opacity: 0.5; }
+    }
+    .ceo-update-text {
+      color: var(--navy-deep);
+      line-height: 1.4;
+    }
   </style>
   <link rel="stylesheet" href="chatbot.css">
 </head>
@@ -965,6 +1014,14 @@
     </nav>
 
   <main id="main">
+    <!-- Live CEO Updates Banner -->
+    <div id="ceoUpdateBanner" class="ceo-update-banner" style="display: none;">
+      <div class="ceo-update-badge">
+        <span class="ceo-update-pulse"></span>
+        <span>Live Announcement</span>
+      </div>
+      <span id="ceoUpdateText" class="ceo-update-text"></span>
+    </div>
     <!-- Hero -->
     <section class="hero" id="hero" aria-label="Welcome">
       <div class="hero-bg" aria-hidden="true">
@@ -1307,6 +1364,23 @@
           closeTeamModal();
         }
       });
+
+      // Fetch Live CEO Updates
+      async function checkLiveUpdates() {
+        try {
+          const response = await fetch('/api/update');
+          const data = await response.json();
+          if (response.ok && data.update) {
+            document.getElementById('ceoUpdateText').textContent = data.update;
+            document.getElementById('ceoUpdateBanner').style.display = 'flex';
+          } else {
+            document.getElementById('ceoUpdateBanner').style.display = 'none';
+          }
+        } catch (err) {
+          console.error("Failed to check live updates:", err);
+        }
+      }
+      checkLiveUpdates();
     })();
   </script>
   <script src="chatbot.js"></script>
