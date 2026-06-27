@@ -671,3 +671,41 @@
     gap: 2rem 1rem !important;
   }
 }
+
+/* Fix lightbox close button visibility on mobile/desktop globally */
+.lightbox-close {
+  position: absolute !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  width: 44px !important;
+  height: 44px !important;
+  border: 1px solid var(--gold) !important;
+  color: var(--gold) !important;
+  font-size: 1.75rem !important;
+  background: var(--navy-deep) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 10100 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  transition: all var(--transition) !important;
+}
+.lightbox-close:hover {
+  background: var(--gold) !important;
+  color: var(--navy-deep) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Ensure on mobile it stays very clearly visible and on top of any full-width popup content */
+@media (max-width: 768px) {
+  .lightbox-close {
+    top: 0.75rem !important;
+    right: 0.75rem !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 1.5rem !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+  }
+}
