@@ -430,7 +430,7 @@
     if (isMd) {
       appendAssistantResponse(`
         <p><strong>Adari Ramakrishna</strong> is our Managing Director, focusing on joint ventures, clear titles, land procurement, and strategic growth locations.</p>
-        <p>📞 Contact: <a href="tel:+916304259567" style="color:var(--gold);text-decoration:underline;">+91 63042 59567</a></p>
+        <p>📞 Contact: <a href="tel:+919848498070" style="color:var(--gold);text-decoration:underline;">+91 98484 98070</a></p>
         <p><a href="md-details" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
