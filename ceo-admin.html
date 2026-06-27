@@ -436,7 +436,8 @@
       try {
         const hexValue = updateValue ? encodeHex(updateValue) : '-';
         const response = await fetch(`${KV_UPDATE_URL}/${hexValue}`, {
-          method: 'POST'
+          method: 'POST',
+          body: ''
         });
 
         if (response.ok) {
