@@ -368,7 +368,7 @@
       const textarea = document.getElementById('updateText');
       
       try {
-        const response = await fetch(KV_URL);
+        const response = await fetch(KV_URL + '?t=' + Date.now());
         if (!response.ok) {
           activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
           activeTextEl.classList.add('empty');

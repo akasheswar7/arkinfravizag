@@ -1616,7 +1616,7 @@
       // Fetch Live CEO Updates
       async function checkLiveUpdates() {
         try {
-          const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update');
+          const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update?t=' + Date.now());
           if (response.ok) {
             let hexText = await response.text();
             if (hexText) {
