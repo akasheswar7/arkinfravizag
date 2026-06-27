@@ -439,9 +439,9 @@
     if (isTeam) {
       appendAssistantResponse(`
         <p>Our core leadership team at ARK Infra comprises:</p>
-        <ul>
-          <li><strong>Konathala Hanumantharao (Arun)</strong> - CEO</li>
+                <ul>
           <li><strong>Adari Ramakrishna</strong> - Managing Director</li>
+          <li><strong>Konathala Hanumantharao (Arun)</strong> - CEO</li>
         </ul>
         <p>You can ask me about any team member to see their bio, or view details on the main cards above.</p>
       `);
