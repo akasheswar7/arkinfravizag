@@ -657,3 +657,17 @@
 .footer-legal a:hover {
   color: var(--gold);
 }
+
+/* Mobile responsive footer override to keep columns side-by-side */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem 1.5rem !important;
+  }
+}
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 2rem 1rem !important;
+  }
+}
