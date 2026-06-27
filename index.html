@@ -914,41 +914,42 @@
       .footer-bottom { flex-direction: column; text-align: center; }
     }
 
-    /* CEO Update Banner */
-    .ceo-update-banner {
-      margin-top: var(--header-h);
-      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
-      color: var(--navy-deep);
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      text-align: center;
-      position: relative;
-      z-index: 100;
-      border-bottom: 1px solid rgba(5, 13, 26, 0.15);
+    /* CEO Update Card inside Hero */
+    .ceo-update-card {
+      background: rgba(201, 169, 98, 0.08);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 0.5rem;
       flex-wrap: wrap;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      text-align: left;
+      animation: updateSlideIn 0.5s ease-out;
+    }
+    @keyframes updateSlideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .ceo-update-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.35rem;
-      background: var(--navy-deep);
-      color: var(--gold);
-      padding: 0.25rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
+      background: var(--gold);
+      color: var(--navy-deep);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .ceo-update-pulse {
       width: 6px;
       height: 6px;
-      background-color: var(--gold);
+      background-color: var(--navy-deep);
       border-radius: 50%;
       display: inline-block;
       animation: updatePulse 1.5s infinite ease-in-out;
@@ -959,8 +960,9 @@
       100% { transform: scale(0.8); opacity: 0.5; }
     }
     .ceo-update-text {
-      color: var(--navy-deep);
-      line-height: 1.4;
+      color: var(--white);
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
   </style>
   <link rel="stylesheet" href="chatbot.css">
@@ -1014,14 +1016,6 @@
     </nav>
 
   <main id="main">
-    <!-- Live CEO Updates Banner -->
-    <div id="ceoUpdateBanner" class="ceo-update-banner" style="display: none;">
-      <div class="ceo-update-badge">
-        <span class="ceo-update-pulse"></span>
-        <span>Live Announcement</span>
-      </div>
-      <span id="ceoUpdateText" class="ceo-update-text"></span>
-    </div>
     <!-- Hero -->
     <section class="hero" id="hero" aria-label="Welcome">
       <div class="hero-bg" aria-hidden="true">
@@ -1036,6 +1030,14 @@
             <strong style="color: var(--gold); display: block; margin-bottom: 0.5rem; font-size: 1.25rem;">Where Dreams Meet the Right Address</strong>
             "ARK Infra delivers premium real estate solutions where excellence meets trust, and every investment becomes a step toward a brighter future."
           </p>
+          <!-- Live CEO Updates Notice Card -->
+          <div id="ceoUpdateBanner" class="ceo-update-card" style="display: none;">
+            <div class="ceo-update-badge">
+              <span class="ceo-update-pulse"></span>
+              <span>CEO Announcement</span>
+            </div>
+            <span id="ceoUpdateText" class="ceo-update-text"></span>
+          </div>
           <div class="hero-actions">
             <a href="projects" class="btn btn-primary">View Projects</a>
             <a href="#contact" class="btn btn-outline">Contact Us</a>
