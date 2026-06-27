@@ -1370,13 +1370,27 @@
       // Fetch Live CEO Updates
       async function checkLiveUpdates() {
         try {
-          const response = await fetch('https://kvdb.io/28CEB2bZxY8rbWaWsXpfip/arkinfra_active_update');
+          const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update');
           if (response.ok) {
-            const text = await response.text();
-            if (text && text.trim()) {
-              document.getElementById('ceoUpdateText').textContent = text.trim();
-              document.getElementById('ceoUpdateBanner').style.display = 'flex';
-              return;
+            let hexText = await response.text();
+            if (hexText) {
+              hexText = hexText.trim();
+              if (hexText.startsWith('"') && hexText.endsWith('"')) {
+                hexText = hexText.substring(1, hexText.length - 1);
+              }
+            }
+            if (hexText && hexText !== 'null' && hexText !== '-') {
+              // Decode hex
+              const bytes = new Uint8Array(hexText.length / 2);
+              for (let i = 0; i < hexText.length; i += 2) {
+                bytes[i / 2] = parseInt(hexText.substring(i, i + 2), 16);
+              }
+              const text = new TextDecoder().decode(bytes);
+              if (text && text.trim() && text !== '-') {
+                document.getElementById('ceoUpdateText').textContent = text.trim();
+                document.getElementById('ceoUpdateBanner').style.display = 'flex';
+                return;
+              }
             }
           }
           document.getElementById('ceoUpdateBanner').style.display = 'none';

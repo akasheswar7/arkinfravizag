@@ -343,7 +343,22 @@
       window.location.href = 'ceo-login.html';
     }
 
-    const KV_URL = 'https://kvdb.io/28CEB2bZxY8rbWaWsXpfip/arkinfra_active_update';
+    const KV_URL = 'https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update';
+    const KV_UPDATE_URL = 'https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/owsihrx6/arkinfra_active_update';
+
+    // Hex encoding/decoding helper utilities to safely transmit values via URL path segments
+    function encodeHex(str) {
+      const bytes = new TextEncoder().encode(str);
+      return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+    }
+
+    function decodeHex(hex) {
+      const bytes = new Uint8Array(hex.length / 2);
+      for (let i = 0; i < hex.length; i += 2) {
+        bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+      }
+      return new TextDecoder().decode(bytes);
+    }
 
     // 2. Fetch Active Update on Load
     window.addEventListener('DOMContentLoaded', fetchActiveUpdate);
@@ -354,22 +369,38 @@
       
       try {
         const response = await fetch(KV_URL);
-        if (response.status === 404) {
+        if (!response.ok) {
           activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
           activeTextEl.classList.add('empty');
           return;
         }
-        const text = await response.text();
-        
-        if (text && text.trim()) {
-          activeTextEl.textContent = `"${text.trim()}"`;
-          activeTextEl.classList.remove('empty');
-          textarea.value = text.trim();
-          updateCount();
-        } else {
-          activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
-          activeTextEl.classList.add('empty');
+        let text = await response.text();
+        if (text) {
+          text = text.trim();
+          if (text.startsWith('"') && text.endsWith('"')) {
+            text = text.substring(1, text.length - 1);
+          }
         }
+        
+        if (text && text !== 'null' && text !== '-') {
+          try {
+            const decoded = decodeHex(text);
+            if (decoded && decoded.trim() && decoded !== '-') {
+              activeTextEl.textContent = `"${decoded.trim()}"`;
+              activeTextEl.classList.remove('empty');
+              textarea.value = decoded.trim();
+              updateCount();
+              return;
+            }
+          } catch (e) {
+            console.error("Hex decoding failed:", e);
+          }
+        }
+        
+        activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
+        activeTextEl.classList.add('empty');
+        textarea.value = "";
+        updateCount();
       } catch (err) {
         console.error(err);
         activeTextEl.textContent = "Unable to fetch active announcement status.";
@@ -403,9 +434,9 @@
       }
 
       try {
-        const response = await fetch(KV_URL, {
-          method: 'PUT',
-          body: updateValue
+        const hexValue = updateValue ? encodeHex(updateValue) : '-';
+        const response = await fetch(`${KV_UPDATE_URL}/${hexValue}`, {
+          method: 'POST'
         });
 
         if (response.ok) {
