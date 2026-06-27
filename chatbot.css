@@ -1,4 +1,4 @@
-/* Chatbot Stylesheet - Scoped under .ark-chatbot to prevent conflict with other elements */
+﻿/* Chatbot Stylesheet - Scoped under .ark-chatbot to prevent conflict with other elements */
 
 .ark-chatbot {
   --navy-deep: #050d1a;
@@ -656,4 +656,152 @@
 }
 .footer-legal a:hover {
   color: var(--gold);
+}
+
+/* ==========================================================================
+   ARK Corporate Headquarters, Google Map & Building Location Guide Styles
+   ========================================================================== */
+.contact { background: var(--navy-deep); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+  margin-top: 3rem;
+}
+.contact-info { display: flex; flex-direction: column; gap: 2rem; }
+.contact-item {
+  display: flex; gap: 1.25rem; align-items: flex-start;
+}
+.contact-icon {
+  width: 3rem; height: 3rem; flex-shrink: 0;
+  border: 1px solid var(--gold); color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+}
+.contact-item h4 {
+  font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 0.35rem;
+}
+.contact-item p, .contact-item a { color: var(--white); font-size: 1rem; }
+.contact-item a:hover { color: var(--gold); }
+.contact-form {
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+.contact-form input,
+.contact-form textarea {
+  width: 100%; padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(201, 169, 98, 0.2);
+  color: var(--white); font-family: inherit; font-size: 0.9375rem;
+  transition: border-color 0.3s;
+}
+.contact-form input::placeholder,
+.contact-form textarea::placeholder { color: var(--text-muted); }
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none; border-color: var(--gold);
+}
+.contact-form textarea { min-height: 140px; resize: vertical; }
+.map-wrap {
+  margin-top: 3rem; border: 1px solid rgba(201, 169, 98, 0.2);
+  overflow: hidden; height: 400px;
+}
+.map-wrap iframe { width: 100%; height: 100%; border: 0; filter: grayscale(30%) contrast(1.1); }
+.map-placeholder {
+  height: 100%; min-height: 400px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-muted); font-size: 0.9375rem;
+}
+.map-placeholder strong { display: block; color: var(--gold); font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.75rem; }
+.contact-pending { color: var(--text-muted); font-style: italic; }
+.contact-pending a { color: var(--gold); font-style: normal; }
+
+.building-guide {
+  margin-top: 3.5rem;
+  border-top: 1px dashed rgba(201, 169, 98, 0.2);
+  padding-top: 3.5rem;
+}
+.building-image-container {
+  position: relative;
+  max-width: 36rem;
+  margin: 0 auto;
+  border: 1px solid rgba(201, 169, 98, 0.3);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+.building-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: brightness(0.9) contrast(1.05);
+  transition: filter var(--transition);
+}
+.building-image-container:hover .building-img {
+  filter: brightness(1.05) contrast(1.05);
+}
+.ark-board-marker {
+  position: absolute;
+  top: 43.5%;
+  left: 51%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  cursor: pointer;
+}
+.marker-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 0 10px var(--gold);
+  border: 2px solid var(--white);
+}
+.pulse-ring {
+  border: 3px solid var(--gold);
+  border-radius: 50%;
+  height: 36px;
+  width: 36px;
+  position: absolute;
+  left: -12px;
+  top: -12px;
+  animation: pulsate 2s ease-out infinite;
+  opacity: 0;
+}
+@keyframes pulsate {
+  0% { transform: scale(0.1, 0.1); opacity: 0.0; }
+  50% { opacity: 1.0; }
+  100% { transform: scale(1.2, 1.2); opacity: 0.0; }
+}
+.marker-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  background: rgba(10, 22, 40, 0.95);
+  border: 1px solid var(--gold);
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  color: var(--white);
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  opacity: 0;
+  transition: opacity var(--transition), transform var(--transition);
+  transform: translateX(-50%) translateY(10px);
+}
+.building-image-container:hover .marker-tooltip,
+.ark-board-marker:hover .marker-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.marker-tooltip strong {
+  display: block;
+  color: var(--gold);
+  font-size: 0.8125rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.marker-tooltip span {
+  font-size: 0.75rem;
+  color: var(--text-body);
 }
