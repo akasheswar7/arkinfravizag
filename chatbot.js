@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ARK Infra AI Chatbot Widget
  * Integrates an elegant, interactive client-side assistant.
  * Dual-Mode:
@@ -163,7 +163,7 @@
 
       launcherContainer.innerHTML = `
         <!-- Floating Launcher Link redirecting to about-ark.html -->
-        <a href="about-ark.html" class="ark-chatbot-launcher" id="chatbotRedirectLauncher" title="Help &amp; AI Support" aria-label="Go to AI Support Page">
+        <a href="about-ark" class="ark-chatbot-launcher" id="chatbotRedirectLauncher" title="Help &amp; AI Support" aria-label="Go to AI Support Page">
           ${premiumAiIconSvg}
           <span class="ark-chatbot-launcher-badge"></span>
         </a>
@@ -339,12 +339,12 @@
     // Projects general Trigger
     const isProjects = /project|apartment|villa|commercial|building/i.test(cleanQuery);
 
-    // Leader bio Triggers
-    const isFounder = /founder|venkata|rao/i.test(cleanQuery);
-    const isCeo = /ceo|arun|hanumantharao/i.test(cleanQuery);
+        // Leader bio Triggers
+    const isCeo = /ceo|arun|hanumantharao|founder/i.test(cleanQuery);
     const isMd = /md|ramakrishna|director|adari/i.test(cleanQuery);
-    const isBm = /manager|bm|vignesh|branch/i.test(cleanQuery);
     const isTeam = /team|leader|leadership|management/i.test(cleanQuery);
+    const isVenkataRao = /venkata|v\.rao|v\s+rao/i.test(cleanQuery);
+    const isVignesh = /vignesh|y\.vignesh|y\s+vignesh/i.test(cleanQuery);
 
     // Process triggers in order of priority:
     if (isContact) {
@@ -402,11 +402,18 @@
       return;
     }
 
-    if (isFounder) {
+        if (isVenkataRao) {
       appendAssistantResponse(`
-        <p><strong>Adari Venkata Rao</strong> is the Founder of ARK Infra. With decades of leadership, he established the core vision of the company to deliver premium, legally transparent real estate solutions.</p>
+        <p>Adari Venkata Rao is no longer associated with ARK Infra. For any corporate inquiries, please contact our CEO & Founder, <strong>Konathala Hanumantharao (Arun)</strong>:</p>
         <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
-        <p><a href="founder-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
+      `);
+      return;
+    }
+
+    if (isVignesh) {
+      appendAssistantResponse(`
+        <p>Yenamadala Vignesh is no longer the Branch Manager of ARK Infra. For layout visits, site execution, or sales inquiries, please contact our CEO, <strong>Konathala Hanumantharao (Arun)</strong>:</p>
+        <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
       `);
       return;
     }
@@ -415,7 +422,7 @@
       appendAssistantResponse(`
         <p><strong>Konathala Hanumantharao (Arun)</strong> is the CEO & Founder of ARK Infra. He has nearly 20 years of real estate experience and leads our strategic vision.</p>
         <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
-        <p><a href="ceo-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
+        <p><a href="ceo-details" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
     }
@@ -424,16 +431,7 @@
       appendAssistantResponse(`
         <p><strong>Adari Ramakrishna</strong> is our Managing Director, focusing on joint ventures, clear titles, land procurement, and strategic growth locations.</p>
         <p>📞 Contact: <a href="tel:+916304259567" style="color:var(--gold);text-decoration:underline;">+91 63042 59567</a></p>
-        <p><a href="md-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
-      `);
-      return;
-    }
-
-    if (isBm) {
-      appendAssistantResponse(`
-        <p><strong>Yenamadala Vignesh</strong> is our Branch Manager, overseeing site execution, customer relations, layout developments, and timely handovers.</p>
-        <p>📞 Contact: <a href="tel:+919014550481" style="color:var(--gold);text-decoration:underline;">+91 90145 50481</a></p>
-        <p><a href="bm-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
+        <p><a href="md-details" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
     }
@@ -442,10 +440,8 @@
       appendAssistantResponse(`
         <p>Our core leadership team at ARK Infra comprises:</p>
         <ul>
-          <li><strong>Adari Venkata Rao</strong> - Founder</li>
           <li><strong>Konathala Hanumantharao (Arun)</strong> - CEO</li>
           <li><strong>Adari Ramakrishna</strong> - Managing Director</li>
-          <li><strong>Yenamadala Vignesh</strong> - Branch Manager</li>
         </ul>
         <p>You can ask me about any team member to see their bio, or view details on the main cards above.</p>
       `);
