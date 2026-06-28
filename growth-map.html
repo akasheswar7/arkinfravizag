@@ -1655,7 +1655,7 @@
         }
 
         const marker = L.marker(item.coords, { icon: icon });
-        if (item.layer === "projects") {
+        if (item.layer === "projects" || id === "it-googledata") {
           marker.addTo(map);
         }
         markerInstances[id] = marker;
