@@ -702,6 +702,32 @@
       letter-spacing: 0.08em;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
     }
+
+    /* Mobile styles to make the map look extremely clean and premium */
+    @media (max-width: 768px) {
+      .custom-city-label.minor {
+        display: none !important;
+      }
+      .custom-city-label.major span {
+        font-size: 9px !important;
+        color: rgba(255, 255, 255, 0.6) !important;
+        letter-spacing: 0.08em !important;
+      }
+      /* Scale down markers to free up space and prevent overlap */
+      .ark-marker-wrapper {
+        transform: scale(0.78);
+        transform-origin: bottom center;
+      }
+      .dev-marker-wrapper, .google-marker-wrapper {
+        transform: scale(0.78);
+        transform-origin: center center;
+      }
+      /* Reduce font sizes of labels on mobile */
+      .ark-marker-label, .dev-marker-label, .google-marker-label {
+        font-size: 7px !important;
+        bottom: -11px !important;
+      }
+    }
   </style>
 </head>
 <body>
