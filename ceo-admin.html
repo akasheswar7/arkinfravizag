@@ -146,6 +146,8 @@
       color: var(--white);
       font-style: italic;
       line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .status-content.empty {
@@ -166,7 +168,9 @@
 
     .textarea-field {
       width: 100%;
-      height: 140px;
+      min-height: 120px;
+      height: auto;
+      overflow-y: hidden;
       padding: 1.25rem;
       background: rgba(5, 13, 26, 0.6);
       border: 1px solid rgba(201, 169, 98, 0.2);
@@ -177,7 +181,7 @@
       line-height: 1.6;
       resize: none;
       margin-bottom: 0.5rem;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, height 0.1s ease-out;
     }
 
     .textarea-field:focus {
@@ -314,11 +318,11 @@
         <textarea 
           class="textarea-field" 
           id="updateText" 
-          maxlength="350" 
+          maxlength="750" 
           placeholder="Type update message here... (e.g. 'Inauguration ceremony for Sabbavaram Venture on July 10th at 10 AM! Site visits are open.')"
           oninput="updateCount()"
         ></textarea>
-        <div class="char-count"><span id="charNum">350</span> characters remaining</div>
+        <div class="char-count"><span id="charNum">750</span> characters remaining</div>
 
         <div class="btn-group">
           <button class="btn btn-outline" type="button" id="clearBtn" onclick="publishUpdate(true)">
@@ -346,18 +350,38 @@
     const KV_URL = 'https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update';
     const KV_UPDATE_URL = 'https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/owsihrx6/arkinfra_active_update';
 
-    // Hex encoding/decoding helper utilities to safely transmit values via URL path segments
-    function encodeHex(str) {
+    // Safe encoding/decoding helper utilities to transmit values via URL path segments
+    // We use a backward-compatible Base64 format prefixed with 'b64:' to support up to 750 characters.
+    // Older Hex-encoded values are automatically detected and decoded.
+    function encodeValue(str) {
       const bytes = new TextEncoder().encode(str);
-      return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('');
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return 'b64:' + window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     }
 
-    function decodeHex(hex) {
-      const bytes = new Uint8Array(hex.length / 2);
-      for (let i = 0; i < hex.length; i += 2) {
-        bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+    function decodeValue(str) {
+      if (str.startsWith('b64:')) {
+        let base64 = str.substring(4).replace(/-/g, '+').replace(/_/g, '/');
+        while (base64.length % 4) {
+          base64 += '=';
+        }
+        const binary = window.atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+      } else {
+        // Fallback to older Hex decoding
+        const bytes = new Uint8Array(str.length / 2);
+        for (let i = 0; i < str.length; i += 2) {
+          bytes[i / 2] = parseInt(str.substring(i, i + 2), 16);
+        }
+        return new TextDecoder().decode(bytes);
       }
-      return new TextDecoder().decode(bytes);
     }
 
     // 2. Fetch Active Update on Load
@@ -384,7 +408,7 @@
         
         if (text && text !== 'null' && text !== '-') {
           try {
-            const decoded = decodeHex(text);
+            const decoded = decodeValue(text);
             if (decoded && decoded.trim() && decoded !== '-') {
               activeTextEl.textContent = `"${decoded.trim()}"`;
               activeTextEl.classList.remove('empty');
@@ -434,10 +458,13 @@
       }
 
       try {
-        const hexValue = updateValue ? encodeHex(updateValue) : '-';
-        const response = await fetch(`${KV_UPDATE_URL}/${hexValue}`, {
+        const encodedValue = updateValue ? encodeValue(updateValue) : '-';
+        const response = await fetch(`${KV_UPDATE_URL}/${encodedValue}`, {
           method: 'POST',
-          body: ''
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'update=true'
         });
 
         if (response.ok) {
@@ -468,7 +495,12 @@
     function updateCount() {
       const textarea = document.getElementById('updateText');
       const charNum = document.getElementById('charNum');
-      charNum.textContent = 350 - textarea.value.length;
+      
+      // Auto-grow height to fit content
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      
+      charNum.textContent = 750 - textarea.value.length;
     }
 
     function showNotification(msg, type) {

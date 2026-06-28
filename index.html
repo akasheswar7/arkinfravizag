@@ -928,8 +928,8 @@
       margin-top: 1rem;
       margin-bottom: 1.5rem;
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      align-items: flex-start;
+      gap: 0.75rem;
       flex-wrap: wrap;
       text-align: left;
       animation: updateSlideIn 0.5s ease-out;
@@ -968,6 +968,10 @@
       color: var(--white);
       font-size: 0.9rem;
       line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+      flex: 1;
+      min-width: 250px;
     }
 
     /* Premium Preloader Styles */
@@ -1622,23 +1626,40 @@
 
       // Fetch Live CEO Updates
       async function checkLiveUpdates() {
+        function decodeValue(str) {
+          if (str.startsWith('b64:')) {
+            let base64 = str.substring(4).replace(/-/g, '+').replace(/_/g, '/');
+            while (base64.length % 4) {
+              base64 += '=';
+            }
+            const binary = window.atob(base64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+              bytes[i] = binary.charCodeAt(i);
+            }
+            return new TextDecoder().decode(bytes);
+          } else {
+            // Fallback to older Hex decoding
+            const bytes = new Uint8Array(str.length / 2);
+            for (let i = 0; i < str.length; i += 2) {
+              bytes[i / 2] = parseInt(str.substring(i, i + 2), 16);
+            }
+            return new TextDecoder().decode(bytes);
+          }
+        }
+
         try {
           const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update?t=' + Date.now());
           if (response.ok) {
-            let hexText = await response.text();
-            if (hexText) {
-              hexText = hexText.trim();
-              if (hexText.startsWith('"') && hexText.endsWith('"')) {
-                hexText = hexText.substring(1, hexText.length - 1);
+            let encodedText = await response.text();
+            if (encodedText) {
+              encodedText = encodedText.trim();
+              if (encodedText.startsWith('"') && encodedText.endsWith('"')) {
+                encodedText = encodedText.substring(1, encodedText.length - 1);
               }
             }
-            if (hexText && hexText !== 'null' && hexText !== '-') {
-              // Decode hex
-              const bytes = new Uint8Array(hexText.length / 2);
-              for (let i = 0; i < hexText.length; i += 2) {
-                bytes[i / 2] = parseInt(hexText.substring(i, i + 2), 16);
-              }
-              const text = new TextDecoder().decode(bytes);
+            if (encodedText && encodedText !== 'null' && encodedText !== '-') {
+              const text = decodeValue(encodedText);
               if (text && text.trim() && text !== '-') {
                 document.getElementById('ceoUpdateText').textContent = text.trim();
                 document.getElementById('ceoUpdateBanner').style.display = 'flex';
