@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Visakhapatnam's future growth corridor. See upcoming metro corridors, Bhogapuram International Airport, IT parks, highways, and their proximity to ARK projects.">
+  <title>Future Vizag Growth Map | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --off-white: #f4f6f9;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .site-header.scrolled {
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 2rem; }
+    .nav-desktop a {
+      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover, .nav-desktop a.active { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: var(--header-h) 0 0 0; z-index: 999;
+      background: var(--navy-deep);
+      padding: 3rem 1.5rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      overflow-y: auto;
+    }
+    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile a {
+      font-size: 1.25rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.5rem;
+    }
+    .nav-mobile a.active { color: var(--gold); }
+
+    @media (max-width: 900px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+    }
+
+    /* Subpage Hero */
+    .subpage-hero {
+      position: relative; padding: 8rem 0 4rem;
+      background: linear-gradient(180deg, var(--navy), var(--navy-deep));
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+      text-align: center;
+    }
+    .subpage-hero h1 {
+      font-family: var(--font-display); font-size: 3rem; color: var(--white);
+      margin-bottom: 1rem; letter-spacing: 0.02em;
+    }
+    .subpage-hero p {
+      font-size: 1.1rem; color: var(--text-muted); max-width: 36rem; margin: 0 auto;
+    }
+
+    /* Main Content Layout */
+    .map-container-grid {
+      max-width: var(--max-w); margin: 3rem auto; padding: 0 1.5rem;
+      display: grid; grid-template-columns: 1fr 2.2fr; gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .map-container-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Sidebar / Filters */
+    .map-sidebar {
+      background: var(--navy);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      padding: 2rem; border-radius: 4px;
+    }
+    .sidebar-section h3 {
+      font-family: var(--font-display); font-size: 1.5rem; color: var(--white);
+      margin-bottom: 1.25rem; border-bottom: 1px solid rgba(201, 169, 98, 0.25);
+      padding-bottom: 0.5rem;
+    }
+    .filter-group {
+      display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;
+    }
+    .filter-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px; cursor: pointer; transition: var(--transition);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-body);
+      user-select: none;
+    }
+    .filter-item:hover {
+      background: rgba(201, 169, 98, 0.05);
+      border-color: rgba(201, 169, 98, 0.3);
+    }
+    .filter-item.active {
+      background: rgba(201, 169, 98, 0.12);
+      border-color: var(--gold);
+      color: var(--white);
+    }
+    .filter-icon {
+      width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+      background: rgba(201, 169, 98, 0.15); border-radius: 50%; color: var(--gold);
+      font-size: 0.75rem; transition: var(--transition);
+    }
+    .filter-item.active .filter-icon {
+      background: var(--gold); color: var(--navy-deep);
+    }
+
+    /* Map Viewer Column */
+    .map-display-wrapper {
+      display: flex; flex-direction: column; gap: 2rem;
+    }
+    .map-box {
+      position: relative; width: 100%; aspect-ratio: 4/3;
+      background: rgba(5, 13, 26, 0.95);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 4px; overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+    @media (max-width: 600px) {
+      .map-box { aspect-ratio: 1; }
+    }
+
+    /* Map Elements SVG classes */
+    .map-bg-land { fill: #081220; }
+    .map-bg-water { fill: #0b1a30; }
+    .map-coastline { stroke: #1e3d66; stroke-width: 2; fill: none; }
+    
+    /* Roadways */
+    .map-road-nh { stroke: rgba(148, 163, 184, 0.15); stroke-width: 3; fill: none; transition: var(--transition); }
+    .map-road-nh.active { stroke: rgba(201, 169, 98, 0.6); stroke-width: 4; filter: drop-shadow(0 0 4px var(--gold)); }
+    .map-road-beach { stroke: rgba(148, 163, 184, 0.1); stroke-dasharray: 4,4; stroke-width: 2; fill: none; transition: var(--transition); }
+    .map-road-beach.active { stroke: #38bdf8; stroke-width: 3; stroke-dasharray: none; filter: drop-shadow(0 0 5px #0284c7); }
+    
+    /* Metro line */
+    .map-metro-line { stroke: rgba(239, 68, 68, 0.1); stroke-width: 2.5; stroke-dasharray: 6,4; fill: none; transition: var(--transition); }
+    .map-metro-line.active { stroke: #ef4444; stroke-dasharray: none; stroke-width: 3.5; filter: drop-shadow(0 0 6px #dc2626); }
+
+    /* Pins & Markers */
+    .map-marker {
+      cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .map-marker:hover {
+      transform: scale(1.3);
+    }
+    .map-marker.active {
+      transform: scale(1.4);
+    }
+    .marker-pin { fill: var(--gold); stroke: var(--navy-deep); stroke-width: 1.5; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+    .marker-pin.infra-airport { fill: #f59e0b; }
+    .marker-pin.infra-it { fill: #a855f7; }
+    .marker-pin.infra-school { fill: #3b82f6; }
+    .marker-pin.infra-hospital { fill: #ec4899; }
+    .marker-pin.infra-tourism { fill: #06b6d4; }
+    
+    .map-marker.active .marker-pin {
+      stroke: var(--white); stroke-width: 2; filter: drop-shadow(0 0 10px var(--gold));
+    }
+
+    /* ARK Projects pin styling */
+    .ark-project-marker {
+      cursor: pointer; transition: transform 0.3s;
+    }
+    .ark-project-marker:hover {
+      transform: scale(1.25);
+    }
+    .ark-project-pin {
+      fill: #22c55e; stroke: var(--white); stroke-width: 1.5;
+      filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.8));
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.6)); }
+      50% { filter: drop-shadow(0 0 12px rgba(34, 197, 94, 1)); }
+      100% { filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.6)); }
+    }
+    .ark-project-label {
+      font-family: var(--font-sans); font-size: 9px; fill: #ffffff;
+      font-weight: 700; pointer-events: none; text-anchor: middle;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* Proximity Connection Lines */
+    .proximity-line {
+      stroke: #22c55e; stroke-width: 2; stroke-dasharray: 5,5;
+      fill: none; opacity: 0; transition: opacity 0.4s ease;
+      stroke-linecap: round;
+    }
+    .proximity-line.visible {
+      opacity: 0.85;
+      animation: dashmove 1s linear infinite;
+    }
+    @keyframes dashmove {
+      to { stroke-dashoffset: -10; }
+    }
+
+    /* Connection Label Badge */
+    .connection-badge {
+      background: rgba(34, 197, 94, 0.95);
+      border: 1px solid var(--white);
+      color: var(--white);
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: none; z-index: 100;
+      pointer-events: none;
+      animation: fadeIn 0.3s;
+    }
+
+    /* Detail Card Panel */
+    .detail-panel {
+      background: var(--navy);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      padding: 2.5rem; border-radius: 4px;
+      animation: cardFadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .detail-header {
+      display: flex; justify-content: space-between; align-items: start;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+      padding-bottom: 1.25rem; margin-bottom: 1.5rem;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .detail-title h2 {
+      font-family: var(--font-display); font-size: 2.25rem; color: var(--white);
+      margin-bottom: 0.25rem;
+    }
+    .detail-tag {
+      padding: 0.35rem 0.85rem; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.08em; font-weight: 700; border-radius: 20px;
+      background: rgba(201, 169, 98, 0.12); color: var(--gold);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+    }
+    .detail-tag.project {
+      background: rgba(34, 197, 94, 0.1); color: #22c55e;
+      border-color: rgba(34, 197, 94, 0.25);
+    }
+    .detail-meta {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (max-width: 600px) {
+      .detail-meta { grid-template-columns: 1fr; gap: 1rem; }
+    }
+    .meta-item {
+      padding: 1rem; background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 4px;
+    }
+    .meta-item strong {
+      display: block; font-size: 0.75rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.25rem;
+    }
+    .meta-item span {
+      font-size: 1.05rem; color: var(--white); font-weight: 600;
+    }
+    .detail-body p {
+      font-size: 1rem; color: var(--text-body); margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+    .detail-impact {
+      border-left: 3px solid var(--gold); padding-left: 1.5rem;
+      margin: 1.75rem 0; font-style: italic; background: rgba(201, 169, 98, 0.03);
+      padding: 1.25rem 1.5rem; border-radius: 0 4px 4px 0;
+    }
+    .detail-impact strong {
+      display: block; font-style: normal; color: var(--gold);
+      font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 0.35rem;
+    }
+    .detail-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      text-transform: uppercase; font-size: 0.8125rem; font-weight: 700;
+      letter-spacing: 0.1em; color: var(--navy-deep);
+      background: var(--gold); padding: 0.85rem 2rem;
+      border-radius: 2px; transition: var(--transition);
+    }
+    .detail-cta:hover {
+      background: var(--gold-light); transform: translateY(-2px);
+    }
+
+    /* Tooltip */
+    .map-tooltip {
+      position: absolute; display: none; pointer-events: none;
+      background: rgba(5, 13, 26, 0.95);
+      border: 1px solid var(--gold);
+      color: var(--white); padding: 0.5rem 0.85rem;
+      font-size: 0.75rem; font-weight: 600; border-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      z-index: 101;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--navy-deep);
+      border-top: 1px solid rgba(201, 169, 98, 0.15);
+      padding: 5rem 1.5rem 2rem;
+    }
+    .footer-grid {
+      max-width: var(--max-w); margin: 0 auto 4rem;
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 4rem;
+    }
+    @media (max-width: 900px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 500px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+    .footer-brand p { margin: 1.5rem 0; color: var(--text-muted); font-size: 0.9375rem; }
+    .footer-col h4 {
+      font-family: var(--font-display); font-size: 1.25rem; color: var(--white);
+      margin-bottom: 1.5rem; letter-spacing: 0.05em;
+    }
+    .footer-col ul { display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-col a { color: var(--text-muted); font-size: 0.875rem; }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-social a {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid rgba(201, 169, 98, 0.25); color: var(--gold);
+    }
+    .footer-social a:hover {
+      background: var(--gold); color: var(--navy-deep);
+      border-color: var(--gold);
+    }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 0 auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 2rem; display: flex; justify-content: space-between;
+      font-size: 0.8125rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-legal a { margin-left: 1.5rem; }
+    .footer-legal a:hover { color: var(--gold); }
+
+    /* Modals */
+    .modal {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(5, 13, 26, 0.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; transition: var(--transition);
+      padding: 1.5rem;
+    }
+    .modal.open { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--navy); border: 1px solid rgba(201, 169, 98, 0.3);
+      padding: 3rem; max-width: 40rem; width: 100%; border-radius: 4px;
+      position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    }
+    .modal-close {
+      position: absolute; top: 1.5rem; right: 1.5rem; font-size: 2rem;
+      color: var(--gold); cursor: pointer;
+    }
+    .modal-close:hover { color: var(--white); }
+    .modal-content h3 { font-family: var(--font-display); font-size: 2rem; color: var(--white); margin-bottom: 1.5rem; }
+    .modal-content p { font-size: 0.9375rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.7; }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="/" class="logo" aria-label="ARK Infra Home">
+        <img class="logo-badge-img" src="images/logo.jpg" alt="ARK Infra Logo" aria-hidden="true">
+        ARK <span>Infra</span>
+      </a>
+      <nav class="nav-desktop" aria-label="Main navigation">
+        <a href="about">About</a>
+        <a href="projects">Projects</a>
+        <a href="insights">Insights</a>
+        <a href="why">Why Us</a>
+        <a href="achievements">Achievements</a>
+        <a href="testimonials">Testimonials</a>
+        <a href="gallery">Gallery</a>
+        <a href="growth-map" class="active">Growth Map</a>
+        <a href="contact" class="nav-cta">Contact</a>
+      </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+    <a href="about">About</a>
+    <a href="projects">Projects</a>
+    <a href="insights">Insights</a>
+    <a href="why">Why Us</a>
+    <a href="achievements">Achievements</a>
+    <a href="testimonials">Testimonials</a>
+    <a href="gallery">Gallery</a>
+    <a href="growth-map" class="active">Growth Map</a>
+    <a href="contact">Contact</a>
+  </nav>
+
+  <main id="main">
+    <!-- Subpage Hero -->
+    <section class="subpage-hero" aria-label="Page Title">
+      <div class="reveal">
+        <h1>Future Vizag Growth Map</h1>
+        <p>Explore upcoming public infrastructure corridors, IT hubs, and connectivity developments in Visakhapatnam and see their impact on ARK projects.</p>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="growth-map-section" aria-label="Interactive Map Grid">
+      <div class="map-container-grid">
+        
+        <!-- Sidebar Controls -->
+        <div class="map-sidebar">
+          <div class="sidebar-section">
+            <h3>Infrastructure Layers</h3>
+            <div class="filter-group">
+              <div class="filter-item active" data-layer="airport">
+                <span class="filter-icon">✈️</span>
+                <span>Airports & Transit</span>
+              </div>
+              <div class="filter-item active" data-layer="metro">
+                <span class="filter-icon">🚇</span>
+                <span>Metro Corridors</span>
+              </div>
+              <div class="filter-item active" data-layer="it">
+                <span class="filter-icon">💻</span>
+                <span>IT Parks & SEZs</span>
+              </div>
+              <div class="filter-item active" data-layer="roads">
+                <span class="filter-icon">🛣️</span>
+                <span>New Roads & VCIC</span>
+              </div>
+              <div class="filter-item active" data-layer="schools">
+                <span class="filter-icon">🏫</span>
+                <span>Educational Hubs</span>
+              </div>
+              <div class="filter-item active" data-layer="hospitals">
+                <span class="filter-icon">🏥</span>
+                <span>Hospitals & Medical</span>
+              </div>
+              <div class="filter-item active" data-layer="tourism">
+                <span class="filter-icon">🏖️</span>
+                <span>Tourism & Beaches</span>
+              </div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; font-style: italic; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1rem;">
+              *Toggling categories highlights related markers. Click green tags (ARK Projects) or markers to trace distances.
+            </p>
+          </div>
+        </div>
+
+        <!-- Map & Details Wrapper -->
+        <div class="map-display-wrapper">
+          
+          <!-- Map Box -->
+          <div class="map-box" id="mapBox">
+            
+            <!-- Interactive SVG Vector Map -->
+            <svg id="vizagVectorMap" viewBox="0 0 800 600" width="100%" height="100%">
+              <!-- Definitions for gradients and drop shadows -->
+              <defs>
+                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.5"/>
+                </filter>
+                <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <!-- SVG Ocean Background -->
+              <rect x="0" y="0" width="800" height="600" class="map-bg-water" />
+
+              <!-- Land Shape Path representing coastline & inland region of Vizag -->
+              <path d="M 0 0 L 800 0 L 800 60 L 720 120 L 580 230 L 480 300 L 400 370 L 320 400 L 260 450 L 180 470 L 100 520 L 0 540 Z" class="map-bg-land" />
+              <!-- Wave Line (Coastline) -->
+              <path d="M 0 540 C 50 535, 80 525, 100 520 C 140 510, 160 480, 180 470 C 220 450, 240 455, 260 450 C 290 440, 300 410, 320 400 C 360 380, 380 385, 400 370 C 440 340, 460 320, 480 300 C 530 260, 550 250, 580 230 C 650 170, 690 140, 720 120 C 760 100, 780 75, 800 60" class="map-coastline" />
+
+              <!-- Grid overlay (Latitude/Longitude guides) -->
+              <g stroke="rgba(30, 61, 102, 0.3)" stroke-width="0.5" stroke-dasharray="2,2">
+                <line x1="100" y1="0" x2="100" y2="600" />
+                <line x1="200" y1="0" x2="200" y2="600" />
+                <line x1="300" y1="0" x2="300" y2="600" />
+                <line x1="400" y1="0" x2="400" y2="600" />
+                <line x1="500" y1="0" x2="500" y2="600" />
+                <line x1="600" y1="0" x2="600" y2="600" />
+                <line x1="700" y1="0" x2="700" y2="600" />
+                <line y1="100" x1="0" y2="100" x2="800" />
+                <line y1="200" x1="0" y2="200" x2="800" />
+                <line y1="300" x1="0" y2="300" x2="800" />
+                <line y1="400" x1="0" y2="400" x2="800" />
+                <line y1="500" x1="0" y2="500" x2="800" />
+              </g>
+
+              <!-- Gulf/Bay text -->
+              <text x="500" y="450" fill="rgba(30, 61, 102, 0.4)" font-family="var(--font-display)" font-size="20" font-style="italic" letter-spacing="0.2em" transform="rotate(-15 500 450)">BAY OF BENGAL</text>
+              <text x="100" y="30" fill="rgba(30, 61, 102, 0.25)" font-family="var(--font-sans)" font-size="10">GRID ZONE VZ-08</text>
+
+              <!-- Infrastructure: National Highway NH-16 (glows when Road toggle active) -->
+              <path id="nh16Line" d="M 0 490 Q 120 440 220 380 T 420 280 T 620 140 T 800 20" class="map-road-nh active" />
+              <text font-family="var(--font-sans)" font-size="8" fill="#e4d4a8" font-weight="700" opacity="0.6">
+                <textPath href="#nh16Line" startOffset="30%">NH-16 EXPRESSWAY (VIZAG-CHENNAI CORRIDOR)</textPath>
+              </text>
+
+              <!-- Infrastructure: Beach Road 6-Lane Expressway Extension -->
+              <path id="beachRoadLine" d="M 320 400 C 360 380 380 385 400 370 C 440 340 460 320 480 300 C 530 260 550 250 580 230 Q 670 150 720 120 T 800 45" class="map-road-beach active" />
+              <text font-family="var(--font-sans)" font-size="7" fill="#38bdf8" font-weight="700" opacity="0.8">
+                <textPath href="#beachRoadLine" startOffset="15%">PROPOSED 6-LANE BEACH ROAD EXTENSION</textPath>
+              </text>
+
+              <!-- Infrastructure: Vizag Proposed Metro Corridor (glowing red line) -->
+              <path id="metroLine" d="M 220 380 Q 300 340 350 310 T 580 170" class="map-metro-line active" />
+              <text font-family="var(--font-sans)" font-size="8" fill="#ef4444" font-weight="700" opacity="0.6">
+                <textPath href="#metroLine" startOffset="45%">PROPOSED VIZAG METRO LINE CORRIDOR</textPath>
+              </text>
+
+              <!-- Proximity Lines (Dashed connection lines, animated via JS) -->
+              <line id="lineGoldenAcresAirport" x1="680" y1="70" x2="630" y2="100" class="proximity-line" />
+              <line id="lineKokkirapalliSez" x1="80" y1="510" x2="70" y2="540" class="proximity-line" />
+              <line id="lineMukthaSteel" x1="190" y1="440" x2="220" y2="380" class="proximity-line" />
+              <line id="lineHighwayCityNH" x1="480" y1="200" x2="520" y2="210" class="proximity-line" />
+
+              <!-- Markers: Public Developments -->
+              <!-- Bhogapuram Greenfield Airport -->
+              <g class="map-marker dev-marker" id="mark-airport-bhogapuram" data-id="airport-bhogapuram" data-layer="airport" transform="translate(680, 70)">
+                <circle cx="0" cy="0" r="14" fill="rgba(245, 158, 11, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-airport" />
+                <text x="0" y="16" fill="#f59e0b" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Bhogapuram Airport</text>
+              </g>
+
+              <!-- Atchutapuram SEZ Industrial Hub -->
+              <g class="map-marker dev-marker" id="mark-it-atchutapuram" data-id="it-atchutapuram" data-layer="it" transform="translate(80, 510)">
+                <circle cx="0" cy="0" r="14" fill="rgba(168, 85, 247, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-it" />
+                <text x="0" y="16" fill="#c084fc" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Atchutapuram SEZ</text>
+              </g>
+
+              <!-- Rushikonda IT Hills -->
+              <g class="map-marker dev-marker" id="mark-it-rushikonda" data-id="it-rushikonda" data-layer="it" transform="translate(420, 290)">
+                <circle cx="0" cy="0" r="14" fill="rgba(168, 85, 247, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-it" />
+                <text x="0" y="16" fill="#c084fc" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda IT Hill</text>
+              </g>
+
+              <!-- Health City Arilova -->
+              <g class="map-marker dev-marker" id="mark-hospital-healthcity" data-id="hospital-healthcity" data-layer="hospitals" transform="translate(280, 300)">
+                <circle cx="0" cy="0" r="14" fill="rgba(236, 72, 153, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-hospital" />
+                <text x="0" y="16" fill="#f472b6" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Health City</text>
+              </g>
+
+              <!-- Centurion University Educational Hub -->
+              <g class="map-marker dev-marker" id="mark-school-centurion" data-id="school-centurion" data-layer="schools" transform="translate(600, 110)">
+                <circle cx="0" cy="0" r="14" fill="rgba(59, 130, 246, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-school" />
+                <text x="0" y="16" fill="#60a5fa" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Centurion Uni</text>
+              </g>
+
+              <!-- Rushikonda Beach & Resorts -->
+              <g class="map-marker dev-marker" id="mark-tourism-rushikonda" data-id="tourism-rushikonda" data-layer="tourism" transform="translate(450, 280)">
+                <circle cx="0" cy="0" r="14" fill="rgba(6, 182, 212, 0.15)" />
+                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-tourism" />
+                <text x="0" y="16" fill="#22d3ee" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda Beach</text>
+              </g>
+
+
+              <!-- Markers: ARK Infra Ventures (Green Glowing Pins) -->
+              <!-- Golden Acres Bhogapuram -->
+              <g class="ark-project-marker" id="ark-goldenacres" data-id="ark-goldenacres" transform="translate(630, 100)">
+                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
+                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
+                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
+                <text x="0" y="-18" class="ark-project-label">GOLDEN ACRES</text>
+              </g>
+
+              <!-- Kokkirapalli Venture -->
+              <g class="ark-project-marker" id="ark-kokkirapalli" data-id="ark-kokkirapalli" transform="translate(70, 540)">
+                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
+                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
+                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
+                <text x="0" y="20" class="ark-project-label">KOKKIRAPALLI</text>
+              </g>
+
+              <!-- Sri Muktha Gardens -->
+              <g class="ark-project-marker" id="ark-srimuktha" data-id="ark-srimuktha" transform="translate(190, 440)">
+                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
+                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
+                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
+                <text x="0" y="-18" class="ark-project-label">SRI MUKTHA GARDENS</text>
+              </g>
+
+              <!-- Highway City Layout -->
+              <g class="ark-project-marker" id="ark-highwaycity" data-id="ark-highwaycity" transform="translate(480, 200)">
+                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
+                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
+                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
+                <text x="0" y="-18" class="ark-project-label">HIGHWAY CITY</text>
+              </g>
+
+            </svg>
+
+            <!-- Map Tooltip (floats near cursor via JS) -->
+            <div class="map-tooltip" id="mapTooltip">Tooltip</div>
+
+            <!-- Proximity Time Bubble Badge overlay (anchored at center of dotted line) -->
+            <div class="connection-badge" id="connTimeBadge">10 Mins Drive</div>
+
+          </div>
+
+          <!-- Development Details Display Panel -->
+          <div class="detail-panel" id="detailPanel">
+            <div id="panelEmptyState" style="text-align: center; padding: 2rem 0;">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="var(--gold)" stroke-width="1.5" style="margin: 0 auto 1.5rem; display: block; opacity: 0.6;">
+                <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"></polygon>
+                <line x1="9" y1="3" x2="9" y2="18"></line>
+                <line x1="15" y1="6" x2="15" y2="21"></line>
+              </svg>
+              <h3 style="font-family: var(--font-display); font-size: 1.5rem; color: var(--white); margin-bottom: 0.5rem;">Interactive Development Inspector</h3>
+              <p style="color: var(--text-muted); font-size: 0.9375rem; max-width: 25rem; margin: 0 auto;">Select any infrastructure project (yellow/blue pins) or green ARK Projects on the map above to view completion dates, investment highlights, and direct land valuation impact.</p>
+            </div>
+            
+            <div id="panelContent" style="display: none;">
+              <div class="detail-header">
+                <div class="detail-title">
+                  <h2 id="itemTitle">Bhogapuram International Airport</h2>
+                  <span class="detail-tag" id="itemType">Airport</span>
+                </div>
+              </div>
+              <div class="detail-meta">
+                <div class="meta-item">
+                  <strong>Estimated Completion</strong>
+                  <span id="itemDate">2027</span>
+                </div>
+                <div class="meta-item" id="metaVal1Row">
+                  <strong id="metaVal1Title">Scale of Project</strong>
+                  <span id="itemVal1">₹4,592 Crores</span>
+                </div>
+                <div class="meta-item" id="metaVal2Row">
+                  <strong id="metaVal2Title">Proximity to ARK</strong>
+                  <span id="itemVal2">10 Mins (Golden Acres)</span>
+                </div>
+              </div>
+              <div class="detail-body">
+                <p id="itemDesc">The upcoming Greenfield International Airport in Bhogapuram is a game-changer for North Visakhapatnam. Being built by GMR Group, it features modular terminals, cargo complexes, and an aero-city to serve millions of passengers annually.</p>
+                <div class="detail-impact">
+                  <strong>Expected Impact on Land Value</strong>
+                  <p id="itemImpact" style="margin: 0; font-size: 0.9375rem; color: var(--text-body);">Plotted layouts in the Bhogapuram-Kopparla zone are experiencing rapid appreciation, with land prices rising 25% year-on-year due to upcoming logistics, highway connectivity, and airport access.</p>
+                </div>
+                <a href="projects" class="detail-cta" id="itemCta">Explore Nearby ARK Project</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <img class="logo-badge-img" src="images/logo.jpg" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Contact Email">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about">About Us</a></li>
+          <li><a href="projects">Projects</a></li>
+          <li><a href="gallery">Gallery</a></li>
+          <li><a href="contact">Contact</a></li>
+          <li><a href="emi-calculator">EMI Calculator</a></li>
+          <li><a href="insights">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects">Luxury Apartments</a></li>
+          <li><a href="projects">Residential Layouts</a></li>
+          <li><a href="projects">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#" id="openPrivacy">Privacy Policy</a>
+        <a href="#" id="openTerms">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal" id="privacyModal" role="dialog" aria-labelledby="privacyTitle" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      <h3 id="privacyTitle">Privacy Policy</h3>
+      <p>ARK Infra ("we") respects your privacy. We collect personal information such as name, email, and phone number only when you voluntarily submit our contact form or inquire about properties.</p>
+      <p>We use this information solely to respond to your inquiries, process transactions, and improve our services. We do not sell your data to third parties.</p>
+    </div>
+  </div>
+  <div class="modal" id="termsModal" role="dialog" aria-labelledby="termsTitle" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      <h3 id="termsTitle">Terms &amp; Conditions</h3>
+      <p>By accessing the ARK Infra website, you agree to these terms. All content, images, and project information are for informational purposes and subject to change without notice.</p>
+      <p>Property details, pricing, and availability must be confirmed in writing with authorized ARK Infra representatives.</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Header scroll animation
+      const header = document.getElementById('header');
+      const menuToggle = document.getElementById('menuToggle');
+      const navMobile = document.getElementById('navMobile');
+
+      window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 50);
+      });
+
+      menuToggle.addEventListener('click', function () {
+        const open = navMobile.classList.toggle('open');
+        menuToggle.classList.toggle('active', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      navMobile.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('open');
+          menuToggle.classList.remove('active');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Layer Toggles
+      const filterItems = document.querySelectorAll('.filter-item');
+      const nh16Line = document.getElementById('nh16Line');
+      const beachRoadLine = document.getElementById('beachRoadLine');
+      const metroLine = document.getElementById('metroLine');
+
+      filterItems.forEach(item => {
+        item.addEventListener('click', () => {
+          const layer = item.dataset.layer;
+          const active = item.classList.toggle('active');
+
+          // Filter map markers belonging to this layer
+          document.querySelectorAll(`.dev-marker[data-layer="${layer}"]`).forEach(marker => {
+            marker.style.display = active ? 'block' : 'none';
+          });
+
+          // Custom handling for vector route lines
+          if (layer === 'roads') {
+            nh16Line.classList.toggle('active', active);
+            beachRoadLine.classList.toggle('active', active);
+          } else if (layer === 'metro') {
+            metroLine.classList.toggle('active', active);
+          }
+        });
+      });
+
+      // Data definitions for map points
+      const mapData = {
+        // Infrastructure items
+        "airport-bhogapuram": {
+          title: "Bhogapuram International Airport",
+          type: "Airport / Aviation Hub",
+          date: "Q3 2027 (Under Construction)",
+          val1: "₹4,592 Crores",
+          val2: "10 Mins (Golden Acres)",
+          desc: "Vizag's new Greenfield International Airport is slated to become the commercial aviation gateway of Andhra Pradesh. Spanning 2,200 acres, this project is accelerating real estate growth in the surrounding Bhogapuram, Kopparla, and Tagarapuvalasa micro-markets.",
+          impact: "plotted layouts inside Bhogapuram have seen a 30-40% surge in land value since GMR started runway leveling, making Golden Acres a high appreciation hub.",
+          cta: "projects",
+          arkId: "ark-goldenacres",
+          lineId: "lineGoldenAcresAirport",
+          badgeText: "10 Mins Drive"
+        },
+        "it-atchutapuram": {
+          title: "Atchutapuram SEZ Industrial Corridor",
+          type: "IT & Industrial SEZ",
+          date: "Fully Active / Expanding",
+          val1: "50,000+ Employees",
+          val2: "15 Mins (Kokkirapalli Venture)",
+          desc: "A massive industrial zone housing pharmaceutical, manufacturing, and textile corporations. This zone is a primary job generator in South Vizag, feeding immediate demand for quality residential housing in nearby Yelamanchili.",
+          impact: "Constant demand from SEZ corporate executives is pushing rental yields and plots occupancy upward in Kokkirapalli Phase 1 & 2.",
+          cta: "projects",
+          arkId: "ark-kokkirapalli",
+          lineId: "lineKokkirapalliSez",
+          badgeText: "15 Mins Drive"
+        },
+        "it-rushikonda": {
+          title: "Rushikonda IT Hills (MNC Zone)",
+          type: "IT & Software Park",
+          date: "Operational Hub",
+          val1: "150+ Tech Firms",
+          val2: "25 Mins (Highway City)",
+          desc: "Visakhapatnam's primary IT hub, home to companies like Tech Mahindra, Wipro, and Millennium IT Towers. The state government is actively expanding incubation facilities here to support cyber security and fintech startups.",
+          impact: "Vizag's status as Andhra Pradesh's IT capital is creating a wealthy tech employee base looking for premium plots and apartments.",
+          cta: "projects"
+        },
+        "hospital-healthcity": {
+          title: "Arilova Health City",
+          type: "Healthcare Hub",
+          date: "Operational",
+          val1: "12+ Super Specialty Hospitals",
+          val2: "20 Mins (Sri Muktha Gardens)",
+          desc: "A dedicated medical city housing premium hospitals like Apollo, NRI, and Mahatma Gandhi Cancer Hospital. This hub provides world-class medical facilities to the entire coastal AP population.",
+          impact: "Easy accessibility to super-specialty healthcare centers nearby adds critical livability value to all ARK residential layouts.",
+          cta: "projects",
+          infraId: "mark-hospital-healthcity",
+          lineId: "lineMukthaSteel",
+          badgeText: "8 Mins to NH-16"
+        },
+        "school-centurion": {
+          title: "Centurion University & Oakridge School",
+          type: "Education Zone",
+          date: "Active Institutions",
+          val1: "Ranked Top in State",
+          val2: "8 Mins (Golden Acres)",
+          desc: "Located on the fast-growing educational corridor in Anandapuram-Bhogapuram, housing top-tier international schools, engineering universities, and research institutes.",
+          impact: "Proximity to premium schools makes the Bhogapuram corridor highly attractive to families looking to build homes immediately.",
+          cta: "projects"
+        },
+        "tourism-rushikonda": {
+          title: "Rushikonda Beach & Resort Hub",
+          type: "Tourism & Beachfront",
+          date: "Blue Flag Certified",
+          val1: "₹150+ Crores Development",
+          val2: "15 Mins (Highway City)",
+          desc: "Vizag's premier Blue Flag certified beach, home to luxury resorts, water sports, and beach beautification corridors linking Vizag City to Bheemili.",
+          impact: "High tourism growth and premium beachfront development are accelerating property valuation in the coastal corridor.",
+          cta: "projects"
+        },
+
+        // ARK Projects items
+        "ark-goldenacres": {
+          title: "Golden Acres (Bhogapuram)",
+          type: "ARK Premium Project",
+          date: "Plots / Ready to Register",
+          val1: "₹17,00,0/- Per Sq. Yd",
+          val2: "VMRDA & AP RERA Approved",
+          desc: "Our elite gated plotted community located in Bhogapuram (Kopparla). Located in the heart of Vizag's primary growth hub, Golden Acres offers premium blacktop roads, underground drains, water lines, and avenue plantations.",
+          impact: "Positioned only 10 minutes from the upcoming Bhogapuram International Airport, this project is optimized for massive long-term appreciation.",
+          cta: "projects",
+          infraId: "mark-airport-bhogapuram",
+          lineId: "lineGoldenAcresAirport",
+          badgeText: "10 Mins Drive"
+        },
+        "ark-kokkirapalli": {
+          title: "Kokkirapalli Venture (Yelamanchili)",
+          type: "ARK Plotted Venture",
+          date: "Phase 1 & 2 Ongoing",
+          val1: "₹16,000/- Per Sq. Yd",
+          val2: "VMRDA Approved Layout",
+          desc: "A premium gated residential layout at Yelamanchili featuring wide 40' blacktop roads, secure entrance arch, and spot registration. Offers peaceful living with rapid accessibility.",
+          impact: "Located just 15 minutes away from the thriving Atchutapuram SEZ industrial sector, creating immediate housing demand.",
+          cta: "projects",
+          infraId: "mark-it-atchutapuram",
+          lineId: "lineKokkirapalliSez",
+          badgeText: "15 Mins Drive"
+        },
+        "ark-srimuktha": {
+          title: "Sri Muktha Gardens (Desapathrunipalem)",
+          type: "ARK Completed Venture",
+          date: "100% Sold Out / Houses Built",
+          val1: "₹7,500/- Launch Price",
+          val2: "Ready for Construction",
+          desc: "A budget-friendly plotted venture near the Vizag Steel Plant sector gate. Fully completed with blacktop roads, electricity grids, and compound fencing.",
+          impact: "Located close to the NH-16 highway and steel plant corridor, providing excellent connectivity for working professionals.",
+          cta: "projects",
+          infraId: "mark-hospital-healthcity",
+          lineId: "lineMukthaSteel",
+          badgeText: "8 Mins to NH-16"
+        },
+        "ark-highwaycity": {
+          title: "Highway City Layout",
+          type: "ARK Premium Venture",
+          date: "Ongoing Development",
+          val1: "Direct NH-16 Access",
+          val2: "Commercial & Residential",
+          desc: "ARK's landmark project directly facing the National Highway. Features premium commercial plots and luxury residential villa plots in a fully loaded gated campus.",
+          impact: "Ideal for investors seeking high visibility commercial space or residential assets right on Vizag's primary economic artery.",
+          cta: "projects",
+          infraId: "mark-tourism-rushikonda",
+          lineId: "lineHighwayCityNH",
+          badgeText: "Direct Highway Access"
+        }
+      };
+
+      // Interactive Map Interactivity
+      const mapBox = document.getElementById('mapBox');
+      const mapTooltip = document.getElementById('mapTooltip');
+      const vizagVectorMap = document.getElementById('vizagVectorMap');
+      const connTimeBadge = document.getElementById('connTimeBadge');
+      
+      const panelEmptyState = document.getElementById('panelEmptyState');
+      const panelContent = document.getElementById('panelContent');
+      
+      const itemTitle = document.getElementById('itemTitle');
+      const itemType = document.getElementById('itemType');
+      const itemDate = document.getElementById('itemDate');
+      const itemVal1 = document.getElementById('itemVal1');
+      const itemVal2 = document.getElementById('itemVal2');
+      const metaVal1Title = document.getElementById('metaVal1Title');
+      const metaVal2Title = document.getElementById('metaVal2Title');
+      const itemDesc = document.getElementById('itemDesc');
+      const itemImpact = document.getElementById('itemImpact');
+      const itemCta = document.getElementById('itemCta');
+
+      // Add tooltips on hover
+      const allMarkers = document.querySelectorAll('.map-marker, .ark-project-marker');
+      allMarkers.forEach(marker => {
+        const id = marker.dataset.id;
+        const info = mapData[id];
+
+        marker.addEventListener('mouseenter', (e) => {
+          if (!info) return;
+          mapTooltip.textContent = info.title;
+          mapTooltip.style.display = 'block';
+        });
+
+        marker.addEventListener('mousemove', (e) => {
+          const rect = mapBox.getBoundingClientRect();
+          const x = e.clientX - rect.left + 15;
+          const y = e.clientY - rect.top + 15;
+          mapTooltip.style.left = `${x}px`;
+          mapTooltip.style.top = `${y}px`;
+        });
+
+        marker.addEventListener('mouseleave', () => {
+          mapTooltip.style.display = 'none';
+        });
+
+        marker.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectMapPoint(id);
+        });
+      });
+
+      // Clicking on empty ocean/land resets details
+      vizagVectorMap.addEventListener('click', () => {
+        resetSelection();
+      });
+
+      function selectMapPoint(id) {
+        const info = mapData[id];
+        if (!info) return;
+
+        // Reset previous selections & connections
+        allMarkers.forEach(m => m.classList.remove('active'));
+        document.querySelectorAll('.proximity-line').forEach(l => l.classList.remove('visible'));
+        connTimeBadge.style.display = 'none';
+
+        // Highlight selected marker
+        const activeMarker = document.getElementById(id) || document.getElementById(`mark-${id}`);
+        if (activeMarker) {
+          activeMarker.classList.add('active');
+        }
+
+        // Handle connection lines and time badge
+        if (info.lineId) {
+          const line = document.getElementById(info.lineId);
+          if (line) {
+            line.classList.add('visible');
+            
+            // Calculate center of proximity line to display time bubble
+            const x1 = parseFloat(line.getAttribute('x1'));
+            const y1 = parseFloat(line.getAttribute('y1'));
+            const x2 = parseFloat(line.getAttribute('x2'));
+            const y2 = parseFloat(line.getAttribute('y2'));
+            
+            const midX = (x1 + x2) / 2;
+            const midY = (y1 + y2) / 2;
+            
+            // Map aspect ratio scale adjustment
+            const mapBoxRect = mapBox.getBoundingClientRect();
+            const scaleX = mapBoxRect.width / 800;
+            const scaleY = mapBoxRect.height / 600;
+            
+            connTimeBadge.textContent = info.badgeText;
+            connTimeBadge.style.left = `${midX * scaleX}px`;
+            connTimeBadge.style.top = `${midY * scaleY}px`;
+            connTimeBadge.style.display = 'block';
+          }
+        }
+
+        // Fill detail panel
+        itemTitle.textContent = info.title;
+        itemType.textContent = info.type;
+        itemDate.textContent = info.date;
+        itemVal1.textContent = info.val1;
+        itemVal2.textContent = info.val2;
+        itemDesc.textContent = info.desc;
+        itemImpact.textContent = info.impact;
+
+        // Customize labels based on Project vs Infrastructure
+        if (id.startsWith('ark-')) {
+          itemType.className = "detail-tag project";
+          metaVal1Title.textContent = "Pricing Info";
+          metaVal2Title.textContent = "VMRDA Status";
+          itemCta.textContent = "Enquire About This Project";
+          itemCta.href = `contact?project=${encodeURIComponent(info.title)}`;
+        } else {
+          itemType.className = "detail-tag";
+          metaVal1Title.textContent = "Scale of Project";
+          metaVal2Title.textContent = "Proximity to ARK";
+          itemCta.textContent = "Explore Nearby Gated Project";
+          itemCta.href = "projects";
+        }
+
+        panelEmptyState.style.display = 'none';
+        panelContent.style.display = 'block';
+        
+        // Scroll to details on mobile screens
+        if (window.innerWidth <= 1024) {
+          document.getElementById('detailPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      function resetSelection() {
+        allMarkers.forEach(m => m.classList.remove('active'));
+        document.querySelectorAll('.proximity-line').forEach(l => l.classList.remove('visible'));
+        connTimeBadge.style.display = 'none';
+        
+        panelContent.style.display = 'none';
+        panelEmptyState.style.display = 'block';
+      }
+
+      // Handle window resize for connection badges
+      window.addEventListener('resize', () => {
+        const activeLine = document.querySelector('.proximity-line.visible');
+        if (activeLine && connTimeBadge.style.display === 'block') {
+          const x1 = parseFloat(activeLine.getAttribute('x1'));
+          const y1 = parseFloat(activeLine.getAttribute('y1'));
+          const x2 = parseFloat(activeLine.getAttribute('x2'));
+          const y2 = parseFloat(activeLine.getAttribute('y2'));
+          
+          const midX = (x1 + x2) / 2;
+          const midY = (y1 + y2) / 2;
+          
+          const mapBoxRect = mapBox.getBoundingClientRect();
+          const scaleX = mapBoxRect.width / 800;
+          const scaleY = mapBoxRect.height / 600;
+          
+          connTimeBadge.style.left = `${midX * scaleX}px`;
+          connTimeBadge.style.top = `${midY * scaleY}px`;
+        }
+      });
+    })();
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
