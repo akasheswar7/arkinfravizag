@@ -1679,7 +1679,7 @@
         }
 
         const marker = L.marker(item.coords, { icon: icon });
-        if (item.layer === "projects" || id === "it-googledata") {
+        if (item.layer === "projects" || id === "it-googledata" || id === "it-nakkapallesteel") {
           marker.addTo(map);
         }
         markerInstances[id] = marker;
@@ -1704,12 +1704,12 @@
         });
       });
 
-      // Automatically fit map view bounds to encompass ARK project markers on load
-      const arkMarkerLayers = Object.keys(markerInstances)
-        .filter(id => mapData[id].layer === "projects")
+      // Automatically fit map view bounds to encompass ARK projects and loaded default markers on load
+      const defaultVisibleMarkers = Object.keys(markerInstances)
+        .filter(id => mapData[id].layer === "projects" || id === "it-googledata" || id === "it-nakkapallesteel")
         .map(id => markerInstances[id]);
-      if (arkMarkerLayers.length > 0) {
-        const group = L.featureGroup(arkMarkerLayers);
+      if (defaultVisibleMarkers.length > 0) {
+        const group = L.featureGroup(defaultVisibleMarkers);
         map.fitBounds(group.getBounds().pad(0.08), { animate: false });
       }
 
