@@ -733,31 +733,31 @@
           <div class="sidebar-section">
             <h3>Infrastructure Layers</h3>
             <div class="filter-group">
-              <div class="filter-item active" data-layer="airport">
+              <div class="filter-item" data-layer="airport">
                 <span class="filter-icon">✈️</span>
                 <span>Airports & Transit</span>
               </div>
-              <div class="filter-item active" data-layer="metro">
+              <div class="filter-item" data-layer="metro">
                 <span class="filter-icon">🚇</span>
                 <span>Metro Corridors</span>
               </div>
-              <div class="filter-item active" data-layer="it">
+              <div class="filter-item" data-layer="it">
                 <span class="filter-icon">💻</span>
                 <span>IT Parks & SEZs</span>
               </div>
-              <div class="filter-item active" data-layer="roads">
+              <div class="filter-item" data-layer="roads">
                 <span class="filter-icon">🛣️</span>
                 <span>New Roads & VCIC</span>
               </div>
-              <div class="filter-item active" data-layer="schools">
+              <div class="filter-item" data-layer="schools">
                 <span class="filter-icon">🏫</span>
                 <span>Educational Hubs</span>
               </div>
-              <div class="filter-item active" data-layer="hospitals">
+              <div class="filter-item" data-layer="hospitals">
                 <span class="filter-icon">🏥</span>
                 <span>Hospitals & Medical</span>
               </div>
-              <div class="filter-item active" data-layer="tourism">
+              <div class="filter-item" data-layer="tourism">
                 <span class="filter-icon">🏖️</span>
                 <span>Tourism & Beaches</span>
               </div>
@@ -1417,7 +1417,7 @@
         weight: 3.5,
         opacity: 0.65,
         dashArray: '6, 6'
-      }).addTo(map);
+      });
 
       const metroCoords = [
         [17.6900, 83.2100],
@@ -1432,7 +1432,7 @@
         weight: 3,
         opacity: 0.6,
         dashArray: '10, 10'
-      }).addTo(map);
+      });
 
       const beachRoadCoords = [
         [17.7780, 83.3860],
@@ -1446,7 +1446,7 @@
         weight: 3,
         opacity: 0.65,
         dashArray: '4, 4'
-      }).addTo(map);
+      });
 
       // Icon builders
       const getArkIcon = (label, id) => L.divIcon({
@@ -1515,7 +1515,10 @@
           icon = getDevIcon(item.color, item.emoji, shortLabel);
         }
 
-        const marker = L.marker(item.coords, { icon: icon }).addTo(map);
+        const marker = L.marker(item.coords, { icon: icon });
+        if (item.layer === "projects") {
+          marker.addTo(map);
+        }
         markerInstances[id] = marker;
 
         marker.on('click', () => selectMapPoint(id));
@@ -1538,10 +1541,12 @@
         });
       });
 
-      // Automatically fit map view bounds to encompass all markers on load
-      const allMarkerLayers = Object.values(markerInstances);
-      if (allMarkerLayers.length > 0) {
-        const group = L.featureGroup(allMarkerLayers);
+      // Automatically fit map view bounds to encompass ARK project markers on load
+      const arkMarkerLayers = Object.keys(markerInstances)
+        .filter(id => mapData[id].layer === "projects")
+        .map(id => markerInstances[id]);
+      if (arkMarkerLayers.length > 0) {
+        const group = L.featureGroup(arkMarkerLayers);
         map.fitBounds(group.getBounds().pad(0.08), { animate: false });
       }
 
