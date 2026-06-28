@@ -932,16 +932,20 @@
       // Layer Toggles
       const filterItems = document.querySelectorAll('.filter-item');
       
-      // Leaflet Map Initialization
+      // Leaflet Map Initialization (Static view configuration)
       const map = L.map('leafletMap', {
-        center: [17.78, 83.25],
-        zoom: 11,
+        center: [17.78, 83.22],
+        zoom: 10,
+        zoomSnap: 0.5,
         zoomControl: false,
+        dragging: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        touchZoom: false,
         attributionControl: false
       });
-
-      // Add Zoom Control at bottom right
-      L.control.zoom({ position: 'bottomright' }).addTo(map);
 
       // CartoDB Dark Matter tile layer
       L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -1485,8 +1489,6 @@
 
         const activeEl = document.getElementById(`wrapper-${id}`) || markerInstances[id].getElement()?.querySelector('.dev-marker-wrapper') || markerInstances[id].getElement()?.querySelector('.google-marker-wrapper');
         if (activeEl) activeEl.classList.add('active');
-
-        map.panTo(info.coords, { animate: true, duration: 0.6 });
 
         if (currentPolyline) {
           map.removeLayer(currentPolyline);
