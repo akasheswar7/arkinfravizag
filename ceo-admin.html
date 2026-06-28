@@ -459,7 +459,7 @@
 
       try {
         const encodedValue = updateValue ? encodeValue(updateValue) : '-';
-        const response = await fetch(`${KV_UPDATE_URL}/${encodedValue}`, {
+        const response = await fetch(`${KV_UPDATE_URL}?value=${encodedValue}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
