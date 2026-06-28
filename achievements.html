@@ -64,6 +64,7 @@
       display: flex; align-items: center; gap: 0.75rem;
       font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
       color: var(--white); letter-spacing: 0.04em;
+      flex-shrink: 0;
     }
     .logo span { color: var(--gold); }
     .logo-badge-img {
@@ -74,9 +75,9 @@
       padding: 2px;
       border-radius: 2px;
     }
-    .nav-desktop { display: flex; align-items: center; gap: 2rem; }
+    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
     .nav-desktop a {
-      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.12em;
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
       text-transform: uppercase; color: var(--text-body);
     }
     .nav-desktop a:hover { color: var(--gold); }
@@ -94,6 +95,10 @@
     .menu-toggle span {
       width: 26px; height: 2px; background: var(--gold);
       transition: var(--transition);
+    }
+    @media (max-width: 1120px) {
+      .nav-desktop { display: none !important; }
+      .menu-toggle { display: flex !important; }
     }
     .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
     .menu-toggle.active span:nth-child(2) { opacity: 0; }
