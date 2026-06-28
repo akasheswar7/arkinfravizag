@@ -182,9 +182,11 @@
       border-color: rgba(201, 169, 98, 0.3);
     }
     .filter-item.active {
-      background: rgba(201, 169, 98, 0.12);
+      background: rgba(201, 169, 98, 0.22);
       border-color: var(--gold);
-      color: var(--white);
+      color: var(--gold-light);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+      font-weight: 600;
     }
     .filter-icon {
       width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
@@ -193,6 +195,7 @@
     }
     .filter-item.active .filter-icon {
       background: var(--gold); color: var(--navy-deep);
+      box-shadow: 0 0 8px rgba(201, 169, 98, 0.6);
     }
 
     /* Map Viewer Column */
@@ -1534,6 +1537,13 @@
           mapTooltip.style.display = 'none';
         });
       });
+
+      // Automatically fit map view bounds to encompass all markers on load
+      const allMarkerLayers = Object.values(markerInstances);
+      if (allMarkerLayers.length > 0) {
+        const group = L.featureGroup(allMarkerLayers);
+        map.fitBounds(group.getBounds().pad(0.08), { animate: false });
+      }
 
       map.on('click', (e) => {
         if (e.originalEvent.target.id === 'leafletMap' || e.originalEvent.target.classList.contains('leaflet-container')) {
