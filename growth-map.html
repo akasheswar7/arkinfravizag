@@ -744,6 +744,24 @@
         color: var(--white) !important;
       }
     }
+
+    /* Premium Dark Theme Leaflet Zoom Controls */
+    .leaflet-control-zoom {
+      border: 1px solid rgba(201, 169, 98, 0.3) !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+      border-radius: 4px !important;
+      overflow: hidden;
+    }
+    .leaflet-control-zoom-in, .leaflet-control-zoom-out {
+      background-color: var(--navy) !important;
+      color: var(--gold) !important;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15) !important;
+      transition: background-color 0.2s, color 0.2s;
+    }
+    .leaflet-control-zoom-in:hover, .leaflet-control-zoom-out:hover {
+      background-color: var(--navy-mid) !important;
+      color: var(--white) !important;
+    }
   </style>
 </head>
 <body>
@@ -1003,18 +1021,18 @@
       // Layer Toggles
       const filterItems = document.querySelectorAll('.filter-item');
       
-      // Leaflet Map Initialization (Static view configuration)
+      // Leaflet Map Initialization
       const map = L.map('leafletMap', {
         center: [17.78, 83.22],
         zoom: 10,
         zoomSnap: 0.5,
-        zoomControl: false,
-        dragging: false,
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        touchZoom: false,
+        zoomControl: true,       // Enabled +/- zoom control buttons
+        dragging: true,          // Enabled panning to navigate the map
+        scrollWheelZoom: false,  // Disabled to prevent page scroll hijacking on desktop scroll
+        doubleClickZoom: true,
+        boxZoom: true,
+        keyboard: true,
+        touchZoom: true,         // Enabled pinch-to-zoom on touch screens
         attributionControl: false
       });
 
