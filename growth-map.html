@@ -265,6 +265,17 @@
       font-weight: 700; pointer-events: none; text-anchor: middle;
       text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
+    .google-ring-1 {
+      animation: googlePulse 3s infinite ease-in-out;
+      transform-origin: 10px -30px;
+    }
+    @keyframes googlePulse {
+      0% { r: 22px; opacity: 0.8; stroke: #4285f4; }
+      25% { stroke: #ea4335; }
+      50% { r: 28px; opacity: 0.15; stroke: #fabc05; }
+      75% { stroke: #34a853; }
+      100% { r: 22px; opacity: 0.8; stroke: #4285f4; }
+    }
 
     /* Proximity Connection Lines */
     .proximity-line {
@@ -651,6 +662,7 @@
 
               <!-- Proximity Lines (Dashed connection lines, animated via JS) -->
               <line id="lineGoldenAcresAirport" x1="690" y1="40" x2="640" y2="75" class="proximity-line" />
+              <line id="lineBelmonkGoogleData" x1="490" y1="220" x2="580" y2="135" class="proximity-line" />
               <line id="lineBelmonkTagarapuvalasa" x1="580" y1="135" x2="510" y2="190" class="proximity-line" />
               <line id="lineSandalAnandapuram" x1="530" y1="165" x2="610" y2="80" class="proximity-line" />
               <line id="lineRTCKothavalasa" x1="270" y1="215" x2="270" y2="180" class="proximity-line" />
@@ -725,6 +737,18 @@
                 <!-- SVG Tech Building Icon -->
                 <path d="M 4 -36 L 10 -36 L 10 -22 L 4 -22 Z M 11 -32 L 16 -32 L 16 -22 L 11 -22 Z" fill="#c084fc" />
                 <text x="10" y="8" fill="#c084fc" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Kapuluppada IT</text>
+              </g>
+              
+              <!-- Google Data Centre -->
+              <g class="map-marker dev-marker" id="mark-it-googledata" data-id="it-googledata" data-layer="it" transform="translate(480, 250)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="26" fill="none" stroke="#ea4335" stroke-width="1.5" opacity="0.4" class="google-ring-1" />
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#4285f4" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(66, 133, 244, 0.15)" />
+                <!-- Server stack icon in gold/blue -->
+                <path d="M 4 -36 L 16 -36 M 4 -32 L 16 -32 M 4 -28 L 16 -28" stroke="#fabc05" stroke-width="2" stroke-linecap="round" />
+                <rect x="3" y="-39" width="14" height="15" fill="none" stroke="#34a853" stroke-width="1.5" rx="1" />
+                <circle cx="10" cy="-30" r="2" fill="#ea4335" />
+                <text x="10" y="8" fill="#4285f4" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Google Data Centre</text>
               </g>
 
               <!-- Sabbavaram Town / Educational Hub -->
@@ -1074,6 +1098,19 @@
           desc: "Visakhapatnam's primary IT hub, home to companies like Tech Mahindra, Wipro, and Millennium IT Towers. The state government is actively expanding incubation facilities here to support cyber security and fintech startups.",
           impact: "Vizag's status as Andhra Pradesh's IT capital is creating a wealthy tech employee base looking for premium plots and apartments.",
           cta: "projects"
+        },
+        "it-googledata": {
+          title: "Google Data Centre (Vizag Cloud Region)",
+          type: "Hyper-Scale Cloud Data Centre",
+          date: "Q4 2027 (Proposed)",
+          val1: "₹2,500+ Crores Investment",
+          val2: "12 Mins (Belmonk Layout)",
+          desc: "Google's proposed hyper-scale Data Centre and Cloud infrastructure region in Visakhapatnam. This state-of-the-art facility will handle cloud compute workloads for global enterprises and anchor Vizag as a premier technology hub.",
+          impact: "This massive tech investment dramatically increases premium residential demands and land values in the Kapuluppada-Tagarapuvalasa corridor, directly benefiting Belmonk Layout.",
+          cta: "projects",
+          arkId: "ark-belmonk",
+          lineId: "lineBelmonkGoogleData",
+          badgeText: "12 Mins Drive"
         },
         "it-kapuluppada": {
           title: "Kapuluppada IT SEZ & Startup Hill",
