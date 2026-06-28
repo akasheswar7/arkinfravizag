@@ -613,26 +613,25 @@
     /* Google Data Centre pulsing rings */
     .google-marker-wrapper {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 52px;
+      height: 52px;
       cursor: pointer;
     }
     .google-marker-glow {
       position: absolute;
       top: 2px; left: 2px;
-      width: 36px; height: 36px;
+      width: 48px; height: 48px;
       border-radius: 50%;
       animation: googleGlowPulse 4s infinite ease-in-out;
-      box-shadow: 0 0 15px #4285f4;
+      box-shadow: 0 0 20px #4285f4;
     }
     .google-marker-circle {
-      width: 40px; height: 40px;
+      width: 52px; height: 52px;
       border-radius: 50%;
       background: var(--navy-deep);
-      border: 3px solid #4285f4;
+      border: 3.5px solid #4285f4;
       display: flex; align-items: center; justify-content: center;
-      font-size: 15px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.6);
       animation: googleBorderPulse 4s infinite ease-in-out;
       transition: transform 0.25s;
     }
@@ -675,6 +674,13 @@
       50% { color: #fabc05; }
       75% { color: #34a853; }
       100% { color: #4285f4; }
+    }
+    @keyframes googleIconColorPulse {
+      0% { fill: #4285f4; }
+      25% { fill: #ea4335; }
+      50% { fill: #fabc05; }
+      75% { fill: #34a853; }
+      100% { fill: #4285f4; }
     }
 
     /* Custom City Labels Overlay */
@@ -1603,13 +1609,15 @@
           <div class="google-marker-wrapper">
             <div class="google-marker-glow"></div>
             <div class="google-marker-circle">
-              <span>☁️</span>
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="#4285f4" style="animation: googleIconColorPulse 4s infinite ease-in-out;">
+                <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm8 12h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2z"/>
+              </svg>
             </div>
             <div class="google-marker-label">Google Data Centre</div>
           </div>
         `,
-        iconSize: [40, 40],
-        iconAnchor: [20, 20]
+        iconSize: [52, 52],
+        iconAnchor: [26, 26]
       });
 
       const getDevIcon = (color, emoji, label) => L.divIcon({
