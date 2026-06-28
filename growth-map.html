@@ -192,6 +192,195 @@
       font-weight: 600;
     }
     .filter-icon {
+  <link rel="apple-touch-icon" href="images/logo.jpg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore Visakhapatnam's future growth corridor. See upcoming metro corridors, Bhogapuram International Airport, IT parks, highways, and their proximity to ARK projects.">
+  <title>Future Vizag Growth Map | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <!-- Leaflet GIS Map Assets -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --off-white: #f4f6f9;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .site-header.scrolled {
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop a {
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover, .nav-desktop a.active { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    @media (max-width: 1120px) {
+      .nav-desktop { display: none !important; }
+      .menu-toggle { display: flex !important; }
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: var(--header-h) 0 0 0; z-index: 999;
+      background: var(--navy-deep);
+      padding: 3rem 1.5rem;
+      display: flex; flex-direction: column; gap: 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      overflow-y: auto;
+    }
+    .nav-mobile.open { transform: translateX(0); }
+    .nav-mobile a {
+      font-size: 1.25rem; font-weight: 500; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      padding-bottom: 0.5rem;
+    }
+    .nav-mobile a.active { color: var(--gold); }
+
+    @media (max-width: 900px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+    }
+
+    /* Subpage Hero */
+    .subpage-hero {
+      position: relative; padding: 8rem 0 4rem;
+      background: linear-gradient(180deg, var(--navy), var(--navy-deep));
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+      text-align: center;
+    }
+    .subpage-hero h1 {
+      font-family: var(--font-display); font-size: 3rem; color: var(--white);
+      margin-bottom: 1rem; letter-spacing: 0.02em;
+    }
+    .subpage-hero p {
+      font-size: 1.1rem; color: var(--text-muted); max-width: 36rem; margin: 0 auto;
+    }
+
+    /* Main Content Layout */
+    .map-container-grid {
+      max-width: var(--max-w); margin: 3rem auto; padding: 0 1.5rem;
+      display: grid; grid-template-columns: 1fr 2.2fr; gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .map-container-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Sidebar / Filters */
+    .map-sidebar {
+      background: var(--navy);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      padding: 2rem; border-radius: 4px;
+    }
+    .sidebar-section h3 {
+      font-family: var(--font-display); font-size: 1.5rem; color: var(--white);
+      margin-bottom: 1.25rem; border-bottom: 1px solid rgba(201, 169, 98, 0.25);
+      padding-bottom: 0.5rem;
+    }
+    .filter-group {
+      display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;
+    }
+    .filter-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      padding: 0.75rem 1rem; background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px; cursor: pointer; transition: var(--transition);
+      font-size: 0.875rem; font-weight: 500; color: var(--text-body);
+      user-select: none;
+    }
+    .filter-item:hover {
+      background: rgba(201, 169, 98, 0.05);
+      border-color: rgba(201, 169, 98, 0.3);
+    }
+    .filter-item.active {
+      background: rgba(201, 169, 98, 0.22);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+      font-weight: 600;
+    }
+    .filter-icon {
       width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
       background: rgba(201, 169, 98, 0.15); border-radius: 50%; color: var(--gold);
       font-size: 0.75rem; transition: var(--transition);
@@ -199,6 +388,39 @@
     .filter-item.active .filter-icon {
       background: var(--gold); color: var(--navy-deep);
       box-shadow: 0 0 8px rgba(201, 169, 98, 0.6);
+    }
+
+    /* Map Style Toggle */
+    .map-style-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .style-btn {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+      color: var(--text-body);
+      font-size: 0.78rem;
+      font-weight: 500;
+      transition: var(--transition);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .style-btn:hover {
+      background: rgba(201, 169, 98, 0.05);
+      border-color: rgba(201, 169, 98, 0.3);
+      color: var(--white);
+    }
+    .style-btn.active {
+      background: rgba(201, 169, 98, 0.22);
+      border-color: var(--gold);
+      color: var(--gold-light);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+      font-weight: 600;
     }
 
     /* Map Viewer Column */
@@ -870,6 +1092,14 @@
               *Toggling categories highlights related markers. Click green tags (ARK Projects) or markers to trace distances.
             </p>
           </div>
+
+          <div class="sidebar-section" style="margin-top: 1.5rem; border-top: 1px solid rgba(201, 169, 98, 0.15); padding-top: 1.25rem;">
+            <h3>Map Style</h3>
+            <div class="map-style-group">
+              <button class="style-btn active" id="styleBtnDark" data-style="dark">Dark Vector</button>
+              <button class="style-btn" id="styleBtnSat" data-style="satellite">Satellite Map</button>
+            </div>
+          </div>
         </div>
 
         <!-- Map & Details Wrapper -->
@@ -1054,10 +1284,24 @@
         attributionControl: false
       });
 
-      // CartoDB Dark Matter tile layer
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      // Define Tile Layers
+      const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         maxZoom: 20
-      }).addTo(map);
+      });
+
+      const satelliteBase = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+      });
+
+      const satelliteLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20
+      });
+
+      const satelliteLayer = L.layerGroup([satelliteBase, satelliteLabels]);
+
+      // Add default layer
+      darkLayer.addTo(map);
 
       // Data definitions for map points with geo-coordinates
       const mapData = {
@@ -1826,6 +2070,28 @@
             if (active) metroPoly.addTo(map); else map.removeLayer(metroPoly);
           }
         });
+      });
+
+      // Style Toggles
+      const styleBtnDark = document.getElementById('styleBtnDark');
+      const styleBtnSat = document.getElementById('styleBtnSat');
+
+      styleBtnDark.addEventListener('click', () => {
+        if (!styleBtnDark.classList.contains('active')) {
+          styleBtnDark.classList.add('active');
+          styleBtnSat.classList.remove('active');
+          map.removeLayer(satelliteLayer);
+          darkLayer.addTo(map);
+        }
+      });
+
+      styleBtnSat.addEventListener('click', () => {
+        if (!styleBtnSat.classList.contains('active')) {
+          styleBtnSat.classList.add('active');
+          styleBtnDark.classList.remove('active');
+          map.removeLayer(darkLayer);
+          satelliteLayer.addTo(map);
+        }
       });
     })();
   </script>
