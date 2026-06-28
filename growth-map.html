@@ -547,25 +547,72 @@
             <svg id="vizagVectorMap" viewBox="0 0 800 600" width="100%" height="100%">
               <!-- Definitions for gradients and drop shadows -->
               <defs>
-                <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-                  <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.5"/>
+                <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.6"/>
                 </filter>
-                <filter id="glow-green" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                <filter id="glow-green" x="-40%" y="-40%" width="180%" height="180%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
+                  <feComponentTransfer in="blur" result="boost">
+                    <feFuncA type="linear" slope="3"/>
+                  </feComponentTransfer>
+                  <feMerge>
+                    <feMergeNode in="boost" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <filter id="glow-gold" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
                 </filter>
+                
+                <linearGradient id="landGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#060c15" />
+                  <stop offset="50%" stop-color="#0b1726" />
+                  <stop offset="100%" stop-color="#12253c" />
+                </linearGradient>
+                
+                <linearGradient id="waterGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#091526" />
+                  <stop offset="100%" stop-color="#040a12" />
+                </linearGradient>
+                
+                <linearGradient id="mountainGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#060c15" stop-opacity="0.9" />
+                  <stop offset="100%" stop-color="#1e3d66" stop-opacity="0.35" />
+                </linearGradient>
               </defs>
 
               <!-- SVG Ocean Background -->
-              <rect x="0" y="0" width="800" height="600" class="map-bg-water" />
+              <rect x="0" y="0" width="800" height="600" fill="url(#waterGrad)" />
 
               <!-- Land Shape Path representing coastline & inland region of Vizag -->
-              <path d="M 0 0 L 800 0 L 800 60 L 720 120 L 580 230 L 480 300 L 400 370 L 320 400 L 260 450 L 180 470 L 100 520 L 0 540 Z" class="map-bg-land" />
-              <!-- Wave Line (Coastline) -->
-              <path d="M 0 540 C 50 535, 80 525, 100 520 C 140 510, 160 480, 180 470 C 220 450, 240 455, 260 450 C 290 440, 300 410, 320 400 C 360 380, 380 385, 400 370 C 440 340, 460 320, 480 300 C 530 260, 550 250, 580 230 C 650 170, 690 140, 720 120 C 760 100, 780 75, 800 60" class="map-coastline" />
+              <path d="M 0 0 L 800 0 L 800 60 L 720 120 L 580 230 L 480 300 L 400 370 L 320 400 L 260 450 L 180 470 L 100 520 L 0 540 Z" fill="url(#landGrad)" />
+
+              <!-- Ocean Waves Ripple Effect -->
+              <path d="M 0 544 C 50 539, 80 529, 100 524 C 140 514, 160 484, 180 474 C 220 454, 240 459, 260 454 C 290 444, 300 414, 320 404 C 360 384, 380 389, 400 374 C 440 344, 460 324, 480 304 C 530 264, 550 254, 580 234 Q 670 154, 720 124 T 800 49" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="3,12" fill="none" opacity="0.4" />
+              <path d="M 0 548 C 50 543, 80 533, 100 528 C 140 518, 160 488, 180 478 C 220 458, 240 463, 260 458 C 290 448, 300 418, 320 408 C 360 388, 380 393, 400 378 C 440 348, 460 328, 480 308 C 530 268, 550 258, 580 238 Q 670 158, 720 128 T 800 53" stroke="#1e3d66" stroke-width="1.2" stroke-dasharray="2,20" fill="none" opacity="0.3" />
+
+              <!-- Wave Line (Coastline with glowing sand effect) -->
+              <path d="M 0 540 C 50 535, 80 525, 100 520 C 140 510, 160 480, 180 470 C 220 450, 240 455, 260 450 C 290 440, 300 410, 320 400 C 360 380, 380 385, 400 370 C 440 340, 460 320, 480 300 C 530 260, 550 250, 580 230 C 650 170, 690 140, 720 120 C 760 100, 780 75, 800 60" stroke="#e4d4a8" stroke-width="3" fill="none" opacity="0.75" filter="url(#glow-gold)" />
+              <path d="M 0 540 C 50 535, 80 525, 100 520 C 140 510, 160 480, 180 470 C 220 450, 240 455, 260 450 C 290 440, 300 410, 320 400 C 360 380, 380 385, 400 370 C 440 340, 460 320, 480 300 C 530 260, 550 250, 580 230 C 650 170, 690 140, 720 120 C 760 100, 780 75, 800 60" stroke="var(--gold)" stroke-width="1.2" fill="none" />
+
+              <!-- Mountains / Hills Topography (Eastern Ghats Representation) -->
+              <!-- Mountain Range 1 (North-West) -->
+              <path d="M 20 80 L 80 170 L -40 170 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              <path d="M 70 60 L 130 140 L 10 140 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              <path d="M 120 100 L 190 200 L 50 200 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              
+              <!-- Mountain Range 2 (Mid-West / Kothavalasa area) -->
+              <path d="M 40 240 L 100 330 L -20 330 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              <path d="M 90 210 L 160 310 L 20 310 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              <path d="M 150 260 L 220 360 L 80 360 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+
+              <!-- Mountain Range 3 (South-West / Yelamanchili area) -->
+              <path d="M 10 400 L 70 480 L -50 480 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
+              <path d="M 50 430 L 110 500 L -10 500 Z" fill="url(#mountainGrad)" stroke="rgba(30, 61, 102, 0.3)" />
 
               <!-- Grid overlay (Latitude/Longitude guides) -->
-              <g stroke="rgba(30, 61, 102, 0.3)" stroke-width="0.5" stroke-dasharray="2,2">
+              <g stroke="rgba(201, 169, 98, 0.12)" stroke-width="0.5" stroke-dasharray="2,2">
                 <line x1="100" y1="0" x2="100" y2="600" />
                 <line x1="200" y1="0" x2="200" y2="600" />
                 <line x1="300" y1="0" x2="300" y2="600" />
@@ -581,8 +628,8 @@
               </g>
 
               <!-- Gulf/Bay text -->
-              <text x="500" y="450" fill="rgba(30, 61, 102, 0.4)" font-family="var(--font-display)" font-size="20" font-style="italic" letter-spacing="0.2em" transform="rotate(-15 500 450)">BAY OF BENGAL</text>
-              <text x="100" y="30" fill="rgba(30, 61, 102, 0.25)" font-family="var(--font-sans)" font-size="10">GRID ZONE VZ-08</text>
+              <text x="500" y="450" fill="rgba(201, 169, 98, 0.15)" font-family="var(--font-display)" font-size="20" font-style="italic" letter-spacing="0.25em" transform="rotate(-15 500 450)">BAY OF BENGAL</text>
+              <text x="100" y="30" fill="rgba(201, 169, 98, 0.15)" font-family="var(--font-sans)" font-size="10" letter-spacing="0.05em">EASTERN GHATS REGION</text>
 
               <!-- Infrastructure: National Highway NH-16 (glows when Road toggle active) -->
               <path id="nh16Line" d="M 0 490 Q 120 440 220 380 T 420 280 T 620 140 T 800 20" class="map-road-nh active" />
@@ -603,86 +650,100 @@
               </text>
 
               <!-- Proximity Lines (Dashed connection lines, animated via JS) -->
-              <line id="lineGoldenAcresAirport" x1="680" y1="70" x2="630" y2="100" class="proximity-line" />
-              <line id="lineKokkirapalliSez" x1="80" y1="510" x2="70" y2="540" class="proximity-line" />
-              <line id="lineMukthaSteel" x1="190" y1="440" x2="220" y2="380" class="proximity-line" />
-              <line id="lineHighwayCityNH" x1="480" y1="200" x2="520" y2="210" class="proximity-line" />
+              <line id="lineGoldenAcresAirport" x1="690" y1="40" x2="640" y2="75" class="proximity-line" />
+              <line id="lineKokkirapalliSez" x1="90" y1="480" x2="80" y2="515" class="proximity-line" />
+              <line id="lineMukthaSteel" x1="290" y1="270" x2="200" y2="415" class="proximity-line" />
+              <line id="lineHighwayCityNH" x1="490" y1="175" x2="520" y2="210" class="proximity-line" />
 
               <!-- Markers: Public Developments -->
               <!-- Bhogapuram Greenfield Airport -->
-              <g class="map-marker dev-marker" id="mark-airport-bhogapuram" data-id="airport-bhogapuram" data-layer="airport" transform="translate(680, 70)">
-                <circle cx="0" cy="0" r="14" fill="rgba(245, 158, 11, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-airport" />
-                <text x="0" y="16" fill="#f59e0b" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Bhogapuram Airport</text>
+              <g class="map-marker dev-marker" id="mark-airport-bhogapuram" data-id="airport-bhogapuram" data-layer="airport" transform="translate(680, 70)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#f59e0b" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(245, 158, 11, 0.15)" />
+                <!-- SVG Airplane Icon -->
+                <path d="M 10 -40 L 12 -33 L 19 -33 L 13 -29 L 15 -21 L 10 -25 L 5 -21 L 7 -29 L 1 -33 L 8 -33 Z" fill="#f59e0b" />
+                <text x="10" y="8" fill="#f59e0b" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Bhogapuram Airport</text>
               </g>
 
               <!-- Atchutapuram SEZ Industrial Hub -->
-              <g class="map-marker dev-marker" id="mark-it-atchutapuram" data-id="it-atchutapuram" data-layer="it" transform="translate(80, 510)">
-                <circle cx="0" cy="0" r="14" fill="rgba(168, 85, 247, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-it" />
-                <text x="0" y="16" fill="#c084fc" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Atchutapuram SEZ</text>
+              <g class="map-marker dev-marker" id="mark-it-atchutapuram" data-id="it-atchutapuram" data-layer="it" transform="translate(80, 510)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#a855f7" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(168, 85, 247, 0.15)" />
+                <!-- SVG SEZ/Factory Icon -->
+                <path d="M 3 -38 L 7 -32 L 7 -38 L 11 -32 L 11 -38 L 17 -30 L 17 -22 L 3 -22 Z" fill="#c084fc" />
+                <text x="10" y="8" fill="#c084fc" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Atchutapuram SEZ</text>
               </g>
 
               <!-- Rushikonda IT Hills -->
-              <g class="map-marker dev-marker" id="mark-it-rushikonda" data-id="it-rushikonda" data-layer="it" transform="translate(420, 290)">
-                <circle cx="0" cy="0" r="14" fill="rgba(168, 85, 247, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-it" />
-                <text x="0" y="16" fill="#c084fc" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda IT Hill</text>
+              <g class="map-marker dev-marker" id="mark-it-rushikonda" data-id="it-rushikonda" data-layer="it" transform="translate(420, 290)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#a855f7" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(168, 85, 247, 0.15)" />
+                <!-- SVG Tech Building Icon -->
+                <path d="M 4 -36 L 10 -36 L 10 -22 L 4 -22 Z M 11 -32 L 16 -32 L 16 -22 L 11 -22 Z" fill="#c084fc" />
+                <text x="10" y="8" fill="#c084fc" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda IT Hill</text>
               </g>
 
               <!-- Health City Arilova -->
-              <g class="map-marker dev-marker" id="mark-hospital-healthcity" data-id="hospital-healthcity" data-layer="hospitals" transform="translate(280, 300)">
-                <circle cx="0" cy="0" r="14" fill="rgba(236, 72, 153, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-hospital" />
-                <text x="0" y="16" fill="#f472b6" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Health City</text>
+              <g class="map-marker dev-marker" id="mark-hospital-healthcity" data-id="hospital-healthcity" data-layer="hospitals" transform="translate(280, 300)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#ec4899" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(236, 72, 153, 0.15)" />
+                <!-- SVG Medical Cross Icon -->
+                <path d="M 7 -32 L 13 -32 L 13 -38 L 17 -38 L 17 -32 L 23 -32 L 23 -28 L 17 -28 L 17 -22 L 13 -22 L 13 -28 L 7 -28 Z" fill="#f472b6" transform="translate(-5, 0)" />
+                <text x="10" y="8" fill="#f472b6" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Health City</text>
               </g>
 
               <!-- Centurion University Educational Hub -->
-              <g class="map-marker dev-marker" id="mark-school-centurion" data-id="school-centurion" data-layer="schools" transform="translate(600, 110)">
-                <circle cx="0" cy="0" r="14" fill="rgba(59, 130, 246, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-school" />
-                <text x="0" y="16" fill="#60a5fa" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Centurion Uni</text>
+              <g class="map-marker dev-marker" id="mark-school-centurion" data-id="school-centurion" data-layer="schools" transform="translate(600, 110)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#3b82f6" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(59, 130, 246, 0.15)" />
+                <!-- Graduation Cap Icon -->
+                <path d="M 2 -32 L 10 -36 L 18 -32 L 10 -28 Z M 6 -30 L 6 -24 C 6 -21 14 -21 14 -24 L 14 -30 Z" fill="#60a5fa" />
+                <text x="10" y="8" fill="#60a5fa" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Centurion Uni</text>
               </g>
 
               <!-- Rushikonda Beach & Resorts -->
-              <g class="map-marker dev-marker" id="mark-tourism-rushikonda" data-id="tourism-rushikonda" data-layer="tourism" transform="translate(450, 280)">
-                <circle cx="0" cy="0" r="14" fill="rgba(6, 182, 212, 0.15)" />
-                <path d="M0 -15 L12 5 L-12 5 Z" class="marker-pin infra-tourism" />
-                <text x="0" y="16" fill="#22d3ee" font-size="8" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda Beach</text>
+              <g class="map-marker dev-marker" id="mark-tourism-rushikonda" data-id="tourism-rushikonda" data-layer="tourism" transform="translate(450, 280)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#06b6d4" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(6, 182, 212, 0.15)" />
+                <!-- Beach Umbrella/Palm Icon -->
+                <path d="M 10 -38 L 10 -22 M 5 -34 L 15 -34 M 6 -30 L 14 -30" stroke="#22d3ee" stroke-width="2" stroke-linecap="round" />
+                <text x="10" y="8" fill="#22d3ee" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda Beach</text>
               </g>
 
 
-              <!-- Markers: ARK Infra Ventures (Green Glowing Pins) -->
+              <!-- Markers: ARK Infra Ventures (Green Glowing Map Pin Droplets) -->
               <!-- Golden Acres Bhogapuram -->
-              <g class="ark-project-marker" id="ark-goldenacres" data-id="ark-goldenacres" transform="translate(630, 100)">
-                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
-                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
-                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
-                <text x="0" y="-18" class="ark-project-label">GOLDEN ACRES</text>
+              <g class="ark-project-marker" id="ark-goldenacres" data-id="ark-goldenacres" transform="translate(630, 100)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <!-- Elegant Map Pin Path -->
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <!-- House shape inside pin -->
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">GOLDEN ACRES</text>
               </g>
 
               <!-- Kokkirapalli Venture -->
-              <g class="ark-project-marker" id="ark-kokkirapalli" data-id="ark-kokkirapalli" transform="translate(70, 540)">
-                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
-                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
-                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
-                <text x="0" y="20" class="ark-project-label">KOKKIRAPALLI</text>
+              <g class="ark-project-marker" id="ark-kokkirapalli" data-id="ark-kokkirapalli" transform="translate(70, 540)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="14" class="ark-project-label">KOKKIRAPALLI</text>
               </g>
 
               <!-- Sri Muktha Gardens -->
-              <g class="ark-project-marker" id="ark-srimuktha" data-id="ark-srimuktha" transform="translate(190, 440)">
-                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
-                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
-                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
-                <text x="0" y="-18" class="ark-project-label">SRI MUKTHA GARDENS</text>
+              <g class="ark-project-marker" id="ark-srimuktha" data-id="ark-srimuktha" transform="translate(190, 440)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">SRI MUKTHA</text>
               </g>
 
               <!-- Highway City Layout -->
-              <g class="ark-project-marker" id="ark-highwaycity" data-id="ark-highwaycity" transform="translate(480, 200)">
-                <circle cx="0" cy="0" r="15" fill="rgba(34, 197, 94, 0.2)" filter="url(#glow-green)" />
-                <polygon points="0,-12 10,6 -10,6" class="ark-project-pin" />
-                <circle cx="0" cy="-2" r="3" fill="#ffffff" />
-                <text x="0" y="-18" class="ark-project-label">HIGHWAY CITY</text>
+              <g class="ark-project-marker" id="ark-highwaycity" data-id="ark-highwaycity" transform="translate(480, 200)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">HIGHWAY CITY</text>
               </g>
 
             </svg>
