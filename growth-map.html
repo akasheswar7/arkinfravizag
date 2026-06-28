@@ -676,6 +676,32 @@
       75% { color: #34a853; }
       100% { color: #4285f4; }
     }
+
+    /* Custom City Labels Overlay */
+    .custom-city-label {
+      background: none !important;
+      border: none !important;
+      text-align: center;
+      pointer-events: none;
+    }
+    .custom-city-label.major span {
+      font-family: var(--font-sans);
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.85);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95), 0 0 3px rgba(0, 0, 0, 0.95);
+    }
+    .custom-city-label.minor span {
+      font-family: var(--font-sans);
+      font-size: 9px;
+      font-weight: 600;
+      color: rgba(200, 210, 225, 0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9), 0 0 2px rgba(0, 0, 0, 0.9);
+    }
   </style>
 </head>
 <body>
@@ -1446,6 +1472,35 @@
         weight: 3,
         opacity: 0.65,
         dashArray: '4, 4'
+      });
+
+      // Render text labels for 15 main cities/neighborhoods in Visakhapatnam
+      const cities = [
+        { name: "Visakhapatnam", coords: [17.72, 83.30], major: true },
+        { name: "Gajuwaka", coords: [17.69, 83.21], major: true },
+        { name: "Anakapalle", coords: [17.69, 83.00], major: true },
+        { name: "Bhogapuram", coords: [18.01, 83.51], major: false },
+        { name: "Tagarapuvalasa", coords: [17.93, 83.42], major: false },
+        { name: "Anandapuram", coords: [17.86, 83.34], major: false },
+        { name: "Simhachalam", coords: [17.77, 83.25], major: false },
+        { name: "Sabbavaram", coords: [17.78, 83.13], major: false },
+        { name: "Kothavalasa", coords: [17.90, 83.18], major: false },
+        { name: "Lankelapalem", coords: [17.67, 83.13], major: false },
+        { name: "Yelamanchili", coords: [17.55, 82.86], major: false },
+        { name: "Bheemili", coords: [17.89, 83.45], major: false },
+        { name: "Rushikonda", coords: [17.78, 83.38], major: false },
+        { name: "Arilova", coords: [17.77, 83.31], major: false },
+        { name: "NAD Junction", coords: [17.73, 83.22], major: false }
+      ];
+
+      cities.forEach(c => {
+        const icon = L.divIcon({
+          className: c.major ? 'custom-city-label major' : 'custom-city-label minor',
+          html: `<span>${c.name}</span>`,
+          iconSize: [120, 20],
+          iconAnchor: [60, 10]
+        });
+        L.marker(c.coords, { icon: icon, zIndexOffset: -100 }).addTo(map);
       });
 
       // Icon builders
