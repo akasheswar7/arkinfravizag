@@ -736,27 +736,28 @@
         transform: scale(0.78);
         transform-origin: center center;
       }
-      /* Hide text labels by default on mobile to prevent clumsy overlapping clusters */
-      .ark-marker-label, .dev-marker-label, .google-marker-label {
-        display: none !important;
-      }
+    }
 
-      /* Only display the label for the active/selected marker in a premium badge format */
-      .ark-marker-wrapper.active .ark-marker-label,
-      .dev-marker-wrapper.active .dev-marker-label,
-      .google-marker-wrapper.active .google-marker-label {
-        display: block !important;
-        font-size: 9px !important;
-        bottom: -18px !important;
-        background: rgba(10, 22, 40, 0.95) !important;
-        padding: 3px 8px !important;
-        border-radius: 4px !important;
-        border: 1px solid rgba(201, 169, 98, 0.45) !important;
-        z-index: 1000 !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
-        white-space: nowrap !important;
-        color: var(--white) !important;
-      }
+    /* Hide all marker labels by default globally to prevent clumsy clutter and overlap */
+    .ark-marker-label, .dev-marker-label, .google-marker-label {
+      display: none !important;
+    }
+
+    /* Display the label as a premium badge when active (selected) on all devices */
+    .ark-marker-wrapper.active .ark-marker-label,
+    .dev-marker-wrapper.active .dev-marker-label,
+    .google-marker-wrapper.active .google-marker-label {
+      display: block !important;
+      font-size: 9px !important;
+      bottom: -18px !important;
+      background: rgba(10, 22, 40, 0.95) !important;
+      padding: 3px 8px !important;
+      border-radius: 4px !important;
+      border: 1px solid rgba(201, 169, 98, 0.45) !important;
+      z-index: 1000 !important;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6) !important;
+      white-space: nowrap !important;
+      color: var(--white) !important;
     }
 
     /* Premium Dark Theme Leaflet Zoom Controls */
