@@ -1627,7 +1627,7 @@
       // Fetch Live CEO Updates
       async function checkLiveUpdates() {
         function decodeValue(str) {
-          if (str.startsWith('b64:')) {
+          if (str.startsWith('b64_')) {
             let base64 = str.substring(4).replace(/-/g, '+').replace(/_/g, '/');
             while (base64.length % 4) {
               base64 += '=';
