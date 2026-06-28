@@ -651,9 +651,17 @@
 
               <!-- Proximity Lines (Dashed connection lines, animated via JS) -->
               <line id="lineGoldenAcresAirport" x1="690" y1="40" x2="640" y2="75" class="proximity-line" />
-              <line id="lineKokkirapalliSez" x1="90" y1="480" x2="80" y2="515" class="proximity-line" />
-              <line id="lineMukthaSteel" x1="290" y1="270" x2="200" y2="415" class="proximity-line" />
-              <line id="lineHighwayCityNH" x1="490" y1="175" x2="520" y2="210" class="proximity-line" />
+              <line id="lineBelmonkTagarapuvalasa" x1="580" y1="135" x2="510" y2="190" class="proximity-line" />
+              <line id="lineSandalAnandapuram" x1="530" y1="165" x2="610" y2="80" class="proximity-line" />
+              <line id="lineRTCKothavalasa" x1="270" y1="215" x2="270" y2="180" class="proximity-line" />
+              <line id="lineVaibhavSimhachalam" x1="340" y1="245" x2="320" y2="300" class="proximity-line" />
+              <line id="lineEducationHub" x1="250" y1="325" x2="260" y2="290" class="proximity-line" />
+              <line id="lineMukthaSteel" x1="200" y1="415" x2="230" y2="350" class="proximity-line" />
+              <line id="lineSampathSEZ" x1="210" y1="385" x2="230" y2="350" class="proximity-line" />
+              <line id="lineKodduruBypass" x1="130" y1="405" x2="140" y2="420" class="proximity-line" />
+              <line id="lineAlakanandaNH" x1="160" y1="435" x2="140" y2="420" class="proximity-line" />
+              <line id="lineGokulavanamSez" x1="120" y1="455" x2="90" y2="480" class="proximity-line" />
+              <line id="lineKokkirapalliSez" x1="80" y1="515" x2="90" y2="480" class="proximity-line" />
 
               <!-- Markers: Public Developments -->
               <!-- Bhogapuram Greenfield Airport -->
@@ -710,24 +718,90 @@
                 <text x="10" y="8" fill="#22d3ee" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Rushikonda Beach</text>
               </g>
 
+              <!-- Kapuluppada IT SEZ & Startup Hill -->
+              <g class="map-marker dev-marker" id="mark-it-kapuluppada" data-id="it-kapuluppada" data-layer="it" transform="translate(500, 220)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#a855f7" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(168, 85, 247, 0.15)" />
+                <!-- SVG Tech Building Icon -->
+                <path d="M 4 -36 L 10 -36 L 10 -22 L 4 -22 Z M 11 -32 L 16 -32 L 16 -22 L 11 -22 Z" fill="#c084fc" />
+                <text x="10" y="8" fill="#c084fc" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Kapuluppada IT</text>
+              </g>
+
+              <!-- Sabbavaram Town / Educational Hub -->
+              <g class="map-marker dev-marker" id="mark-school-sabbavaram" data-id="school-sabbavaram" data-layer="schools" transform="translate(250, 320)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#3b82f6" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(59, 130, 246, 0.15)" />
+                <!-- Graduation Cap Icon -->
+                <path d="M 2 -32 L 10 -36 L 18 -32 L 10 -28 Z M 6 -30 L 6 -24 C 6 -21 14 -21 14 -24 L 14 -30 Z" fill="#60a5fa" />
+                <text x="10" y="8" fill="#60a5fa" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Sabbavaram Hub</text>
+              </g>
+
+              <!-- Gajuwaka Metro Terminal -->
+              <g class="map-marker dev-marker" id="mark-metro-gajuwaka" data-id="metro-gajuwaka" data-layer="metro" transform="translate(220, 380)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#ef4444" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(239, 68, 68, 0.15)" />
+                <!-- Metro box icon -->
+                <path d="M 5 -34 L 15 -34 L 15 -24 L 5 -24 Z" fill="#f87171" />
+                <text x="10" y="8" fill="#f87171" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Gajuwaka Metro</text>
+              </g>
+
+              <!-- Kothavalasa Transit Depot -->
+              <g class="map-marker dev-marker" id="mark-transit-kothavalasa" data-id="transit-kothavalasa" data-layer="roads" transform="translate(260, 210)" filter="url(#shadow)">
+                <circle cx="10" cy="-30" r="22" fill="#050d1a" stroke="#3b82f6" stroke-width="2.5" />
+                <circle cx="10" cy="-30" r="18" fill="rgba(59, 130, 246, 0.15)" />
+                <!-- Bus box icon -->
+                <path d="M 6 -35 L 14 -35 L 14 -23 L 6 -23 Z" fill="#60a5fa" />
+                <text x="10" y="8" fill="#60a5fa" font-size="9" font-weight="700" text-anchor="middle" font-family="var(--font-sans)">Kothavalasa Depot</text>
+              </g>
+
 
               <!-- Markers: ARK Infra Ventures (Green Glowing Map Pin Droplets) -->
               <!-- Golden Acres Bhogapuram -->
               <g class="ark-project-marker" id="ark-goldenacres" data-id="ark-goldenacres" transform="translate(630, 100)" filter="url(#shadow)">
                 <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
-                <!-- Elegant Map Pin Path -->
                 <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
-                <!-- House shape inside pin -->
                 <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
                 <text x="10" y="4" class="ark-project-label">GOLDEN ACRES</text>
               </g>
 
-              <!-- Kokkirapalli Venture -->
-              <g class="ark-project-marker" id="ark-kokkirapalli" data-id="ark-kokkirapalli" transform="translate(70, 540)" filter="url(#shadow)">
+              <!-- Belmonk Layout Premium Tagarapuvalasa -->
+              <g class="ark-project-marker" id="ark-belmonk" data-id="ark-belmonk" transform="translate(570, 160)" filter="url(#shadow)">
                 <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
                 <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
                 <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
-                <text x="10" y="14" class="ark-project-label">KOKKIRAPALLI</text>
+                <text x="10" y="4" class="ark-project-label">BELMONK LAYOUT</text>
+              </g>
+
+              <!-- Sandal Valley Anandapuram -->
+              <g class="ark-project-marker" id="ark-sandalvalley" data-id="ark-sandalvalley" transform="translate(520, 190)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">SANDAL VALLEY</text>
+              </g>
+
+              <!-- RTC Depot Backside Kothavalasa -->
+              <g class="ark-project-marker" id="ark-rtcdepot" data-id="ark-rtcdepot" transform="translate(260, 240)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">RTC DEPOT BACK</text>
+              </g>
+
+              <!-- Vaibhav Classic Simhachalam -->
+              <g class="ark-project-marker" id="ark-vaibhavclassic" data-id="ark-vaibhavclassic" transform="translate(330, 270)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">VAIBHAV CLASSIC</text>
+              </g>
+
+              <!-- Education City Phase 1 Sabbavaram -->
+              <g class="ark-project-marker" id="ark-educationcity" data-id="ark-educationcity" transform="translate(240, 350)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">EDUCATION CITY</text>
               </g>
 
               <!-- Sri Muktha Gardens -->
@@ -738,12 +812,44 @@
                 <text x="10" y="4" class="ark-project-label">SRI MUKTHA</text>
               </g>
 
-              <!-- Highway City Layout -->
-              <g class="ark-project-marker" id="ark-highwaycity" data-id="ark-highwaycity" transform="translate(480, 200)" filter="url(#shadow)">
+              <!-- Sri Sampath Ganesh Lankelapalem -->
+              <g class="ark-project-marker" id="ark-sampathganesh" data-id="ark-sampathganesh" transform="translate(200, 410)" filter="url(#shadow)">
                 <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
                 <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
                 <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
-                <text x="10" y="4" class="ark-project-label">HIGHWAY CITY</text>
+                <text x="10" y="4" class="ark-project-label">SAMPATH GANESH</text>
+              </g>
+
+              <!-- Kodduru Venture Anakapalle -->
+              <g class="ark-project-marker" id="ark-kodduru" data-id="ark-kodduru" transform="translate(120, 430)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">KODDURU VENTURE</text>
+              </g>
+
+              <!-- Alakananda Highway City Tallapalem -->
+              <g class="ark-project-marker" id="ark-highwaycity" data-id="ark-highwaycity" transform="translate(150, 460)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">ALAKANANDA</text>
+              </g>
+
+              <!-- Gokulavanam Anakapalle -->
+              <g class="ark-project-marker" id="ark-gokulavanam" data-id="ark-gokulavanam" transform="translate(110, 480)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="4" class="ark-project-label">GOKULAVANAM</text>
+              </g>
+
+              <!-- Kokkirapalli Venture -->
+              <g class="ark-project-marker" id="ark-kokkirapalli" data-id="ark-kokkirapalli" transform="translate(70, 540)" filter="url(#shadow)">
+                <circle cx="10" cy="-25" r="22" fill="rgba(34, 197, 94, 0.25)" filter="url(#glow-green)" />
+                <path d="M 10 -10 C 2 -18 -4 -25 -4 -34 C -4 -43 4 -50 10 -50 C 16 -50 24 -43 24 -34 C 24 -25 18 -18 10 -10 Z" fill="#22c55e" stroke="#ffffff" stroke-width="1.5" />
+                <path d="M 6 -34 L 10 -38 L 14 -34 L 14 -30 L 6 -30 Z" fill="#ffffff" />
+                <text x="10" y="14" class="ark-project-label">KOKKIRAPALLI</text>
               </g>
 
             </svg>
@@ -969,6 +1075,19 @@
           impact: "Vizag's status as Andhra Pradesh's IT capital is creating a wealthy tech employee base looking for premium plots and apartments.",
           cta: "projects"
         },
+        "it-kapuluppada": {
+          title: "Kapuluppada IT SEZ & Startup Hill",
+          type: "IT & Incubation Hub",
+          date: "Active Expansion",
+          val1: "100+ Startup Units",
+          val2: "15 Mins (Belmonk Layout)",
+          desc: "A sprawling IT park dedicated to software exporters and startups. Includes the Millennium Tower-II and special IT incubation facilities.",
+          impact: "Drives real estate valuation for Bheemili and Tagarapuvalasa residential areas.",
+          cta: "projects",
+          arkId: "ark-belmonk",
+          lineId: "lineBelmonkTagarapuvalasa",
+          badgeText: "15 Mins Drive"
+        },
         "hospital-healthcity": {
           title: "Arilova Health City",
           type: "Healthcare Hub",
@@ -983,14 +1102,30 @@
           badgeText: "8 Mins to NH-16"
         },
         "school-centurion": {
-          title: "Centurion University & Oakridge School",
+          title: "Centurion University & Anandapuram schools",
           type: "Education Zone",
           date: "Active Institutions",
           val1: "Ranked Top in State",
-          val2: "8 Mins (Golden Acres)",
+          val2: "10 Mins (Sandal Valley)",
           desc: "Located on the fast-growing educational corridor in Anandapuram-Bhogapuram, housing top-tier international schools, engineering universities, and research institutes.",
           impact: "Proximity to premium schools makes the Bhogapuram corridor highly attractive to families looking to build homes immediately.",
-          cta: "projects"
+          cta: "projects",
+          arkId: "ark-sandalvalley",
+          lineId: "lineSandalAnandapuram",
+          badgeText: "10 Mins Drive"
+        },
+        "school-sabbavaram": {
+          title: "Sabbavaram University Town (DSNU, IMU)",
+          type: "Educational & University Hub",
+          date: "Fully Operational",
+          val1: "3 Major National Universities",
+          val2: "3 Mins (Education City)",
+          desc: "A designated university cluster housing Damodaram Sanjivayya National Law University, Indian Maritime University, and IIPE.",
+          impact: "Guarantees student housing demand and steady property appreciation.",
+          cta: "projects",
+          arkId: "ark-educationcity",
+          lineId: "lineEducationHub",
+          badgeText: "3 Mins Drive"
         },
         "tourism-rushikonda": {
           title: "Rushikonda Beach & Resort Hub",
@@ -1002,13 +1137,49 @@
           impact: "High tourism growth and premium beachfront development are accelerating property valuation in the coastal corridor.",
           cta: "projects"
         },
+        "transit-kothavalasa": {
+          title: "Kothavalasa Railway & Depot Junction",
+          type: "Transit & Logistics Hub",
+          date: "Active Transit",
+          val1: "50+ Daily Trains",
+          val2: "1 Min (RTC Depot Backside)",
+          desc: "A key rail and bus depot junction linking Visakhapatnam to Araku and industrial corridors. Spurs warehousing and commercial businesses.",
+          impact: "Outstanding location for combined retail/commercial and residential plots.",
+          cta: "projects",
+          arkId: "ark-rtcdepot",
+          lineId: "lineRTCKothavalasa",
+          badgeText: "Walkable Proximity"
+        },
+        "metro-gajuwaka": {
+          title: "Gajuwaka Metro Terminal",
+          type: "Proposed Metro Corridor",
+          date: "Planned Phase 1 Metro",
+          val1: "₹8,300 Crore Rail Network",
+          val2: "5 Mins (Sri Sampath Ganesh)",
+          desc: "A proposed mass transit terminal serving Gajuwaka and Lankelapalem industrial workers. Aims to connect South Vizag to central zones.",
+          impact: "Offers rapid high-speed transit value, driving immediate growth for plots in Lankelapalem and Desapathrunipalem.",
+          cta: "projects",
+          arkId: "ark-sampathganesh",
+          lineId: "lineSampathSEZ",
+          badgeText: "5 Mins Drive"
+        },
+        "transit-gajuwaka": {
+          title: "Anakapalle Bypass & Gajuwaka Corridor",
+          type: "Transit & Logistics Hub",
+          date: "Fully Active NH-16 Corridor",
+          val1: "6-Lane Highways",
+          val2: "Direct Highway Access",
+          desc: "Visakhapatnam's primary transit spine connecting industrial sectors of Gajuwaka and Anakapalle to the national grid.",
+          impact: "Bypass networks provide massive value to the nearby residential layouts.",
+          cta: "projects"
+        },
 
         // ARK Projects items
         "ark-goldenacres": {
           title: "Golden Acres (Bhogapuram)",
           type: "ARK Premium Project",
           date: "Plots / Ready to Register",
-          val1: "₹17,00,0/- Per Sq. Yd",
+          val1: "₹17,000/- Per Sq. Yd",
           val2: "VMRDA & AP RERA Approved",
           desc: "Our elite gated plotted community located in Bhogapuram (Kopparla). Located in the heart of Vizag's primary growth hub, Golden Acres offers premium blacktop roads, underground drains, water lines, and avenue plantations.",
           impact: "Positioned only 10 minutes from the upcoming Bhogapuram International Airport, this project is optimized for massive long-term appreciation.",
@@ -1016,6 +1187,136 @@
           infraId: "mark-airport-bhogapuram",
           lineId: "lineGoldenAcresAirport",
           badgeText: "10 Mins Drive"
+        },
+        "ark-belmonk": {
+          title: "Belmonk Layout Premium (Tagarapuvalasa)",
+          type: "ARK Luxury Project",
+          date: "Ongoing Development",
+          val1: "₹23,000/- Per Sq. Yd",
+          val2: "VMRDA Approved Layout",
+          desc: "Elite gated plotted community along the Tagarapuvalasa corridor. Designed for luxury villa construction with compound walls, underground cabling, and landscaped play parks.",
+          impact: "Located very close to the 6-lane National Highway (NH-16), offering prime location value and rapid connections to IT SEZs.",
+          cta: "projects",
+          infraId: "mark-it-kapuluppada",
+          lineId: "lineBelmonkTagarapuvalasa",
+          badgeText: "15 Mins Drive"
+        },
+        "ark-sandalvalley": {
+          title: "Sandal Valley (Anandapuram)",
+          type: "ARK Plotted Layout",
+          date: "Ongoing Project",
+          val1: "VMRDA Approved",
+          val2: "Ready for Construction",
+          desc: "Gated community near Ballanki Junction in Anandapuram. Features wide blacktop roads, landscaped parks, and underground services in a peaceful environment.",
+          impact: "Situated in Anandapuram's high-appreciation zone, close to top universities and commercial junctions.",
+          cta: "projects",
+          infraId: "mark-school-centurion",
+          lineId: "lineSandalAnandapuram",
+          badgeText: "10 Mins Drive"
+        },
+        "ark-rtcdepot": {
+          title: "RTC Depot Backside Venture (Kothavalasa)",
+          type: "ARK Commercial & Residential",
+          date: "Ongoing plots",
+          val1: "₹23,000/- Per Sq. Yd",
+          val2: "RTC Depot Proximity",
+          desc: "Premium commercial and residential plots directly behind Kothavalasa RTC Depot. Excellent road network and electricity lines.",
+          impact: "Superb dual-use potential for commercial shops and premium residential construction.",
+          cta: "projects",
+          infraId: "mark-transit-kothavalasa",
+          lineId: "lineRTCKothavalasa",
+          badgeText: "Walkable Proximity"
+        },
+        "ark-vaibhavclassic": {
+          title: "Vaibhav Classic (Simhachalam)",
+          type: "ARK Completed Project",
+          date: "100% Sold Out",
+          val1: "Completed Layout",
+          val2: "Ready for Construction",
+          desc: "Completed gated community at Gandigudam near Simhachalam foothills. Offers scenic, pollution-free living with complete infrastructure.",
+          impact: "15 minutes drive to NAD Junction, combining peaceful hillside living with main-city transit convenience.",
+          cta: "projects",
+          infraId: "mark-transit-nad",
+          lineId: "lineVaibhavSimhachalam",
+          badgeText: "15 Mins to NAD"
+        },
+        "ark-educationcity": {
+          title: "Education City - Phase 1 (Sabbavaram)",
+          type: "ARK Proposed Project",
+          date: "Proposed Layout",
+          val1: "VMRDA Norms Developed",
+          val2: "100m Master Plan Road Facing",
+          desc: "Premium proposed gated community at Sabbavaram. Designed with 40' blacktop roads, underground drains, and 24/7 security provision.",
+          impact: "Located right between the Sabbavaram 6-lane NH-16 and Raipur 6-lane NH-26, ideal for university housing investments.",
+          cta: "projects",
+          infraId: "mark-school-sabbavaram",
+          lineId: "lineEducationHub",
+          badgeText: "3 Mins Drive"
+        },
+        "ark-srimuktha": {
+          title: "Sri Muktha Gardens (Desapathrunipalem)",
+          type: "ARK Completed Venture",
+          date: "100% Sold Out / Houses Built",
+          val1: "₹7,500/- Launch Price",
+          val2: "Ready for Construction",
+          desc: "A budget-friendly plotted venture near the Vizag Steel Plant sector gate. Fully completed with blacktop roads, electricity grids, and compound fencing.",
+          impact: "Located close to the NH-16 highway and steel plant corridor, providing excellent connectivity for working professionals.",
+          cta: "projects",
+          infraId: "mark-metro-gajuwaka",
+          lineId: "lineMukthaSteel",
+          badgeText: "8 Mins to NH-16"
+        },
+        "ark-sampathganesh": {
+          title: "Sri Sampath Ganesh Nagar (Lankelapalem)",
+          type: "ARK Completed Venture",
+          date: "Completed / Ready to Build",
+          val1: "Gated Layout",
+          val2: "VMRDA Approved",
+          desc: "Completed plotted community at Lankelapalem, Visakhapatnam. Features 40' blacktop roads, street lights, and instant registrations.",
+          impact: "Located close to Lankelapalem industrial SEZ hubs and NH-16 transit points.",
+          cta: "projects",
+          infraId: "mark-metro-gajuwaka",
+          lineId: "lineSampathSEZ",
+          badgeText: "5 Mins Drive"
+        },
+        "ark-kodduru": {
+          title: "Kodduru Venture (Anakapalli)",
+          type: "ARK Plotted Gated Community",
+          date: "Ongoing Development",
+          val1: "₹16,000/- Per Sq. Yd",
+          val2: "Swimming Pool & Clubhouse",
+          desc: "Premium layout at Kodduru near Anakapalli bypass. Features standard blacktop roads, sewage treatment lines, and a swimming pool.",
+          impact: "Provides rapid access to Visakhapatnam-Chennai highway NH-16 and upcoming business SEZs.",
+          cta: "projects",
+          infraId: "mark-transit-gajuwaka",
+          lineId: "lineKodduruBypass",
+          badgeText: "5 Mins to Bypass"
+        },
+        "ark-highwaycity": {
+          title: "Alakananda - Highway City (Tallapalem)",
+          type: "ARK Ongoing Venture",
+          date: "VMRDA & AP RERA Approved",
+          val1: "Direct NH-16 Access",
+          val2: "Gated Plotted Layout",
+          desc: "ARK's landmark project directly facing the National Highway. Features premium commercial plots and luxury residential villa plots in a fully loaded gated campus.",
+          impact: "Excellent visibility and road accessibility. Positioned on the key economic growth corridor.",
+          cta: "projects",
+          infraId: "mark-transit-gajuwaka",
+          lineId: "lineAlakanandaNH",
+          badgeText: "Direct Highway Access"
+        },
+        "ark-gokulavanam": {
+          title: "Gokulavanam (Anakapalle)",
+          type: "ARK Plotted Project",
+          date: "TLP Approved plots",
+          val1: "₹12,500/- Per Sq. Yd",
+          val2: "Auto Nagar SEZ Proximity",
+          desc: "A premium open plot venture near Anakapalle. Situated just 200m from the Collector Bungalow and adjacent to the 400 Acres Auto Nagar SEZ.",
+          impact: "TLP Approved layout with limited period special payment plans, optimized for quick appreciation.",
+          cta: "projects",
+          infraId: "mark-it-atchutapuram",
+          lineId: "lineGokulavanamSez",
+          badgeText: "5 Mins to SEZ"
         },
         "ark-kokkirapalli": {
           title: "Kokkirapalli Venture (Yelamanchili)",
@@ -1029,32 +1330,6 @@
           infraId: "mark-it-atchutapuram",
           lineId: "lineKokkirapalliSez",
           badgeText: "15 Mins Drive"
-        },
-        "ark-srimuktha": {
-          title: "Sri Muktha Gardens (Desapathrunipalem)",
-          type: "ARK Completed Venture",
-          date: "100% Sold Out / Houses Built",
-          val1: "₹7,500/- Launch Price",
-          val2: "Ready for Construction",
-          desc: "A budget-friendly plotted venture near the Vizag Steel Plant sector gate. Fully completed with blacktop roads, electricity grids, and compound fencing.",
-          impact: "Located close to the NH-16 highway and steel plant corridor, providing excellent connectivity for working professionals.",
-          cta: "projects",
-          infraId: "mark-hospital-healthcity",
-          lineId: "lineMukthaSteel",
-          badgeText: "8 Mins to NH-16"
-        },
-        "ark-highwaycity": {
-          title: "Highway City Layout",
-          type: "ARK Premium Venture",
-          date: "Ongoing Development",
-          val1: "Direct NH-16 Access",
-          val2: "Commercial & Residential",
-          desc: "ARK's landmark project directly facing the National Highway. Features premium commercial plots and luxury residential villa plots in a fully loaded gated campus.",
-          impact: "Ideal for investors seeking high visibility commercial space or residential assets right on Vizag's primary economic artery.",
-          cta: "projects",
-          infraId: "mark-tourism-rushikonda",
-          lineId: "lineHighwayCityNH",
-          badgeText: "Direct Highway Access"
         }
       };
 
