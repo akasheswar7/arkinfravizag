@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ARK Infra AI Chatbot Widget
  * Integrates an elegant, interactive client-side assistant.
  * Dual-Mode:
@@ -163,7 +163,7 @@
 
       launcherContainer.innerHTML = `
         <!-- Floating Launcher Link redirecting to about-ark.html -->
-        <a href="about-ark" class="ark-chatbot-launcher" id="chatbotRedirectLauncher" title="Help &amp; AI Support" aria-label="Go to AI Support Page">
+        <a href="about-ark.html" class="ark-chatbot-launcher" id="chatbotRedirectLauncher" title="Help &amp; AI Support" aria-label="Go to AI Support Page">
           ${premiumAiIconSvg}
           <span class="ark-chatbot-launcher-badge"></span>
         </a>
@@ -422,7 +422,7 @@
       appendAssistantResponse(`
         <p><strong>Konathala Hanumantharao (Arun)</strong> is the CEO & Founder of ARK Infra. He has nearly 20 years of real estate experience and leads our strategic vision.</p>
         <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
-        <p><a href="ceo-details" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
+        <p><a href="ceo-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
     }
@@ -431,7 +431,7 @@
       appendAssistantResponse(`
         <p><strong>Adari Ramakrishna</strong> is our Managing Director, focusing on joint ventures, clear titles, land procurement, and strategic growth locations.</p>
         <p>📞 Contact: <a href="tel:+919848498070" style="color:var(--gold);text-decoration:underline;">+91 98484 98070</a></p>
-        <p><a href="md-details" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
+        <p><a href="md-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
     }

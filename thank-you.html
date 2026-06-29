@@ -6,7 +6,7 @@
   <link rel="apple-touch-icon" href="images/logo.jpg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Thank you for contacting ARK Infra. View our price list flyer.">
+  <meta name="description" content="Thank you for contacting ARK Infra. View our interactive project price list.">
   <title>Thank You | ARK Infra</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -240,6 +240,206 @@
       .footer-grid { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
     }
+
+    /* Interactive Price List Styles */
+    .price-list-section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 2rem auto 4rem;
+      padding: 0;
+      text-align: left;
+    }
+
+    .price-search-bar {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 450px;
+      min-width: 280px;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      padding-left: 3rem;
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .search-input-wrapper input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(10, 22, 40, 0.4);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 4px;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      border-color: var(--gold);
+    }
+
+    .table-container {
+      background: rgba(10, 22, 40, 0.5);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .price-table th {
+      background: rgba(5, 13, 26, 0.85);
+      color: var(--gold);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 2px solid rgba(201, 169, 98, 0.3);
+    }
+
+    .price-table td {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.1);
+      font-size: 0.9rem;
+      color: var(--text-body);
+    }
+
+    .price-table tr {
+      transition: background var(--transition);
+    }
+
+    .price-table tr:hover {
+      background: rgba(201, 169, 98, 0.04);
+    }
+
+    .price-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .price-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-vmrda {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .badge-panchayat {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .badge-premium {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .highlight-price {
+      color: var(--white);
+      font-weight: 600;
+      font-family: var(--font-sans);
+    }
+
+    .mobile-cards-container {
+      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .mobile-price-card {
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 6px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: left;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-row:last-child {
+      margin-bottom: 0;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-value {
+      font-size: 0.9rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .table-container { display: none; }
+      .mobile-cards-container { display: flex; }
+      .price-search-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
+      .search-input-wrapper { max-width: 100%; }
+      .filter-tabs { overflow-x: auto; padding-bottom: 0.25rem; justify-content: flex-start; }
+    }
   </style>
 </head>
 <body>
@@ -251,14 +451,14 @@
         ARK <span>Infra</span>
       </a>
               <nav class="nav-desktop" aria-label="Main navigation">
-          <a href="about">About</a>
-          <a href="projects">Projects</a>
-          <a href="insights">Insights</a>
-          <a href="why">Why Us</a>
-          <a href="achievements">Achievements</a>
-          <a href="testimonials">Testimonials</a>
-          <a href="gallery">Gallery</a>
-          <a href="contact" class="nav-cta">Contact</a>
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="insights.html">Insights</a>
+          <a href="why.html">Why Us</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
         </nav>
       <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -267,14 +467,14 @@
   </header>
 
       <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
-      <a href="about">About</a>
-      <a href="projects">Projects</a>
-      <a href="insights">Insights</a>
-      <a href="why">Why Us</a>
-      <a href="achievements">Achievements</a>
-      <a href="testimonials">Testimonials</a>
-      <a href="gallery">Gallery</a>
-      <a href="contact">Contact</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="insights.html">Insights</a>
+      <a href="why.html">Why Us</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
     </nav>
 
   <main class="thankyou-section">
@@ -284,19 +484,334 @@
       Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.
     </p>
 
-    <h2 class="flyer-heading">ARK Infra Price List Flyer</h2>
-    <div class="flyer-container">
-      <img src="images/price-list.jpg" alt="ARK Infra Price List Flyer">
-      <div class="btn-group">
-        <a href="images/price-list.jpg" download="ARK-Infra-Price-List.jpg" class="btn btn-primary">
-          Download Flyer
-        </a>
+    <h2 class="flyer-heading">ARK Infra Project Price List</h2>
+    
+    <div class="price-list-section">
+      <!-- Search & Filters -->
+      <div class="price-search-bar">
+        <div class="search-input-wrapper">
+          <svg style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 1.25rem; height: 1.25rem; fill: var(--gold); opacity: 0.7;" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <input type="text" id="priceSearch" placeholder="Search layouts, locations, prices...">
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All Projects</button>
+          <button class="filter-tab" data-filter="vmrda">VMRDA</button>
+          <button class="filter-tab" data-filter="panchayat">Panchayat</button>
+          <button class="filter-tab" data-filter="premium">Premium/RERA</button>
+        </div>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="table-container">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Project / Layout Name</th>
+              <th>Location</th>
+              <th>Approval Type</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Golden Acres</td>
+              <td>Kopparla, Bhogapuram</td>
+              <td><span class="price-badge badge-vmrda">VMRDA Project</span></td>
+              <td class="highlight-price">₹17,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Thallapalem</td>
+              <td>Anakapalli</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (17/2025)</span></td>
+              <td class="highlight-price">₹14,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kokkirapalli (100m to NH)</td>
+              <td>Yelamanchili</td>
+              <td><span class="price-badge badge-vmrda">VMRDA</span></td>
+              <td class="highlight-price">₹16,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kokkirapalli (200m to NH)</td>
+              <td>Yelamanchili</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (51/2023)</span></td>
+              <td class="highlight-price">₹13,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Anakapalli - Koduru</td>
+              <td>Swimming Pool area, 300m to NH</td>
+              <td><span class="price-badge badge-vmrda">VMRDA</span></td>
+              <td class="highlight-price">₹16,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sri Muktha Gardens</td>
+              <td>Desapathrunipalem</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹7,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sri Sampath Ganesh Nagar</td>
+              <td>Lankelapalem</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹9,799/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kothavalasa (RTC Depo Backside)</td>
+              <td>Kothavalasa, 300m to NH</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (66/2023)</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="premium">
+              <td style="color: var(--white); font-weight: 500;">Belmond Layout</td>
+              <td>Y-Junction, Tagarapuvalasa</td>
+              <td><span class="price-badge badge-premium">VMRDA / AP RERA</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Education City</td>
+              <td>Sabbavaram - Gullepalli @ Y.J.J.</td>
+              <td><span class="price-badge badge-vmrda">VMRDA / RERA</span></td>
+              <td class="highlight-price">₹14,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="premium">
+              <td style="color: var(--white); font-weight: 500;">Belmok Layout</td>
+              <td>Y-Junction, Tagarapuvalasa</td>
+              <td><span class="price-badge badge-premium">VMRDA / AP RERA</span></td>
+              <td class="highlight-price">₹3,999/- per SFT</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sandal Valley</td>
+              <td>Ballanki @ S. Anandapuram, Kothavalasa</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹4,999/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Vaibhav Classic</td>
+              <td>Gandigundam, Simhachalam</td>
+              <td><span class="price-badge badge-vmrda">VUDA / VMRDA</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards View -->
+      <div class="mobile-cards-container">
+        <!-- Golden Acres -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Golden Acres</span>
+            <span class="price-badge badge-vmrda">VMRDA Project</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Kopparla, Bhogapuram</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹17,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Thallapalem -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Thallapalem</span>
+            <span class="price-badge badge-vmrda">VMRDA (17/2025)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Anakapalli</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹14,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kokkirapalli 100m -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kokkirapalli (100m to NH)</span>
+            <span class="price-badge badge-vmrda">VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Yelamanchili</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹16,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kokkirapalli 200m -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kokkirapalli (200m to NH)</span>
+            <span class="price-badge badge-vmrda">VMRDA (51/2023)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Yelamanchili</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹13,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Anakapalli Koduru -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Anakapalli - Koduru</span>
+            <span class="price-badge badge-vmrda">VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Swimming Pool, 300m to NH</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹16,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Sri Muktha Gardens -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sri Muktha Gardens</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Desapathrunipalem</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹7,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Sri Sampath Ganesh Nagar -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sri Sampath Ganesh Nagar</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Lankelapalem</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹9,799/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kothavalasa -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kothavalasa</span>
+            <span class="price-badge badge-vmrda">VMRDA (66/2023)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">RTC Depo Backside, 300m to NH</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Belmond Layout -->
+        <div class="mobile-price-card" data-category="premium">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Belmond Layout</span>
+            <span class="price-badge badge-premium">VMRDA / AP RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Y-Junction, Tagarapuvalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Education City -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Education City</span>
+            <span class="price-badge badge-vmrda">VMRDA / RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Sabbavaram - Gullepalli @ Y.J.J.</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹14,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Belmok Layout -->
+        <div class="mobile-price-card" data-category="premium">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Belmok Layout</span>
+            <span class="price-badge badge-premium">VMRDA / AP RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Y-Junction, Tagarapuvalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹3,999/- per SFT</span>
+          </div>
+        </div>
+
+        <!-- Sandal Valley -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sandal Valley</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Ballanki @ S. Anandapuram, Kothavalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹4,999/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Vaibhav Classic -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Vaibhav Classic</span>
+            <span class="price-badge badge-vmrda">VUDA / VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Gandigundam, Simhachalam</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="btn-group">
       <a href="/" class="btn btn-outline">Back to Home</a>
-      <a href="projects" class="btn btn-outline">Explore Projects</a>
+      <a href="projects.html" class="btn btn-outline">Explore Projects</a>
     </div>
   </main>
 
@@ -312,27 +827,27 @@
       <div class="footer-col">
         <h4>Quick Links</h4>
         <ul>
-          <li><a href="about">About Us</a></li>
-          <li><a href="projects">Projects</a></li>
-          <li><a href="gallery">Gallery</a></li>
-          <li><a href="contact">Contact</a></li>
-          <li><a href="emi-calculator">EMI Calculator</a></li>
-          <li><a href="insights">Insights</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Projects</h4>
         <ul>
-          <li><a href="projects">Luxury Apartments</a></li>
-          <li><a href="projects">Residential Layouts</a></li>
-          <li><a href="projects">Commercial</a></li>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
           <li><a href="tel:+918125547801">+91 81255 47801</a></li>
-          <li><a href="contact">Enquire via form</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
         </ul>
       </div>
     </div>
@@ -932,6 +1447,59 @@
         }
       }
     })();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('priceSearch');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const tableRows = document.querySelectorAll('.price-table tbody tr');
+      const mobileCards = document.querySelectorAll('.mobile-price-card');
+
+      function filterItems() {
+        const query = searchInput.value.toLowerCase().trim();
+        const activeTab = document.querySelector('.filter-tab.active').getAttribute('data-filter');
+
+        // Filter Table Rows
+        tableRows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          const category = row.getAttribute('data-category');
+          const matchesQuery = text.includes(query);
+          const matchesTab = activeTab === 'all' || category === activeTab;
+
+          if (matchesQuery && matchesTab) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Filter Mobile Cards
+        mobileCards.forEach(card => {
+          const text = card.innerText.toLowerCase();
+          const category = card.getAttribute('data-category');
+          const matchesQuery = text.includes(query);
+          const matchesTab = activeTab === 'all' || category === activeTab;
+
+          if (matchesQuery && matchesTab) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterItems);
+      }
+
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          filterItems();
+        });
+      });
+    });
   </script>
 </body>
 </html>
