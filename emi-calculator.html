@@ -1020,26 +1020,26 @@ I would like to enquire about plots and site visit options.`;
       const apiStatusText = document.getElementById('apiStatusText');
       
       const fallbackRates = [
-        { id: "sbi", name: "State Bank of India (SBI)", minRate: 8.40, maxRate: 9.10, defaultRate: 8.50, processingFee: "0.35% of Loan (Min ₹2,000, Max ₹10,000)", badge: "Lowest rates", logoColor: "#00a8e8", logoUrl: "https://logo.clearbit.com/sbi.co.in" },
-        { id: "hdfc", name: "HDFC Bank Ltd", minRate: 8.70, maxRate: 9.35, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Fast processing", logoColor: "#1c3f94", logoUrl: "https://logo.clearbit.com/hdfcbank.com" },
-        { id: "lic", name: "LIC Housing Finance", minRate: 8.50, maxRate: 9.20, defaultRate: 8.65, processingFee: "₹10,000 + GST flat fee", badge: "High eligibility", logoColor: "#e8b000", logoUrl: "https://logo.clearbit.com/licindia.in" },
-        { id: "icici", name: "ICICI Bank Ltd", minRate: 8.75, maxRate: 9.50, defaultRate: 8.80, processingFee: "0.50% of Loan amount", badge: "Instant digital approval", logoColor: "#ea6812", logoUrl: "https://logo.clearbit.com/icicibank.com" },
-        { id: "axis", name: "Axis Bank Ltd", minRate: 8.75, maxRate: 9.40, defaultRate: 8.85, processingFee: "0.50% of Loan (Min ₹10,000)", badge: "Flexible tenure", logoColor: "#97144d", logoUrl: "https://logo.clearbit.com/axisbank.com" },
-        { id: "kotak", name: "Kotak Mahindra Bank", minRate: 8.70, maxRate: 9.25, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Premium benefits", logoColor: "#ed1c24", logoUrl: "https://logo.clearbit.com/kotak.com" },
-        { id: "bob", name: "Bank of Baroda (BoB)", minRate: 8.40, maxRate: 9.15, defaultRate: 8.45, processingFee: "0.25% of Loan amount", badge: "Government backing", logoColor: "#f26522", logoUrl: "https://logo.clearbit.com/bankofbaroda.in" },
-        { id: "pnb", name: "Punjab National Bank (PNB)", minRate: 8.45, maxRate: 9.00, defaultRate: 8.55, processingFee: "0.35% of Loan amount", badge: "Low interest", logoColor: "#800000", logoUrl: "https://logo.clearbit.com/pnbindia.in" },
-        { id: "union", name: "Union Bank of India", minRate: 8.50, maxRate: 9.05, defaultRate: 8.60, processingFee: "0.40% of Loan amount", badge: "Flexible repayment", logoColor: "#0054a6", logoUrl: "https://logo.clearbit.com/unionbankofindia.co.in" },
-        { id: "canara", name: "Canara Bank", minRate: 8.55, maxRate: 9.10, defaultRate: 8.65, processingFee: "0.50% of Loan amount", badge: "Nil prepayment penalty", logoColor: "#006bb6", logoUrl: "https://logo.clearbit.com/canarabank.com" },
-        { id: "federal", name: "Federal Bank", minRate: 8.80, maxRate: 9.60, defaultRate: 8.90, processingFee: "0.50% of Loan (Min ₹3,000)", badge: "Nil foreclosure fee", logoColor: "#0c5096", logoUrl: "https://logo.clearbit.com/federalbank.co.in" },
-        { id: "idbi", name: "IDBI Bank Ltd", minRate: 8.75, maxRate: 9.35, defaultRate: 8.85, processingFee: "0.50% of Loan amount", badge: "Quick documentation", logoColor: "#00935f", logoUrl: "https://logo.clearbit.com/idbibank.in" },
-        { id: "boi", name: "Bank of India (BoI)", minRate: 8.45, maxRate: 9.05, defaultRate: 8.50, processingFee: "0.25% of Loan amount", badge: "Easy sanction", logoColor: "#003b87", logoUrl: "https://logo.clearbit.com/bankofindia.co.in" },
-        { id: "indusind", name: "IndusInd Bank", minRate: 8.75, maxRate: 9.50, defaultRate: 8.95, processingFee: "0.50% of Loan amount", badge: "High loan amount", logoColor: "#8b2031", logoUrl: "https://logo.clearbit.com/indusind.com" },
-        { id: "yes", name: "Yes Bank Ltd", minRate: 8.95, maxRate: 9.75, defaultRate: 9.15, processingFee: "0.50% of Loan amount", badge: "Co-signed offers", logoColor: "#0b5294", logoUrl: "https://logo.clearbit.com/yesbank.in" },
-        { id: "indian", name: "Indian Bank", minRate: 8.50, maxRate: 9.10, defaultRate: 8.60, processingFee: "0.25% of Loan amount", badge: "Trusted public sector", logoColor: "#0a43a4", logoUrl: "https://logo.clearbit.com/indianbank.in" },
-        { id: "central", name: "Central Bank of India", minRate: 8.55, maxRate: 9.05, defaultRate: 8.65, processingFee: "0.35% of Loan amount", badge: "Reputable service", logoColor: "#023c91", logoUrl: "https://logo.clearbit.com/centralbankofindia.co.in" },
-        { id: "iob", name: "Indian Overseas Bank", minRate: 8.60, maxRate: 9.15, defaultRate: 8.70, processingFee: "0.40% of Loan amount", badge: "Flexible schemes", logoColor: "#0c3c9c", logoUrl: "https://logo.clearbit.com/iob.in" },
-        { id: "idfc", name: "IDFC First Bank", minRate: 8.85, maxRate: 9.40, defaultRate: 8.90, processingFee: "0.50% of Loan amount", badge: "High customer trust", logoColor: "#8b2031", logoUrl: "https://logo.clearbit.com/idfcfirstbank.com" },
-        { id: "maharashtra", name: "Bank of Maharashtra", minRate: 8.35, maxRate: 8.95, defaultRate: 8.40, processingFee: "0.20% of Loan amount", badge: "Lowest starting rate", logoColor: "#08418c", logoUrl: "https://logo.clearbit.com/bankofmaharashtra.in" }
+        { id: "sbi", name: "State Bank of India (SBI)", minRate: 8.40, maxRate: 9.10, defaultRate: 8.50, processingFee: "0.35% of Loan (Min ₹2,000, Max ₹10,000)", badge: "Lowest rates", logoColor: "#0080c6", logoText: "SBI" },
+        { id: "hdfc", name: "HDFC Bank Ltd", minRate: 8.70, maxRate: 9.35, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Fast processing", logoColor: "#003366", logoText: "HDFC" },
+        { id: "lic", name: "LIC Housing Finance", minRate: 8.50, maxRate: 9.20, defaultRate: 8.65, processingFee: "₹10,000 + GST flat fee", badge: "High eligibility", logoColor: "#c79e24", logoText: "LIC" },
+        { id: "icici", name: "ICICI Bank Ltd", minRate: 8.75, maxRate: 9.50, defaultRate: 8.80, processingFee: "0.50% of Loan amount", badge: "Instant digital approval", logoColor: "#f06622", logoText: "ICICI" },
+        { id: "axis", name: "Axis Bank Ltd", minRate: 8.75, maxRate: 9.40, defaultRate: 8.85, processingFee: "0.50% of Loan (Min ₹10,000)", badge: "Flexible tenure", logoColor: "#97144d", logoText: "AXIS" },
+        { id: "kotak", name: "Kotak Mahindra Bank", minRate: 8.70, maxRate: 9.25, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Premium benefits", logoColor: "#ed1c24", logoText: "KOTAK" },
+        { id: "bob", name: "Bank of Baroda (BoB)", minRate: 8.40, maxRate: 9.15, defaultRate: 8.45, processingFee: "0.25% of Loan amount", badge: "Government backing", logoColor: "#f26522", logoText: "BOB" },
+        { id: "pnb", name: "Punjab National Bank (PNB)", minRate: 8.45, maxRate: 9.00, defaultRate: 8.55, processingFee: "0.35% of Loan amount", badge: "Low interest", logoColor: "#a51c24", logoText: "PNB" },
+        { id: "union", name: "Union Bank of India", minRate: 8.50, maxRate: 9.05, defaultRate: 8.60, processingFee: "0.40% of Loan amount", badge: "Flexible repayment", logoColor: "#0054a6", logoText: "UNION" },
+        { id: "canara", name: "Canara Bank", minRate: 8.55, maxRate: 9.10, defaultRate: 8.65, processingFee: "0.50% of Loan amount", badge: "Nil prepayment penalty", logoColor: "#0091ff", logoText: "CANARA" },
+        { id: "federal", name: "Federal Bank", minRate: 8.80, maxRate: 9.60, defaultRate: 8.90, processingFee: "0.50% of Loan (Min ₹3,000)", badge: "Nil foreclosure fee", logoColor: "#0c5096", logoText: "FED" },
+        { id: "idbi", name: "IDBI Bank Ltd", minRate: 8.75, maxRate: 9.35, defaultRate: 8.85, processingFee: "0.50% of Loan amount", badge: "Quick documentation", logoColor: "#00935f", logoText: "IDBI" },
+        { id: "boi", name: "Bank of India (BoI)", minRate: 8.45, maxRate: 9.05, defaultRate: 8.50, processingFee: "0.25% of Loan amount", badge: "Easy sanction", logoColor: "#003b87", logoText: "BOI" },
+        { id: "indusind", name: "IndusInd Bank", minRate: 8.75, maxRate: 9.50, defaultRate: 8.95, processingFee: "0.50% of Loan amount", badge: "High loan amount", logoColor: "#8b2031", logoText: "INDUS" },
+        { id: "yes", name: "Yes Bank Ltd", minRate: 8.95, maxRate: 9.75, defaultRate: 9.15, processingFee: "0.50% of Loan amount", badge: "Co-signed offers", logoColor: "#0b5294", logoText: "YES" },
+        { id: "indian", name: "Indian Bank", minRate: 8.50, maxRate: 9.10, defaultRate: 8.60, processingFee: "0.25% of Loan amount", badge: "Trusted public sector", logoColor: "#0a43a4", logoText: "INDIAN" },
+        { id: "central", name: "Central Bank of India", minRate: 8.55, maxRate: 9.05, defaultRate: 8.65, processingFee: "0.35% of Loan amount", badge: "Reputable service", logoColor: "#023c91", logoText: "CBI" },
+        { id: "iob", name: "Indian Overseas Bank", minRate: 8.60, maxRate: 9.15, defaultRate: 8.70, processingFee: "0.40% of Loan amount", badge: "Flexible schemes", logoColor: "#0c3c9c", logoText: "IOB" },
+        { id: "idfc", name: "IDFC First Bank", minRate: 8.85, maxRate: 9.40, defaultRate: 8.90, processingFee: "0.50% of Loan amount", badge: "High customer trust", logoColor: "#990033", logoText: "IDFC" },
+        { id: "maharashtra", name: "Bank of Maharashtra", minRate: 8.35, maxRate: 8.95, defaultRate: 8.40, processingFee: "0.20% of Loan amount", badge: "Lowest starting rate", logoColor: "#08418c", logoText: "BOM" }
       ];
 
       function renderBankCards(banks, isLive) {
@@ -1059,14 +1059,9 @@ I would like to enquire about plots and site visit options.`;
           card.setAttribute('data-rate', bank.defaultRate);
           card.setAttribute('data-id', bank.id);
           
-          let logoHtml = '';
-          if (bank.logoUrl) {
-            logoHtml = `<img class="bank-card-logo" src="${bank.logoUrl}" alt="${bank.name} Logo">`;
-          } else {
-            // Get initials for logo placeholder
-            const initials = bank.name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
-            logoHtml = `<div class="bank-card-logo-placeholder" style="background-color: ${bank.logoColor || '#c9a962'}">${initials}</div>`;
-          }
+          // Get official logo text abbreviation or fallback to parsed initials
+          const logoText = bank.logoText || bank.name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
+          const logoHtml = `<div class="bank-card-logo-placeholder" style="background-color: ${bank.logoColor || '#c9a962'}">${logoText}</div>`;
           
           let badgeHtml = '';
           if (bank.badge) {

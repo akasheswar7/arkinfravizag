@@ -7,8 +7,8 @@
     "defaultRate": 8.50,
     "processingFee": "0.35% of Loan (Min ₹2,000, Max ₹10,000)",
     "badge": "Lowest rates",
-    "logoColor": "#00a8e8",
-    "logoUrl": "https://logo.clearbit.com/sbi.co.in"
+    "logoColor": "#0080c6",
+    "logoText": "SBI"
   },
   {
     "id": "hdfc",
@@ -18,8 +18,8 @@
     "defaultRate": 8.75,
     "processingFee": "0.50% of Loan amount",
     "badge": "Fast processing",
-    "logoColor": "#1c3f94",
-    "logoUrl": "https://logo.clearbit.com/hdfcbank.com"
+    "logoColor": "#003366",
+    "logoText": "HDFC"
   },
   {
     "id": "lic",
@@ -29,8 +29,8 @@
     "defaultRate": 8.65,
     "processingFee": "₹10,000 + GST flat fee",
     "badge": "High eligibility",
-    "logoColor": "#e8b000",
-    "logoUrl": "https://logo.clearbit.com/licindia.in"
+    "logoColor": "#c79e24",
+    "logoText": "LIC"
   },
   {
     "id": "icici",
@@ -40,8 +40,8 @@
     "defaultRate": 8.80,
     "processingFee": "0.50% of Loan amount",
     "badge": "Instant digital approval",
-    "logoColor": "#ea6812",
-    "logoUrl": "https://logo.clearbit.com/icicibank.com"
+    "logoColor": "#f06622",
+    "logoText": "ICICI"
   },
   {
     "id": "axis",
@@ -52,7 +52,7 @@
     "processingFee": "0.50% of Loan (Min ₹10,000)",
     "badge": "Flexible tenure",
     "logoColor": "#97144d",
-    "logoUrl": "https://logo.clearbit.com/axisbank.com"
+    "logoText": "AXIS"
   },
   {
     "id": "kotak",
@@ -63,7 +63,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Premium benefits",
     "logoColor": "#ed1c24",
-    "logoUrl": "https://logo.clearbit.com/kotak.com"
+    "logoText": "KOTAK"
   },
   {
     "id": "bob",
@@ -74,7 +74,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Government backing",
     "logoColor": "#f26522",
-    "logoUrl": "https://logo.clearbit.com/bankofbaroda.in"
+    "logoText": "BOB"
   },
   {
     "id": "pnb",
@@ -84,8 +84,8 @@
     "defaultRate": 8.55,
     "processingFee": "0.35% of Loan amount",
     "badge": "Low interest",
-    "logoColor": "#800000",
-    "logoUrl": "https://logo.clearbit.com/pnbindia.in"
+    "logoColor": "#a51c24",
+    "logoText": "PNB"
   },
   {
     "id": "union",
@@ -96,7 +96,7 @@
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible repayment",
     "logoColor": "#0054a6",
-    "logoUrl": "https://logo.clearbit.com/unionbankofindia.co.in"
+    "logoText": "UNION"
   },
   {
     "id": "canara",
@@ -106,8 +106,8 @@
     "defaultRate": 8.65,
     "processingFee": "0.50% of Loan amount",
     "badge": "Nil prepayment penalty",
-    "logoColor": "#006bb6",
-    "logoUrl": "https://logo.clearbit.com/canarabank.com"
+    "logoColor": "#0091ff",
+    "logoText": "CANARA"
   },
   {
     "id": "federal",
@@ -118,7 +118,7 @@
     "processingFee": "0.50% of Loan (Min ₹3,000)",
     "badge": "Nil foreclosure fee",
     "logoColor": "#0c5096",
-    "logoUrl": "https://logo.clearbit.com/federalbank.co.in"
+    "logoText": "FED"
   },
   {
     "id": "idbi",
@@ -129,7 +129,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Quick documentation",
     "logoColor": "#00935f",
-    "logoUrl": "https://logo.clearbit.com/idbibank.in"
+    "logoText": "IDBI"
   },
   {
     "id": "boi",
@@ -140,7 +140,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Easy sanction",
     "logoColor": "#003b87",
-    "logoUrl": "https://logo.clearbit.com/bankofindia.co.in"
+    "logoText": "BOI"
   },
   {
     "id": "indusind",
@@ -151,7 +151,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "High loan amount",
     "logoColor": "#8b2031",
-    "logoUrl": "https://logo.clearbit.com/indusind.com"
+    "logoText": "INDUS"
   },
   {
     "id": "yes",
@@ -162,7 +162,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Co-signed offers",
     "logoColor": "#0b5294",
-    "logoUrl": "https://logo.clearbit.com/yesbank.in"
+    "logoText": "YES"
   },
   {
     "id": "indian",
@@ -173,7 +173,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Trusted public sector",
     "logoColor": "#0a43a4",
-    "logoUrl": "https://logo.clearbit.com/indianbank.in"
+    "logoText": "INDIAN"
   },
   {
     "id": "central",
@@ -184,7 +184,7 @@
     "processingFee": "0.35% of Loan amount",
     "badge": "Reputable service",
     "logoColor": "#023c91",
-    "logoUrl": "https://logo.clearbit.com/centralbankofindia.co.in"
+    "logoText": "CBI"
   },
   {
     "id": "iob",
@@ -195,7 +195,7 @@
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible schemes",
     "logoColor": "#0c3c9c",
-    "logoUrl": "https://logo.clearbit.com/iob.in"
+    "logoText": "IOB"
   },
   {
     "id": "idfc",
@@ -205,8 +205,8 @@
     "defaultRate": 8.90,
     "processingFee": "0.50% of Loan amount",
     "badge": "High customer trust",
-    "logoColor": "#8b2031",
-    "logoUrl": "https://logo.clearbit.com/idfcfirstbank.com"
+    "logoColor": "#990033",
+    "logoText": "IDFC"
   },
   {
     "id": "maharashtra",
@@ -217,6 +217,6 @@
     "processingFee": "0.20% of Loan amount",
     "badge": "Lowest starting rate",
     "logoColor": "#08418c",
-    "logoUrl": "https://logo.clearbit.com/bankofmaharashtra.in"
+    "logoText": "BOM"
   }
 ]
