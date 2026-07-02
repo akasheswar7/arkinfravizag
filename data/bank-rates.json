@@ -8,7 +8,7 @@
     "processingFee": "0.35% of Loan (Min ₹2,000, Max ₹10,000)",
     "badge": "Lowest rates",
     "logoColor": "#00a8e8",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/State_Bank_of_India_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/sbi.co.in"
   },
   {
     "id": "hdfc",
@@ -19,7 +19,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Fast processing",
     "logoColor": "#1c3f94",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/HDFC_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/hdfcbank.com"
   },
   {
     "id": "lic",
@@ -30,7 +30,7 @@
     "processingFee": "₹10,000 + GST flat fee",
     "badge": "High eligibility",
     "logoColor": "#e8b000",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/d/df/LIC_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/licindia.in"
   },
   {
     "id": "icici",
@@ -41,7 +41,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Instant digital approval",
     "logoColor": "#ea6812",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/icicibank.com"
   },
   {
     "id": "axis",
@@ -52,7 +52,7 @@
     "processingFee": "0.50% of Loan (Min ₹10,000)",
     "badge": "Flexible tenure",
     "logoColor": "#97144d",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Axis_Bank_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/axisbank.com"
   },
   {
     "id": "kotak",
@@ -63,7 +63,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Premium benefits",
     "logoColor": "#ed1c24",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Kotak_Mahindra_Bank_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/kotak.com"
   },
   {
     "id": "bob",
@@ -74,7 +74,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Government backing",
     "logoColor": "#f26522",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Bank_of_Baroda_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/bankofbaroda.in"
   },
   {
     "id": "pnb",
@@ -85,7 +85,7 @@
     "processingFee": "0.35% of Loan amount",
     "badge": "Low interest",
     "logoColor": "#800000",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/87/Punjab_National_Bank_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/pnbindia.in"
   },
   {
     "id": "union",
@@ -96,7 +96,7 @@
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible repayment",
     "logoColor": "#0054a6",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/88/Union_Bank_of_India_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/unionbankofindia.co.in"
   },
   {
     "id": "canara",
@@ -107,7 +107,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Nil prepayment penalty",
     "logoColor": "#006bb6",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Canara_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/canarabank.com"
   },
   {
     "id": "federal",
@@ -118,7 +118,7 @@
     "processingFee": "0.50% of Loan (Min ₹3,000)",
     "badge": "Nil foreclosure fee",
     "logoColor": "#0c5096",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Federal_Bank_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/federalbank.co.in"
   },
   {
     "id": "idbi",
@@ -129,7 +129,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Quick documentation",
     "logoColor": "#00935f",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/IDBI_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/idbibank.in"
   },
   {
     "id": "boi",
@@ -140,7 +140,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Easy sanction",
     "logoColor": "#003b87",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Bank_of_India_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/bankofindia.co.in"
   },
   {
     "id": "indusind",
@@ -151,7 +151,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "High loan amount",
     "logoColor": "#8b2031",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/IndusInd_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/indusind.com"
   },
   {
     "id": "yes",
@@ -162,7 +162,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "Co-signed offers",
     "logoColor": "#0b5294",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/YES_BANK_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/yesbank.in"
   },
   {
     "id": "indian",
@@ -173,7 +173,7 @@
     "processingFee": "0.25% of Loan amount",
     "badge": "Trusted public sector",
     "logoColor": "#0a43a4",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Indian_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/indianbank.in"
   },
   {
     "id": "central",
@@ -184,7 +184,7 @@
     "processingFee": "0.35% of Loan amount",
     "badge": "Reputable service",
     "logoColor": "#023c91",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Central_Bank_of_India_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/centralbankofindia.co.in"
   },
   {
     "id": "iob",
@@ -195,7 +195,7 @@
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible schemes",
     "logoColor": "#0c3c9c",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Indian_Overseas_Bank_Logo.svg"
+    "logoUrl": "https://logo.clearbit.com/iob.in"
   },
   {
     "id": "idfc",
@@ -206,7 +206,7 @@
     "processingFee": "0.50% of Loan amount",
     "badge": "High customer trust",
     "logoColor": "#8b2031",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Logo_of_IDFC_First_Bank.svg"
+    "logoUrl": "https://logo.clearbit.com/idfcfirstbank.com"
   },
   {
     "id": "maharashtra",
@@ -217,6 +217,6 @@
     "processingFee": "0.20% of Loan amount",
     "badge": "Lowest starting rate",
     "logoColor": "#08418c",
-    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Bank_of_Maharashtra_logo.svg"
+    "logoUrl": "https://logo.clearbit.com/bankofmaharashtra.in"
   }
 ]
