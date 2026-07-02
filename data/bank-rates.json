@@ -7,7 +7,8 @@
     "defaultRate": 8.50,
     "processingFee": "0.35% of Loan (Min ₹2,000, Max ₹10,000)",
     "badge": "Lowest rates",
-    "logoColor": "#00a8e8"
+    "logoColor": "#00a8e8",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cc/State_Bank_of_India_logo.svg"
   },
   {
     "id": "hdfc",
@@ -17,7 +18,8 @@
     "defaultRate": 8.75,
     "processingFee": "0.50% of Loan amount",
     "badge": "Fast processing",
-    "logoColor": "#1c3f94"
+    "logoColor": "#1c3f94",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/e/eb/HDFC_Bank_Logo.svg"
   },
   {
     "id": "lic",
@@ -27,7 +29,8 @@
     "defaultRate": 8.65,
     "processingFee": "₹10,000 + GST flat fee",
     "badge": "High eligibility",
-    "logoColor": "#e8b000"
+    "logoColor": "#e8b000",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/d/df/LIC_Logo.svg"
   },
   {
     "id": "icici",
@@ -37,7 +40,8 @@
     "defaultRate": 8.80,
     "processingFee": "0.50% of Loan amount",
     "badge": "Instant digital approval",
-    "logoColor": "#ea6812"
+    "logoColor": "#ea6812",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg"
   },
   {
     "id": "axis",
@@ -47,7 +51,8 @@
     "defaultRate": 8.85,
     "processingFee": "0.50% of Loan (Min ₹10,000)",
     "badge": "Flexible tenure",
-    "logoColor": "#97144d"
+    "logoColor": "#97144d",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Axis_Bank_logo.svg"
   },
   {
     "id": "kotak",
@@ -57,7 +62,8 @@
     "defaultRate": 8.75,
     "processingFee": "0.50% of Loan amount",
     "badge": "Premium benefits",
-    "logoColor": "#ed1c24"
+    "logoColor": "#ed1c24",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Kotak_Mahindra_Bank_logo.svg"
   },
   {
     "id": "bob",
@@ -67,7 +73,8 @@
     "defaultRate": 8.45,
     "processingFee": "0.25% of Loan amount",
     "badge": "Government backing",
-    "logoColor": "#f26522"
+    "logoColor": "#f26522",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Bank_of_Baroda_Logo.svg"
   },
   {
     "id": "pnb",
@@ -77,7 +84,8 @@
     "defaultRate": 8.55,
     "processingFee": "0.35% of Loan amount",
     "badge": "Low interest",
-    "logoColor": "#800000"
+    "logoColor": "#800000",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/87/Punjab_National_Bank_logo.svg"
   },
   {
     "id": "union",
@@ -87,7 +95,8 @@
     "defaultRate": 8.60,
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible repayment",
-    "logoColor": "#0054a6"
+    "logoColor": "#0054a6",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/8/88/Union_Bank_of_India_Logo.svg"
   },
   {
     "id": "canara",
@@ -97,7 +106,8 @@
     "defaultRate": 8.65,
     "processingFee": "0.50% of Loan amount",
     "badge": "Nil prepayment penalty",
-    "logoColor": "#006bb6"
+    "logoColor": "#006bb6",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Canara_Bank_Logo.svg"
   },
   {
     "id": "federal",
@@ -107,7 +117,8 @@
     "defaultRate": 8.90,
     "processingFee": "0.50% of Loan (Min ₹3,000)",
     "badge": "Nil foreclosure fee",
-    "logoColor": "#0c5096"
+    "logoColor": "#0c5096",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Federal_Bank_logo.svg"
   },
   {
     "id": "idbi",
@@ -117,7 +128,8 @@
     "defaultRate": 8.85,
     "processingFee": "0.50% of Loan amount",
     "badge": "Quick documentation",
-    "logoColor": "#00935f"
+    "logoColor": "#00935f",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/23/IDBI_Bank_Logo.svg"
   },
   {
     "id": "boi",
@@ -127,7 +139,8 @@
     "defaultRate": 8.50,
     "processingFee": "0.25% of Loan amount",
     "badge": "Easy sanction",
-    "logoColor": "#003b87"
+    "logoColor": "#003b87",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Bank_of_India_Logo.svg"
   },
   {
     "id": "indusind",
@@ -137,7 +150,8 @@
     "defaultRate": 8.95,
     "processingFee": "0.50% of Loan amount",
     "badge": "High loan amount",
-    "logoColor": "#8b2031"
+    "logoColor": "#8b2031",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/IndusInd_Bank_Logo.svg"
   },
   {
     "id": "yes",
@@ -147,7 +161,8 @@
     "defaultRate": 9.15,
     "processingFee": "0.50% of Loan amount",
     "badge": "Co-signed offers",
-    "logoColor": "#0b5294"
+    "logoColor": "#0b5294",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/3/30/YES_BANK_Logo.svg"
   },
   {
     "id": "indian",
@@ -157,7 +172,8 @@
     "defaultRate": 8.60,
     "processingFee": "0.25% of Loan amount",
     "badge": "Trusted public sector",
-    "logoColor": "#0a43a4"
+    "logoColor": "#0a43a4",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Indian_Bank_Logo.svg"
   },
   {
     "id": "central",
@@ -167,7 +183,8 @@
     "defaultRate": 8.65,
     "processingFee": "0.35% of Loan amount",
     "badge": "Reputable service",
-    "logoColor": "#023c91"
+    "logoColor": "#023c91",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Central_Bank_of_India_logo.svg"
   },
   {
     "id": "iob",
@@ -177,17 +194,19 @@
     "defaultRate": 8.70,
     "processingFee": "0.40% of Loan amount",
     "badge": "Flexible schemes",
-    "logoColor": "#0c3c9c"
+    "logoColor": "#0c3c9c",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Indian_Overseas_Bank_Logo.svg"
   },
   {
-    "id": "uco",
-    "name": "UCO Bank",
-    "minRate": 8.60,
-    "maxRate": 9.10,
-    "defaultRate": 8.70,
-    "processingFee": "0.35% of Loan amount",
-    "badge": "Government-backed",
-    "logoColor": "#0d319c"
+    "id": "idfc",
+    "name": "IDFC First Bank",
+    "minRate": 8.85,
+    "maxRate": 9.40,
+    "defaultRate": 8.90,
+    "processingFee": "0.50% of Loan amount",
+    "badge": "High customer trust",
+    "logoColor": "#8b2031",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Logo_of_IDFC_First_Bank.svg"
   },
   {
     "id": "maharashtra",
@@ -197,6 +216,7 @@
     "defaultRate": 8.40,
     "processingFee": "0.20% of Loan amount",
     "badge": "Lowest starting rate",
-    "logoColor": "#08418c"
+    "logoColor": "#08418c",
+    "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Bank_of_Maharashtra_logo.svg"
   }
 ]
