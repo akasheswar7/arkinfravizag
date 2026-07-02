@@ -1129,8 +1129,8 @@ I would like to enquire about plots and site visit options.`;
         highlightMatchingBankCard(parseFloat(this.value));
       });
 
-      // Load rates from API (local JSON file)
-      fetch('data/bank-rates.json')
+      // Load rates from API (local JSON file with cache buster)
+      fetch('data/bank-rates.json?v=' + Date.now())
         .then(response => {
           if (!response.ok) throw new Error('API request failed');
           return response.json();
