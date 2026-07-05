@@ -998,7 +998,7 @@
       height: 50%;
       background-color: var(--navy-deep);
       z-index: 10;
-      transition: transform 1.5s cubic-bezier(0.85, 0, 0.15, 1);
+      transition: transform 1.8s cubic-bezier(0.85, 0, 0.15, 1);
     }
 
     .preloader-gate-top {
@@ -1031,7 +1031,7 @@
       align-items: center;
       justify-content: center;
       pointer-events: none;
-      transition: opacity 1.0s cubic-bezier(0.77, 0, 0.175, 1), transform 1.0s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: opacity 1.2s cubic-bezier(0.77, 0, 0.175, 1), transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
     }
 
     .logo-preloader.fade-out .preloader-content {
@@ -1059,7 +1059,7 @@
       border-top-color: var(--gold);
       border-bottom-color: var(--gold-dark);
       border-radius: 50%;
-      animation: preloaderRotateRing 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      animation: preloaderRotateRing 3.5s cubic-bezier(0.19, 1, 0.22, 1) forwards;
     }
 
     .preloader-logo-container {
@@ -1072,7 +1072,7 @@
       opacity: 0;
       transform: rotateY(-70deg) rotateX(15deg) scale(0.75) translateZ(-100px);
       filter: blur(15px) drop-shadow(0 0 0 rgba(201, 169, 98, 0));
-      animation: preloaderSwingIn 1.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards;
+      animation: preloaderSwingIn 2.2s cubic-bezier(0.19, 1, 0.22, 1) 0.3s forwards;
       border-radius: 8px;
       overflow: hidden;
     }
@@ -1101,7 +1101,7 @@
         transparent 70%
       );
       transform: skewX(-20deg);
-      animation: preloaderLightSweep 1.5s cubic-bezier(0.19, 1, 0.22, 1) 1.8s forwards;
+      animation: preloaderLightSweep 1.8s cubic-bezier(0.19, 1, 0.22, 1) 2.0s forwards;
     }
 
     .preloader-progress-container {
@@ -1112,7 +1112,7 @@
       border-radius: 2px;
       overflow: hidden;
       opacity: 0;
-      animation: preloaderFadeInProgress 0.4s ease 0.4s forwards;
+      animation: preloaderFadeInProgress 0.5s ease 0.4s forwards;
     }
 
     .preloader-progress-bar {
@@ -1120,7 +1120,7 @@
       height: 100%;
       background: linear-gradient(90deg, var(--gold), var(--gold-dark));
       border-radius: 2px;
-      animation: preloaderFillProgress 1.5s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
+      animation: preloaderFillProgress 2.0s cubic-bezier(0.77, 0, 0.175, 1) 0.6s forwards;
     }
 
     .preloader-tagline-text {
@@ -1131,7 +1131,7 @@
       opacity: 0;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      animation: preloaderFadeInTagline 0.8s ease 1.0s forwards;
+      animation: preloaderFadeInTagline 1.0s ease 1.2s forwards;
     }
 
     @keyframes preloaderRotateRing {
@@ -1701,7 +1701,7 @@
           return;
         }
 
-        // Wait 2.2 seconds (giving time for the logo swing, progress bar, and sweep animation) then trigger slide gates
+        // Wait 3.0 seconds (giving time for the logo swing, progress bar, and sweep animation) then trigger slide gates
         setTimeout(() => {
           preloader.classList.add('fade-out');
           document.documentElement.classList.remove('preloader-active-lock');
@@ -1711,11 +1711,11 @@
             console.warn("sessionStorage setItem failed:", e);
           }
           
-          // Remove preloader from DOM after split gate slide transitions complete (1.5 seconds duration)
+          // Remove preloader from DOM after split gate slide transitions complete (1.8 seconds duration)
           setTimeout(() => {
             preloader.remove();
-          }, 1500);
-        }, 2200);
+          }, 1800);
+        }, 3000);
       }
       initPreloaderTransition();
     })();
