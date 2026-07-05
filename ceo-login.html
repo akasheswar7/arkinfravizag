@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="images/logo.jpg" type="image/jpeg">
-  <link rel="shortcut icon" href="images/logo.jpg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="images/logo.jpg">
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
@@ -185,7 +185,7 @@
 <body>
 
   <div class="login-container">
-    <img class="logo-badge" src="images/logo.jpg" alt="ARK Infra Logo">
+    <img loading="lazy" class="logo-badge" src="images/logo.webp" alt="ARK Infra Logo">
     <h1 class="title">ARK Portal</h1>
     <p class="subtitle">AUTHORIZED CEO ACCESS ONLY</p>
 
@@ -213,7 +213,13 @@
 
   <script>
     // If already logged in, redirect straight to dashboard
-    if (sessionStorage.getItem('ceo_logged_in') === 'true') {
+    let isLoggedIn = false;
+    try {
+      isLoggedIn = sessionStorage.getItem('ceo_logged_in') === 'true';
+    } catch (e) {
+      console.warn("sessionStorage read failed:", e);
+    }
+    if (isLoggedIn) {
       window.location.href = 'ceo-admin.html';
     }
 
@@ -247,7 +253,11 @@
 
         // Client-side SHA-256 password hash comparison for security
         if (usernameInput === 'ARUNARK' && hashedPassword === '2bbeb0bf10678d5688bfa3e760a554a6fa0105d592e24aa67098e351c91b7661') {
-          sessionStorage.setItem('ceo_logged_in', 'true');
+          try {
+            sessionStorage.setItem('ceo_logged_in', 'true');
+          } catch (e) {
+            console.warn("sessionStorage write failed:", e);
+          }
           window.location.href = 'ceo-admin.html';
         } else {
           errorBox.textContent = "Invalid username or password. Access denied.";

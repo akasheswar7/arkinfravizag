@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="images/logo.jpg" type="image/jpeg">
-  <link rel="shortcut icon" href="images/logo.jpg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="images/logo.jpg">
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="ARK Infra — premium real estate development. Luxury residential and commercial properties across prime locations. Building dreams, creating landmarks.">
@@ -996,7 +996,7 @@
       left: 0;
       width: 100%;
       height: 50%;
-      background-color: #ffffff;
+      background-color: var(--navy-deep);
       z-index: 10;
       transition: transform 1.5s cubic-bezier(0.85, 0, 0.15, 1);
     }
@@ -1059,7 +1059,7 @@
       border-top-color: var(--gold);
       border-bottom-color: var(--gold-dark);
       border-radius: 50%;
-      animation: preloaderRotateRing 6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      animation: preloaderRotateRing 3s cubic-bezier(0.19, 1, 0.22, 1) forwards;
     }
 
     .preloader-logo-container {
@@ -1072,7 +1072,7 @@
       opacity: 0;
       transform: rotateY(-70deg) rotateX(15deg) scale(0.75) translateZ(-100px);
       filter: blur(15px) drop-shadow(0 0 0 rgba(201, 169, 98, 0));
-      animation: preloaderSwingIn 4s cubic-bezier(0.19, 1, 0.22, 1) 0.5s forwards;
+      animation: preloaderSwingIn 1.8s cubic-bezier(0.19, 1, 0.22, 1) 0.2s forwards;
       border-radius: 8px;
       overflow: hidden;
     }
@@ -1101,7 +1101,7 @@
         transparent 70%
       );
       transform: skewX(-20deg);
-      animation: preloaderLightSweep 2.5s cubic-bezier(0.19, 1, 0.22, 1) 4s forwards;
+      animation: preloaderLightSweep 1.5s cubic-bezier(0.19, 1, 0.22, 1) 1.8s forwards;
     }
 
     .preloader-progress-container {
@@ -1112,7 +1112,7 @@
       border-radius: 2px;
       overflow: hidden;
       opacity: 0;
-      animation: preloaderFadeInProgress 0.8s ease 1s forwards;
+      animation: preloaderFadeInProgress 0.4s ease 0.4s forwards;
     }
 
     .preloader-progress-bar {
@@ -1120,18 +1120,18 @@
       height: 100%;
       background: linear-gradient(90deg, var(--gold), var(--gold-dark));
       border-radius: 2px;
-      animation: preloaderFillProgress 4.5s cubic-bezier(0.77, 0, 0.175, 1) 1.2s forwards;
+      animation: preloaderFillProgress 1.5s cubic-bezier(0.77, 0, 0.175, 1) 0.5s forwards;
     }
 
     .preloader-tagline-text {
       margin-top: 1.5rem;
       font-size: 0.75rem;
       font-weight: 500;
-      color: var(--navy-deep);
+      color: var(--gold-light);
       opacity: 0;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      animation: preloaderFadeInTagline 1.5s ease 2.5s forwards;
+      animation: preloaderFadeInTagline 0.8s ease 1.0s forwards;
     }
 
     @keyframes preloaderRotateRing {
@@ -1201,7 +1201,12 @@
   <!-- Inline script to check visited state immediately before rendering body to prevent flicker -->
   <script>
     (function () {
-      const visited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+      let visited = false;
+      try {
+        visited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+      } catch (e) {
+        console.warn("sessionStorage not available:", e);
+      }
       if (visited) {
         document.documentElement.classList.add('preloader-skipped');
       } else {
@@ -1217,7 +1222,7 @@
     <div class="preloader-content">
       <div class="preloader-ring"></div>
       <div class="preloader-logo-container">
-        <img class="preloader-logo-img" src="images/logo.jpg" alt="ARK Infra Logo">
+        <img class="preloader-logo-img" src="images/logo.webp" alt="ARK Infra Logo">
       </div>
       <div class="preloader-progress-container">
         <div class="preloader-progress-bar"></div>
@@ -1243,7 +1248,7 @@
   <header class="site-header" id="header">
     <div class="header-inner">
       <a href="/" class="logo" aria-label="ARK Infra Home">
-        <img class="logo-badge-img" src="images/logo.jpg" alt="ARK Infra Logo" aria-hidden="true">
+        <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
         ARK <span>Infra</span>
       </a>
                     <nav class="nav-desktop" aria-label="Main navigation">
@@ -1279,7 +1284,7 @@
     <!-- Hero -->
     <section class="hero" id="hero" aria-label="Welcome">
       <div class="hero-bg" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" alt="" width="1920" height="1080">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80" alt="" width="1920" height="1080">
       </div>
       <div class="hero-overlay" aria-hidden="true"></div>
       <div class="hero-content">
@@ -1306,14 +1311,14 @@
         <div class="hero-cards-grid">
           <!-- Card 1: Managing Director -->
           <a href="md-details.html" class="hero-card reveal" id="mdCard">
-            <img class="profile-photo" src="images/md-ramakrishna.jpg" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
+            <img class="profile-photo" src="images/md-ramakrishna.webp" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
             <p class="profile-role">Managing Director</p>
             <h2 class="profile-name">Adari Ramakrishna</h2>
             <p class="profile-quote">"We don't just facilitate property investments—we help families, businesses, and investors secure their future with confidence and trust."</p>
           </a>
           <!-- Card 2: CEO -->
           <a href="ceo-details.html" class="hero-card reveal reveal-delay-1" id="ceoCard">
-            <img class="profile-photo" src="images/ceo-arun.png" alt="Konathala Hanumantharao (Arun), CEO, ARK Infra" width="140" height="140">
+            <img class="profile-photo" src="images/ceo-arun.webp" alt="Konathala Hanumantharao (Arun), CEO, ARK Infra" width="140" height="140">
             <p class="profile-role">CEO</p>
             <h2 class="profile-name">Konathala Hanumantharao (Arun)</h2>
             <p class="profile-quote">"Every project we deliver is a promise fulfilled—built on integrity, driven by excellence, and designed for the future."</p>
@@ -1358,7 +1363,7 @@
             </div>
             <div class="contact-item">
               <div class="contact-icon" style="overflow: hidden; padding: 0;" aria-hidden="true">
-                <img src="images/building.jpg?v=2" alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                <img loading="lazy" src="images/building.webp?v=2" alt="" style="width: 100%; height: 100%; object-fit: cover;">
               </div>
               <div>
                 <h4>Corporate Office</h4>
@@ -1393,7 +1398,7 @@
           </p>
           
           <div class="building-image-container">
-            <img src="images/building.jpg?v=2" alt="ARK Infra office building facade (RV Square)" class="building-img" loading="lazy">
+            <img src="images/building.webp?v=2" alt="ARK Infra office building facade (RV Square)" class="building-img" loading="lazy">
             <div class="ark-board-marker" aria-label="ARK Infra location">
               <span class="pulse-ring"></span>
               <span class="marker-dot"></span>
@@ -1416,7 +1421,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="/" class="logo">
-          <img class="logo-badge-img" src="images/logo.jpg" alt="ARK Infra Logo" aria-hidden="true">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
           ARK <span>Infra</span>
         </a>
         <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
@@ -1468,7 +1473,7 @@
   <div class="lightbox" id="teamModal" role="dialog" aria-modal="true" aria-label="Team member details">
     <button class="lightbox-close" id="teamModalClose" aria-label="Close">&times;</button>
     <div class="project-lightbox-content" style="max-width: 36rem;">
-      <img src="" alt="Team member photo" id="teamModalImg" style="max-height: 40vh; object-fit: cover; object-position: center 20%;">
+      <img loading="lazy" src="" alt="Team member photo" id="teamModalImg" style="max-height: 40vh; object-fit: cover; object-position: center 20%;">
       <div class="project-lightbox-details">
         <span class="project-lightbox-status" id="teamModalRole"></span>
         <h3 id="teamModalName" style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.5rem; color: var(--white);"></h3>
@@ -1564,7 +1569,7 @@
         ceo: {
           name: "Konathala Hanumantharao (Arun)",
           role: "CEO",
-          image: "images/ceo-arun.png",
+          image: "images/ceo-arun.webp",
           quote: `"Every project we deliver is a promise fulfilled—built on integrity, driven by excellence, and designed for the future."`,
           bio: "Konathala Hanumantharao (Arun) is the CEO of ARK Infra. Under his dynamic leadership, the company has completed numerous premium developments and established a reputation for absolute transparency, engineering excellence, and customer trust. With 20+ years of experience in real estate, he oversees the company's strategic vision and continues to build landmarks across prime growth corridors.",
           phone: "+91 81255 47801"
@@ -1572,7 +1577,7 @@
         md: {
           name: "Adari Ramakrishna",
           role: "Managing Director",
-          image: "images/md-ramakrishna.jpg",
+          image: "images/md-ramakrishna.webp",
           quote: `"We don't just facilitate property investments—we help families, businesses, and investors secure their future with confidence and trust."`,
           bio: "Adari Ramakrishna serves as the Managing Director of ARK Infra. He brings extensive expertise in land procurement, joint ventures, and strategic investments. His focus is on selecting high-growth locations and creating win-win propositions for both landowners and home buyers, ensuring that every project delivers maximum value and returns.",
           phone: "+91 98484 98070"
@@ -1683,24 +1688,34 @@
         const preloader = document.getElementById('logoPreloader');
         if (!preloader) return;
         
-        const isVisited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+        let isVisited = false;
+        try {
+          isVisited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+        } catch (e) {
+          console.warn("sessionStorage not available:", e);
+        }
+
         if (isVisited) {
           preloader.style.display = 'none';
           document.documentElement.classList.remove('preloader-active-lock');
           return;
         }
 
-        // Wait 6.5 seconds (giving time for the slow 3D swing entrance, progress bar, and shine effect) then trigger slide gates
+        // Wait 2.2 seconds (giving time for the logo swing, progress bar, and sweep animation) then trigger slide gates
         setTimeout(() => {
           preloader.classList.add('fade-out');
           document.documentElement.classList.remove('preloader-active-lock');
-          sessionStorage.setItem('arkinfra_preloader_shown', 'true');
+          try {
+            sessionStorage.setItem('arkinfra_preloader_shown', 'true');
+          } catch (e) {
+            console.warn("sessionStorage setItem failed:", e);
+          }
           
           // Remove preloader from DOM after split gate slide transitions complete (1.5 seconds duration)
           setTimeout(() => {
             preloader.remove();
           }, 1500);
-        }, 6500);
+        }, 2200);
       }
       initPreloaderTransition();
     })();

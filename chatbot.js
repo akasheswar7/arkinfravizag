@@ -12,7 +12,7 @@
     {
       title: "Alakananda - Highway City",
       desc: "VMRDA & AP RERA Approved Layout at Tallapalem. 40' Black Top Roads, drainage, gated community.",
-      image: "images/highway-city-layout.jpg",
+      image: "images/highway-city-layout.webp",
       status: "Ongoing",
       category: "Plots Layout",
       link: "projects.html"
@@ -20,7 +20,7 @@
     {
       title: "Education City - Phase 1",
       desc: "VMRDA Proposed Plotted Development at Sabbavaram. Facing 100m road, gated community, 24hr security.",
-      image: "images/education-city-layout.jpg",
+      image: "images/education-city-layout.webp",
       status: "Ongoing",
       category: "Plots Layout",
       link: "projects.html"

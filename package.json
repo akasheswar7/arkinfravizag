@@ -1,0 +1,24 @@
+{
+  "name": "ark-infra",
+  "version": "1.0.0",
+  "description": "",
+  "main": "chatbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akasheswar7/arkinfravizag.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/akasheswar7/arkinfravizag/issues"
+  },
+  "homepage": "https://github.com/akasheswar7/arkinfravizag#readme",
+  "dependencies": {
+    "sharp": "^0.35.3"
+  }
+}
