@@ -830,6 +830,41 @@
       color: var(--gold); font-size: 1.5rem;
     }
 
+        /* Footer */
+    .site-footer {
+      background: #030811;
+      padding: 5rem 1.5rem 2rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+      margin-top: 5rem;
+    }
+    .footer-grid {
+      max-width: var(--max-w); margin: 0 auto 3rem;
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 3rem;
+    }
+    .footer-brand p { margin: 1.25rem 0; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.6; }
+    .footer-social {
+      display: flex; gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .footer-social a {
+      width: 40px; height: 40px; border: 1px solid rgba(201, 169, 98, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 0.875rem; font-weight: 600;
+      transition: var(--transition);
+    }
+    .footer-social a:hover { background: var(--gold); color: var(--navy-deep); }
+    .footer-col h4 {
+      color: var(--white); font-size: 0.875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .footer-col ul li { margin-bottom: 0.75rem; font-size: 0.875rem; color: var(--text-muted); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 0 auto; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8125rem; color: var(--text-muted);
+    }
+
     /* Responsive */
     @media (max-width: 1024px) {
       .footer-grid { grid-template-columns: 1fr 1fr; }
@@ -924,6 +959,71 @@
     </div>
   </section>
 </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Social Links & Contact">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1DL6SnDUaj/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/arkinfra_97?igsh=MTgxZWxza2djOGk1OA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#" id="openPrivacy">Privacy Policy</a>
+        <a href="#" id="openTerms">Terms &amp; Conditions</a>
+      </div>
+    </div>
+  </footer>
 
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
     <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
