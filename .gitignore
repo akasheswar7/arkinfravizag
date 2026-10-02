@@ -10,4 +10,6 @@ backend/*-credentials.json
 backend/*.json
 *.pdf
 video_frames/
+video.mp4
+
 
