@@ -1,2 +1,13 @@
 scratch/
 node_modules/
+backend/.env
+backend/.venv/
+backend/uploads/
+*.pyc
+__pycache__/
+backend/gcp-credentials.json
+backend/*-credentials.json
+backend/*.json
+*.pdf
+video_frames/
+

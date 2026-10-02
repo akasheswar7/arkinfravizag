@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Read expert real estate advice, market insights, and guides about buying plots in Visakhapatnam, Sabbavaram, and Tallapalem from ARK Infra.">
+  <title>Real Estate Insights | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop a {
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    @media (max-width: 1120px) {
+      .nav-desktop { display: none !important; }
+      .menu-toggle { display: flex !important; }
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: 0; top: var(--header-h);
+      background: rgba(5, 13, 26, 0.98);
+      padding: 2rem 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition), visibility var(--transition);
+      z-index: 999;
+      visibility: hidden;
+    }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
+    .nav-mobile a {
+      display: block; padding: 1rem 0;
+      font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    /* Insights Content */
+    .insights-section {
+      padding: calc(var(--header-h) + 3rem) 1.5rem 5rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 500; color: var(--white); text-align: center; margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 1.05rem; color: var(--text-muted); text-align: center;
+      max-width: 38rem; margin: 0 auto 4rem; line-height: 1.6;
+    }
+
+    /* Blog Grid */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    .blog-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(201, 169, 98, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+    }
+    .blog-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201, 169, 98, 0.4);
+      box-shadow: 0 15px 35px rgba(201, 169, 98, 0.1);
+    }
+    .blog-card-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+      transition: transform 0.6s ease;
+    }
+    .blog-card:hover .blog-card-img {
+      transform: scale(1.05);
+    }
+    .blog-card-body {
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .blog-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    .blog-card-title {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.3;
+      transition: color 0.3s;
+    }
+    .blog-card:hover .blog-card-title {
+      color: var(--gold-light);
+    }
+    .blog-card-excerpt {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+    .blog-read-btn {
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: auto;
+      transition: gap 0.3s;
+    }
+    .blog-card:hover .blog-read-btn {
+      gap: 0.75rem;
+    }
+
+    /* Modal Article Viewer */
+    .article-modal {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(5, 13, 26, 0.95);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .article-modal.open {
+      opacity: 1; visibility: visible;
+    }
+    .article-modal-content {
+      background: var(--navy);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      max-width: 48rem;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      border-radius: 4px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+    .article-modal-img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      background: #000;
+    }
+    .article-modal-body {
+      padding: 3rem 2.5rem;
+      color: var(--text-body);
+    }
+    .article-modal-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      width: 40px; height: 40px; border: 1px solid var(--gold);
+      color: var(--gold); font-size: 1.5rem;
+      background: rgba(5, 13, 26, 0.85);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.3s, color 0.3s;
+    }
+    .article-modal-close:hover {
+      background: var(--gold);
+      color: var(--navy-deep);
+    }
+    .article-modal-meta {
+      font-size: 0.8125rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      font-weight: 600;
+    }
+    .article-modal-title {
+      font-family: var(--font-display);
+      font-size: 2.25rem;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      line-height: 1.25;
+    }
+    .article-text {
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--text-body);
+    }
+    .article-text p {
+      margin-bottom: 1.5rem;
+    }
+    .article-text h4 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--white);
+      margin: 2rem 0 1rem;
+    }
+    .article-text ul, .article-text ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+    .article-text li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .blog-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    }
+    @media (max-width: 768px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .article-modal-body { padding: 2rem 1.5rem; }
+      .article-modal-title { font-size: 1.75rem; }
+    }
+
+    /* Footer */
+    .site-footer {
+      background: #030811;
+      padding: 5rem 1.5rem 2rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+      margin-top: 5rem;
+    }
+    .footer-grid {
+      max-width: var(--max-w); margin: 0 auto 3rem;
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 3rem;
+    }
+    .footer-brand p { margin: 1.25rem 0; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.6; }
+    .footer-social {
+      display: flex; gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .footer-social a {
+      width: 40px; height: 40px; border: 1px solid rgba(201, 169, 98, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 0.875rem; font-weight: 600;
+      transition: var(--transition);
+    }
+    .footer-social a:hover { background: var(--gold); color: var(--navy-deep); }
+    .footer-col h4 {
+      color: var(--white); font-size: 0.875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .footer-col ul li { margin-bottom: 0.75rem; font-size: 0.875rem; color: var(--text-muted); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 0 auto; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8125rem; color: var(--text-muted);
+    }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+        <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+        ARK <span>Infra</span>
+      </a>
+              <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="insights.html">Insights</a>
+          <a href="why.html">Why Us</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="growth-map.html">Growth Map</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
+        </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+      <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="insights.html">Insights</a>
+      <a href="why.html">Why Us</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="growth-map.html">Growth Map</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  <main class="insights-section">
+    <p class="section-label">Education & Insights</p>
+    <h1 class="section-title">Real Estate Insights</h1>
+    <p class="section-desc">
+      Expert guides, market trends, and regulatory updates in Andhra Pradesh's real estate sector to help you make informed land investments.
+    </p>
+
+    <!-- Blog Grid -->
+    <div class="blog-grid">
+      
+      <!-- Card 1 -->
+      <div class="blog-card" data-article="0">
+        <img loading="lazy" src="images/education-city-layout.webp" alt="Sabbavaram Layout Overview" class="blog-card-img" onerror="this.src='https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80'">
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>Market Trends</span>
+            <span>June 2026</span>
+          </div>
+          <h3 class="blog-card-title">Why Sabbavaram is Visakhapatnam's Next Mega Investment Hub</h3>
+          <p class="blog-card-excerpt">
+            Positioned strategically between crucial transit highways and major academic zones, Sabbavaram is experiencing unprecedented capital growth. Learn why plotting here yields high returns.
+          </p>
+          <span class="blog-read-btn">Read Article &rarr;</span>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="blog-card" data-article="1">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80" alt="Law gavel representing regulatory approvals" class="blog-card-img">
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>Legal Guide</span>
+            <span>June 2026</span>
+          </div>
+          <h3 class="blog-card-title">VMRDA vs. AP RERA: A Guide for Smart Plot Buyers</h3>
+          <p class="blog-card-excerpt">
+            Understanding layout approvals is vital to secure your hard-earned money. We break down the differences between VMRDA and AP RERA and why approved ventures are 100% safe.
+          </p>
+          <span class="blog-read-btn">Read Article &rarr;</span>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="blog-card" data-article="2">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80" alt="Engineers checking land blueprints" class="blog-card-img">
+        <div class="blog-card-body">
+          <div class="blog-meta">
+            <span>Buying Tips</span>
+            <span>May 2026</span>
+          </div>
+          <h3 class="blog-card-title">5 Essential Checklist Items Before Purchasing Land in Vizag</h3>
+          <p class="blog-card-excerpt">
+            From checking Encumbrance Certificates (EC) and legal titles to inspecting road dimensions and drainage layouts, here is your essential pre-purchase layout checklist.
+          </p>
+          <span class="blog-read-btn">Read Article &rarr;</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Article Lightbox Modal -->
+  <div class="article-modal" id="articleModal" role="dialog" aria-modal="true" aria-label="Read Article">
+    <button class="article-modal-close" id="articleModalClose" aria-label="Close">&times;</button>
+    <div class="article-modal-content">
+      <img loading="lazy" src="" alt="Article Banner" id="modalImg" class="article-modal-img">
+      <div class="article-modal-body">
+        <div class="article-modal-meta" id="modalMeta">Market Trends</div>
+        <h2 class="article-modal-title" id="modalTitle">Article Title</h2>
+        <div class="article-text" id="modalText">
+          <!-- Text loaded dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Social Links & Contact">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1DL6SnDUaj/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/arkinfra_97?igsh=MTgxZWxza2djOGk1OA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // 1. Mobile Menu controls
+      const menuToggle = document.getElementById('menuToggle');
+      const navMobile = document.getElementById('navMobile');
+
+      menuToggle.addEventListener('click', function () {
+        const open = navMobile.classList.toggle('open');
+        menuToggle.classList.toggle('active', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      navMobile.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('open');
+          menuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // 2. Blog Dataset
+      const articlesData = [
+        {
+          title: "Why Sabbavaram is Visakhapatnam's Next Mega Investment Hub",
+          meta: "Market Trends - June 2026",
+          image: "images/education-city-layout.webp",
+          fallbackImage: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=80",
+          content: `
+            <p>Visakhapatnam's real estate market is expanding rapidly, and Sabbavaram has emerged as the premier sweet spot for plotted land investment. Positioned as a major educational and logistical center, it represents a high-growth corridor that smart investors are targeting heavily in 2026.</p>
+            
+            <h4>The Educational City Catalyst</h4>
+            <p>Sabbavaram is home to Visakhapatnam's prestigious "Education City," hosting massive, newly constructed campuses. Major institutes established here include:</p>
+            <ul>
+              <li><strong>Damodaram Sanjivayya National Law University (DSNLU)</strong></li>
+              <li><strong>Indian Maritime University (IMU)</strong></li>
+              <li><strong>Indian Institute of Petroleum and Energy (IIPE)</strong></li>
+            </ul>
+            <p>The influx of thousands of students, researchers, and university staff creates a constant, permanent demand for rental housing, local commercial complexes, and premium residential zones nearby.</p>
+
+            <h4>Strategic Infrastructure Connectivity</h4>
+            <p>Sabbavaram's location is a logistical goldmine, sitting strategically between major transit highways:</p>
+            <ul>
+              <li><strong>Raipur-Vizag 6-Lane Expressway (NH-26):</strong> Offers rapid logistics access into neighboring states.</li>
+              <li><strong>Chennai-Kolkata National Highway (NH-16):</strong> Connecting Sabbavaram to Visakhapatnam city center within 25 minutes.</li>
+              <li><strong>Proximity to NAD Junction:</strong> Only 19 km from the core commercial hub of Vizag.</li>
+            </ul>
+
+            <h4>Expected Capital Growth</h4>
+            <p>Due to the massive government expenditure on highway expansion and educational infrastructures, land prices in Sabbavaram have consistently grown by 15-20% year-on-year. Buying layout plots (such as our <strong>Education City - Phase 1</strong> gated venture) guarantees highly appreciating assets with high legal safety and clear titles.</p>
+          `
+        },
+        {
+          title: "VMRDA vs. AP RERA: A Guide for Smart Plot Buyers",
+          meta: "Legal Guide - June 2026",
+          image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1200&q=80",
+          fallbackImage: "",
+          content: `
+            <p>When purchasing a residential plot in Visakhapatnam, legal security is the absolute first priority. Many buyers hear the terms <strong>VMRDA approval</strong> and <strong>AP RERA approval</strong> but do not fully understand what they stand for or why both are critical for a secure land purchase.</p>
+
+            <h4>What is VMRDA?</h4>
+            <p>The <strong>Visakhapatnam Metropolitan Region Development Authority (VMRDA)</strong> is the urban planning agency responsible for zoning, infrastructure layout standards, and land usage permissions in the Vizag region.</p>
+            <p>A VMRDA-approved layout ensures that:</p>
+            <ul>
+              <li>The layout adheres to strict guidelines regarding road widths (typically minimum 40 feet).</li>
+              <li>A mandatory 10% of the total land area is set aside for public parks, open spaces, and utility reservations.</li>
+              <li>Basic layout infrastructures (like concrete drainages, streetlights, and water lines) must be physically executed by the developer.</li>
+            </ul>
+
+            <h4>What is AP RERA?</h4>
+            <p>The <strong>Andhra Pradesh Real Estate Regulatory Authority (AP RERA)</strong> is a consumer protection body created by the central government. While VMRDA approves physical infrastructure planning, RERA monitors financial transparency and project delivery timelines.</p>
+            <p>Under RERA compliance, developers must register their ventures before marketing, keep client funds in escrow accounts, and commit to completing the development within the registered timeline. If a developer delays or fails to deliver promised facilities, RERA imposes strict penalties.</p>
+
+            <h4>Why You Need Both</h4>
+            <p>Buying a plot that has both approvals (like ARK Infra's RERA & VMRDA approved Alakananda layout at Tallapalem) means your purchase is double-shielded. You get the guarantee of high-quality planning standards from VMRDA, and financial/delivery protection from RERA. It guarantees that you can get immediate bank loan approvals and clean title registrations.</p>
+          `
+        },
+        {
+          title: "5 Essential Checklist Items Before Purchasing Land in Vizag",
+          meta: "Buying Tips - May 2026",
+          image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80",
+          fallbackImage: "",
+          content: `
+            <p>Buying land is one of the most significant investments you will ever make. To ensure your purchase is safe and lucrative, here is the ultimate legal and physical checklist you should run through before executing a registration in Visakhapatnam.</p>
+
+            <h4>1. Check the Encumbrance Certificate (EC)</h4>
+            <p>An EC is a legal document proving that the property is free from any monetary or legal liabilities (like unpaid home loans, mortgages, or pending legal disputes). Always request a 30-year Encumbrance Certificate to verify the historical chain of ownership.</p>
+
+            <h4>2. Verify Title Deeds and Clear Titles</h4>
+            <p>Ensure that the seller has absolute ownership rights over the land. The title deed must be registered, and all previous links (link documents) must be legally validated. If the project is a joint venture, review the Joint Development Agreement (JDA) carefully.</p>
+
+            <h4>3. Check VMRDA & AP RERA Approvals</h4>
+            <p>Never buy plots in unapproved layouts. Unapproved layouts run the risk of demolition, lack basic amenities, and cannot get legal bank loans. Always demand the official VMRDA approval order and AP RERA registration number.</p>
+
+            <h4>4. Inspect the Physical Layout Infrastructure</h4>
+            <p>Walk the site. Verify if the developer has laid standard 40-foot wide blacktop roads, if there is a working drainage system to prevent waterlogging, and if electricity connectivity is established. Substandard developments can lead to high maintenance costs later.</p>
+
+            <h4>5. Verify Bank Loan Tie-ups</h4>
+            <p>A great indicator of a layout's legal safety is if major nationalized or private banks (like SBI, HDFC, or ICICI) have approved the venture for home loans. Banks perform rigorous legal background checks before partnering with developers, giving you an extra layer of assurance.</p>
+          `
+        }
+      ];
+
+      // 3. Modal Controls
+      const modal = document.getElementById('articleModal');
+      const modalImg = document.getElementById('modalImg');
+      const modalMeta = document.getElementById('modalMeta');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalText = document.getElementById('modalText');
+      const modalClose = document.getElementById('articleModalClose');
+
+      function openArticle(index) {
+        const article = articlesData[index];
+        if (!article) return;
+
+        modalImg.src = article.image;
+        modalImg.onerror = function() {
+          if(article.fallbackImage) {
+            modalImg.src = article.fallbackImage;
+          }
+        };
+        modalMeta.textContent = article.meta;
+        modalTitle.textContent = article.title;
+        modalText.innerHTML = article.content;
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeArticle() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      // Add click event to blog cards
+      document.querySelectorAll('.blog-card').forEach(card => {
+        card.addEventListener('click', function () {
+          const index = parseInt(this.dataset.article);
+          openArticle(index);
+        });
+      });
+
+      if (modalClose) {
+        modalClose.addEventListener('click', closeArticle);
+      }
+
+      if (modal) {
+        modal.addEventListener('click', function (e) {
+          if (e.target === modal) closeArticle();
+        });
+      }
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeArticle();
+        }
+      });
+    })();
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

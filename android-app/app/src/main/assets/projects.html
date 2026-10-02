@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About ARK Infra. Explore our premium gated layouts, ongoing developments, quality standards, and interact with our AI Assistant.">
+  <title>Featured Projects | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --off-white: #f4f6f9;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      transition: background var(--transition), box-shadow var(--transition), backdrop-filter var(--transition);
+    }
+    .site-header.scrolled {
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop a {
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    @media (max-width: 1120px) {
+      .nav-desktop { display: none !important; }
+      .menu-toggle { display: flex !important; }
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: 0; top: var(--header-h);
+      background: rgba(5, 13, 26, 0.98);
+      padding: 2rem 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition), visibility var(--transition);
+      z-index: 999;
+      visibility: hidden;
+    }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
+    .nav-mobile a {
+      display: block; padding: 1rem 0;
+      font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    .back-btn {
+      padding: 0.65rem 1.5rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      border-radius: 2px;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+    .back-btn:hover {
+      background: rgba(201, 169, 98, 0.1);
+      transform: translateX(-4px);
+    }
+
+    /* Section common */
+    section { padding: 6rem 1.5rem; position: relative; }
+    .container { max-width: var(--max-w); margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::before {
+      content: ""; width: 2.5rem; height: 1px; background: var(--gold);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 600; color: var(--white);
+      line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .section-desc {
+      font-size: 1.0625rem; color: var(--text-muted);
+      max-width: 36rem; line-height: 1.8;
+    }
+    .reveal {
+      opacity: 0; transform: translateY(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2rem; font-size: 0.8125rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; border-radius: 2px;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      box-shadow: var(--shadow-gold);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201, 169, 98, 0.4); }
+    .btn-outline {
+      border: 1px solid var(--gold); color: var(--gold);
+      background: transparent;
+    }
+    .btn-outline:hover { background: rgba(201, 169, 98, 0.1); transform: translateY(-2px); }
+
+    /* Main Container & Top Padding */
+    .support-section {
+      padding: calc(var(--header-h) + 3rem) 1.5rem 3rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .support-header-text {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      max-width: 38rem;
+    }
+    .support-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.25rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+    }
+    .support-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* Chat Dashboard Wrapper */
+    .support-chat-wrapper {
+      width: 100%;
+      max-width: 800px;
+      height: 620px;
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      background: rgba(10, 22, 40, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 12px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(201, 169, 98, 0.05);
+      overflow: hidden;
+      margin-bottom: 3rem;
+    }
+
+    /* "Best of ARK Infra" Showcase Section */
+    .showcase-container {
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 2rem;
+    }
+    .showcase-heading-wrap {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+    .showcase-heading-wrap::after {
+      content: "";
+      display: block;
+      width: 4rem;
+      height: 2px;
+      background: var(--gold);
+      margin: 1rem auto 0;
+    }
+    .showcase-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .showcase-heading {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+    
+    /* Layouts Showcase Cards */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+    .showcase-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s var(--transition), border-color 0.4s var(--transition), box-shadow 0.4s var(--transition);
+    }
+    .showcase-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(201, 169, 98, 0.45);
+      box-shadow: 0 10px 30px rgba(201, 169, 98, 0.15);
+    }
+    .showcase-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .showcase-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    .showcase-tag {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .showcase-card-title {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .showcase-card-desc {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .showcase-bullets {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 1.5rem;
+    }
+    .showcase-bullets li {
+      font-size: 0.875rem;
+      color: var(--text-body);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .showcase-bullets li::before {
+      content: "\2713";
+      color: var(--gold);
+      font-weight: bold;
+    }
+    .showcase-action-btn {
+      margin-top: auto;
+      display: inline-block;
+      text-align: center;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      font-weight: 600;
+      font-size: 0.8125rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: opacity var(--transition);
+    }
+    .showcase-action-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Trust / Quality Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    .pillar-card {
+      padding: 2rem 1.5rem;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(201, 169, 98, 0.1);
+      border-radius: 4px;
+      text-align: center;
+    }
+    .pillar-icon {
+      font-size: 2.25rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .pillar-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+    .pillar-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Testimonial Quote */
+    .showcase-quote-wrap {
+      padding: 3rem;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 8px;
+      text-align: center;
+      position: relative;
+    }
+    .showcase-quote-wrap::before {
+      content: "\201C";
+      font-family: var(--font-display);
+      font-size: 6rem;
+      color: var(--gold);
+      opacity: 0.15;
+      position: absolute;
+      top: 0;
+      left: 2rem;
+    }
+    .showcase-quote-text {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--white);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    .showcase-quote-author {
+      font-size: 0.875rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Detailed content sections styling (moved from index.html) */
+    /* About */
+    .about { background: var(--navy); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      margin-top: 3rem; align-items: start;
+    }
+    .about-image {
+      position: relative; overflow: hidden;
+    }
+    .about-image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+    .about-image-accent {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      width: 60%; height: 60%; border: 2px solid var(--gold); z-index: -1;
+    }
+    .about-stats-inline {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .stat-box {
+      padding: 1.5rem; background: rgba(201, 169, 98, 0.08);
+      border-left: 3px solid var(--gold);
+    }
+    .stat-box strong {
+      display: block; font-family: var(--font-display);
+      font-size: 2rem; color: var(--gold);
+    }
+    .stat-box span { font-size: 0.8125rem; color: var(--text-muted); }
+    .vision-mission {
+      display: grid; gap: 2rem; margin-top: 2rem;
+    }
+    .vm-card {
+      padding: 2rem; background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .vm-card h3 {
+      font-family: var(--font-display); font-size: 1.5rem;
+      color: var(--white); margin-bottom: 0.75rem;
+    }
+    .vm-card p { font-size: 0.9375rem; color: var(--text-muted); }
+    .ceo-message {
+      margin-top: 4rem; padding: 3rem;
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      position: relative;
+    }
+    .ceo-message::before {
+      content: "\201C"; font-family: var(--font-display);
+      font-size: 8rem; color: var(--gold); opacity: 0.2;
+      position: absolute; top: -1rem; left: 1.5rem; line-height: 1;
+    }
+    .ceo-message p {
+      font-family: var(--font-display); font-size: 1.375rem;
+      color: var(--white); line-height: 1.6; position: relative; z-index: 1;
+    }
+    .ceo-message footer {
+      margin-top: 1.5rem; font-size: 0.875rem; color: var(--gold);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* Projects */
+    .projects { background: var(--navy-deep); }
+    .project-tabs {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2.5rem 0 2rem;
+    }
+    .project-tab {
+      padding: 0.65rem 1.25rem; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); border: 1px solid rgba(201, 169, 98, 0.2);
+      transition: var(--transition);
+    }
+    .project-tab.active, .project-tab:hover {
+      background: var(--gold); color: var(--navy-deep); border-color: var(--gold);
+    }
+    .projects-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .project-card {
+      position: relative; overflow: hidden;
+      background: var(--navy-mid); cursor: pointer;
+    }
+    .project-card.hidden { display: none; }
+    .project-card img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .project-card:hover img { transform: scale(1.08); }
+    .project-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(5,13,26,0.95) 0%, transparent 60%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.5rem;
+    }
+    .project-status {
+      font-size: 0.625rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.5rem;
+    }
+    .project-overlay h3 {
+      font-family: var(--font-display); font-size: 1.5rem;
+      color: var(--white); margin-bottom: 0.25rem;
+    }
+    .project-overlay p { font-size: 0.8125rem; color: var(--text-muted); }
+    .project-meta {
+      display: flex; gap: 1rem; margin-top: 0.75rem;
+      font-size: 0.75rem; color: var(--gold-light);
+    }
+
+    /* Why Choose */
+    .why { background: var(--navy); }
+    .why-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .why-card {
+      padding: 2rem 1.5rem; text-align: center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(201, 169, 98, 0.12);
+      transition: transform var(--transition), border-color var(--transition);
+    }
+    .why-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(201, 169, 98, 0.4);
+    }
+    .why-icon {
+      width: 3.5rem; height: 3.5rem; margin: 0 auto 1.25rem;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid var(--gold); color: var(--gold);
+      font-size: 1.25rem;
+    }
+    .why-card h3 {
+      font-size: 0.9375rem; color: var(--white); margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .why-card p { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* Achievements */
+    .achievements {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-deep));
+      padding: 5rem 1.5rem;
+    }
+    .achievements-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+      margin-top: 3rem;
+    }
+    .achievement-item { text-align: center; }
+    .achievement-num {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 4.5rem);
+      font-weight: 700; color: var(--gold);
+      line-height: 1;
+    }
+    .achievement-num span { font-size: 0.5em; color: var(--gold-light); }
+    .achievement-item p {
+      margin-top: 0.75rem; font-size: 0.875rem;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .awards-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .award-card {
+      padding: 2rem; text-align: center;
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      background: rgba(5, 13, 26, 0.5);
+    }
+    .award-card .award-year {
+      font-size: 0.75rem; color: var(--gold); letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+    .award-card h4 { color: var(--white); font-size: 1rem; font-weight: 600; }
+    .award-card p { font-size: 0.8125rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    /* Testimonials */
+    .testimonials { background: var(--navy-deep); overflow: hidden; }
+    .testimonial-slider {
+      margin-top: 3rem; position: relative;
+    }
+    .testimonial-track {
+      display: flex; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .testimonial-slide {
+      min-width: 100%; padding: 0 0.5rem;
+    }
+    .testimonial-card {
+      max-width: 48rem; margin: 0 auto;
+      padding: 3rem; text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+    }
+    .testimonial-stars { color: var(--gold); font-size: 1.25rem; margin-bottom: 1.5rem; letter-spacing: 0.25rem; }
+    .testimonial-card blockquote {
+      font-family: var(--font-display); font-size: 1.5rem;
+      color: var(--white); line-height: 1.6; font-style: italic;
+    }
+    .testimonial-author {
+      margin-top: 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem;
+    }
+    .testimonial-author img {
+      width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--gold);
+    }
+    .testimonial-author strong { display: block; color: var(--white); font-size: 0.9375rem; }
+    .testimonial-author span { font-size: 0.8125rem; color: var(--text-muted); }
+    .slider-controls {
+      display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;
+    }
+    .slider-btn {
+      width: 48px; height: 48px; border: 1px solid var(--gold);
+      color: var(--gold); display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .slider-btn:hover { background: var(--gold); color: var(--navy-deep); }
+    .slider-dots { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; }
+    .slider-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: rgba(201, 169, 98, 0.3); transition: var(--transition);
+    }
+    .slider-dot.active { background: var(--gold); width: 24px; border-radius: 4px; }
+
+    /* Gallery */
+    .gallery { background: var(--navy); }
+    .gallery-filters {
+      display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2rem 0;
+    }
+    .gallery-filter {
+      padding: 0.5rem 1rem; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); border: 1px solid transparent;
+      transition: var(--transition);
+    }
+    .gallery-filter.active { color: var(--gold); border-color: var(--gold); }
+    .gallery-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem;
+    }
+    .gallery-item {
+      position: relative; overflow: hidden; cursor: pointer;
+      aspect-ratio: 1;
+    }
+    .gallery-item.hidden { display: none; }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .gallery-item:hover img { transform: scale(1.1); }
+    .gallery-item::after {
+      content: ""; position: absolute; inset: 0;
+      background: rgba(201, 169, 98, 0); transition: background 0.3s;
+    }
+    .gallery-item:hover::after { background: rgba(5, 13, 26, 0.4); }
+    .gallery-item.wide { grid-column: span 2; aspect-ratio: 2/1; }
+    .gallery-item.tall { grid-row: span 2; aspect-ratio: auto; }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 10000;
+      background: rgba(5, 13, 26, 0.95);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .lightbox.open { opacity: 1; visibility: visible; }
+    .lightbox img { max-height: 90vh; max-width: 90vw; object-fit: contain; }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      width: 48px; height: 48px; border: 1px solid var(--gold);
+      color: var(--gold); font-size: 1.5rem;
+    }
+    .project-lightbox-content {
+      max-width: 50rem;
+      width: 100%;
+      background: var(--navy);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+        .project-lightbox-content img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .project-lightbox-details {
+      padding: 2rem;
+      color: var(--white);
+      text-align: left;
+    }
+    .project-lightbox-status {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .project-lightbox-details h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .project-lightbox-details p {
+      color: var(--text-body);
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+    .project-lightbox-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .project-lightbox-meta span {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      color: var(--gold-light);
+      background: rgba(201, 169, 98, 0.05);
+    }
+    .project-lightbox-highlights {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .highlights-col h4 {
+      font-size: 0.875rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+      border-bottom: 1px dashed rgba(201, 169, 98, 0.2);
+      padding-bottom: 0.25rem;
+    }
+    .highlights-col ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    .highlights-col ul li {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.4;
+    }
+    .highlights-col ul li::before {
+      content: "\2726";
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      margin-top: 0.15rem;
+    }
+
+    /* Contact Form block */
+    .contact { background: var(--navy-deep); }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+      margin-top: 3rem;
+    }
+    .contact-form {
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%; padding: 1rem 1.25rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      color: var(--white); font-family: inherit; font-size: 0.9375rem;
+      transition: border-color 0.3s;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--text-muted); }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      outline: none; border-color: var(--gold);
+    }
+    .contact-form textarea { min-height: 140px; resize: vertical; }
+
+    .modal {
+      position: fixed; inset: 0; z-index: 10001;
+      background: rgba(5, 13, 26, 0.9);
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .modal.open { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: var(--navy); border: 1px solid rgba(201, 169, 98, 0.3);
+      max-width: 36rem; max-height: 80vh; overflow-y: auto;
+      padding: 2.5rem; position: relative;
+    }
+    .modal-content h3 {
+      font-family: var(--font-display); font-size: 1.75rem;
+      color: var(--white); margin-bottom: 1rem;
+    }
+    .modal-content p { font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.7; }
+    .modal-close {
+      position: absolute; top: 1rem; right: 1rem;
+      color: var(--gold); font-size: 1.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .achievements-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .support-chat-wrapper { height: 550px; }
+      .showcase-grid { grid-template-columns: 1fr; }
+      .pillars-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-item.wide { grid-column: span 1; aspect-ratio: 1; }
+      .gallery-item.tall { grid-row: span 1; }
+      .awards-row { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+        <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+        ARK <span>Infra</span>
+      </a>
+                          <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="insights.html">Insights</a>
+          <a href="why.html">Why Us</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="growth-map.html">Growth Map</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
+        </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+          <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="insights.html">Insights</a>
+      <a href="why.html">Why Us</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="growth-map.html">Growth Map</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  
+  <main class="support-section">
+<section class="projects" id="projects">
+    <div class="container">
+      <p class="section-label reveal">Featured Projects</p>
+      <h2 class="section-title reveal">Iconic Developments</h2>
+      <p class="section-desc reveal">Sample layouts below — replace with your real project names, photos, and locations when available.</p>
+
+      <!-- EMI Calculator CTA Banner -->
+      <div class="emi-cta-banner reveal" style="background: rgba(201, 169, 98, 0.08); border: 1px solid rgba(201, 169, 98, 0.2); border-radius: 6px; padding: 1.5rem 2rem; margin: 1.5rem 0 2.5rem; max-width: 50rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; text-align: left;">
+        <div style="flex: 1; min-width: 280px;">
+          <h4 style="font-family: var(--font-display); font-size: 1.35rem; color: var(--white); margin-bottom: 0.25rem;">Estimate Your Monthly Payments</h4>
+          <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.4; margin: 0;">Use our premium interactive EMI Calculator to plan your budget for these layout plots.</p>
+        </div>
+        <a href="emi-calculator.html" class="btn-cta" style="background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: var(--navy-deep); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.75rem 1.5rem; border-radius: 2px; text-align: center; white-space: nowrap; transition: opacity var(--transition);" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">Calculate EMI</a>
+      </div>
+
+      <div class="project-tabs reveal" role="tablist">
+        <button class="project-tab active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="project-tab" data-filter="ongoing" role="tab">Ongoing</button>
+      </div>
+
+      <div class="projects-grid" id="projectsGrid"></div>
+    </div>
+  </section>
+<section class="roadmap-section" id="roadmap">
+  <style>
+    .roadmap-section {
+      background: var(--navy);
+      padding: 6rem 1.5rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.15);
+      position: relative;
+    }
+    .roadmap-container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      position: relative;
+    }
+    .timeline {
+      position: relative;
+      margin-top: 4rem;
+      padding: 2rem 0;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: rgba(201, 169, 98, 0.15);
+      transform: translateX(-50%);
+    }
+    .timeline-progress {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-dark));
+      transform: translateX(-50%);
+      height: 0%;
+      transition: height 0.1s linear;
+      box-shadow: 0 0 10px rgba(201, 169, 98, 0.3);
+    }
+    .timeline-item {
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 50%;
+      position: relative;
+      margin-bottom: 5rem;
+      width: 100%;
+    }
+    .timeline-item:nth-child(even) {
+      justify-content: flex-start;
+      padding-left: 50%;
+      padding-right: 0;
+    }
+    .timeline-node {
+      position: absolute;
+      left: 50%;
+      top: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--navy-deep);
+      border: 2px solid rgba(201, 169, 98, 0.3);
+      transform: translate(-50%, 0);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.4s, box-shadow 0.4s, background-color 0.4s;
+    }
+    .timeline-item.active .timeline-node {
+      border-color: var(--gold);
+      background: var(--gold);
+      box-shadow: 0 0 15px rgba(201, 169, 98, 0.5);
+    }
+    .timeline-node::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(201, 169, 98, 0.3);
+      transition: background-color 0.4s, transform 0.4s;
+    }
+    .timeline-item.active .timeline-node::after {
+      background: var(--navy-deep);
+      transform: scale(1.2);
+    }
+    .timeline-content {
+      width: 85%;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(201, 169, 98, 0.12);
+      border-radius: 4px;
+      padding: 2.25rem;
+      position: relative;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s, opacity 0.8s;
+      opacity: 0;
+    }
+    .timeline-item:nth-child(odd) .timeline-content {
+      transform: translateX(-50px);
+      margin-right: 3rem;
+      text-align: right;
+    }
+    .timeline-item:nth-child(even) .timeline-content {
+      transform: translateX(50px);
+      margin-left: 3rem;
+      text-align: left;
+    }
+    .timeline-item.active .timeline-content {
+      opacity: 1;
+      transform: translateX(0);
+      border-color: rgba(201, 169, 98, 0.35);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    }
+    .timeline-content:hover {
+      border-color: rgba(201, 169, 98, 0.5);
+      box-shadow: 0 15px 40px rgba(201, 169, 98, 0.15);
+    }
+    .timeline-phase {
+      font-size: 0.6875rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.75rem;
+    }
+    .timeline-item:nth-child(odd) .timeline-title {
+      justify-content: flex-end;
+    }
+    .timeline-status-badge {
+      display: inline-block;
+      font-size: 0.625rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2px;
+      font-weight: 600;
+      font-family: var(--font-sans);
+    }
+    .timeline-status-badge.completed {
+      background: rgba(37, 211, 102, 0.1);
+      color: #25D366;
+      border: 1px solid rgba(37, 211, 102, 0.2);
+    }
+    .timeline-status-badge.ongoing {
+      background: rgba(201, 169, 98, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+    }
+    .timeline-status-badge.upcoming {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .timeline-desc {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .timeline::before {
+        left: 16px;
+      }
+      .timeline-progress {
+        left: 16px;
+      }
+      .timeline-item {
+        justify-content: flex-start;
+        padding-left: 45px;
+        padding-right: 0;
+        margin-bottom: 3.5rem;
+      }
+      .timeline-item:nth-child(even) {
+        padding-left: 45px;
+      }
+      .timeline-node {
+        left: 16px;
+        transform: translate(-50%, 0);
+        top: 1rem;
+      }
+      .timeline-content {
+        width: 100%;
+        padding: 1.75rem;
+      }
+      .timeline-item:nth-child(odd) .timeline-content,
+      .timeline-item:nth-child(even) .timeline-content {
+        transform: translateX(30px);
+        margin-left: 1rem;
+        margin-right: 0;
+        text-align: left;
+      }
+      .timeline-item:nth-child(odd) .timeline-title {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+
+  <div class="roadmap-container">
+    <p class="section-label reveal">Execution & Trust</p>
+    <h2 class="section-title reveal">Venture Development Roadmap</h2>
+    <p class="section-desc reveal" style="margin-bottom: 3rem;">
+      From securing 100% legally clear titles to final customer registrations, see how we systematically build premium gated layouts.
+    </p>
+
+    <div class="timeline" id="roadmapTimeline">
+      <!-- Active Progress Bar -->
+      <div class="timeline-progress" id="timelineProgress"></div>
+
+      <!-- Phase 1 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <span class="timeline-phase">Phase 01</span>
+          <h3 class="timeline-title">
+            Land Procurement & Title Verification
+            <span class="timeline-status-badge completed">Completed</span>
+          </h3>
+          <p class="timeline-desc">
+            We purchase premium lands in strategic, high-growth corridors around Visakhapatnam. Our legal experts conduct strict vetting to ensure 100% clear titles, Vaasthu layout alignment, and hassle-free spot registration.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <span class="timeline-phase">Phase 02</span>
+          <h3 class="timeline-title">
+            Government Sanctions & RERA Approvals
+            <span class="timeline-status-badge completed">Completed</span>
+          </h3>
+          <p class="timeline-desc">
+            ARK Infra layouts strictly adhere to official rules. We secure VMRDA proposed layouts and AP RERA approvals (like our Alakananda layout at Tallapalem) to guarantee legally verified land development.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <span class="timeline-phase">Phase 03</span>
+          <h3 class="timeline-title">
+            Core Infrastructure Development
+            <span class="timeline-status-badge ongoing">In Progress</span>
+          </h3>
+          <p class="timeline-desc">
+            Heavy machinery execution on-site. We lay premium 40-foot wide blacktop roads, construct robust underground concrete drainage facilities, and set up electricity poles with street lighting networks.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <span class="timeline-phase">Phase 04</span>
+          <h3 class="timeline-title">
+            Gated Amenities & Greenery
+            <span class="timeline-status-badge ongoing">In Progress</span>
+          </h3>
+          <p class="timeline-desc">
+            Building premium enhancements including a grand entrance archway, secured layout compound walls, organic avenue plantations, and landscaping children's play parks with recreational zones.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 5 -->
+      <div class="timeline-item reveal">
+        <div class="timeline-node"></div>
+        <div class="timeline-content">
+          <span class="timeline-phase">Phase 05</span>
+          <h3 class="timeline-title">
+            Registrations & Customer Handover
+            <span class="timeline-status-badge upcoming">Upcoming</span>
+          </h3>
+          <p class="timeline-desc">
+            Smooth customer handovers. We assist with spot registrations and facilitate bank loan approvals with major financial partners, enabling immediate construction of your dream home.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const items = document.querySelectorAll('.timeline-item');
+      const progressLine = document.getElementById('timelineProgress');
+      const timeline = document.getElementById('roadmapTimeline');
+
+      // Scroll observer to activate milestones
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.25,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      items.forEach(item => observer.observe(item));
+
+      // Dynamic timeline height adjustment based on scroll
+      window.addEventListener('scroll', () => {
+        if (!timeline || !progressLine) return;
+        const rect = timeline.getBoundingClientRect();
+        const viewHeight = window.innerHeight;
+        
+        // Calculate the percentage of the timeline that has been scrolled through
+        const scrolledDistance = viewHeight * 0.7 - rect.top; 
+        const totalHeight = rect.height;
+        let percentage = (scrolledDistance / totalHeight) * 100;
+        
+        if (percentage < 0) percentage = 0;
+        if (percentage > 100) percentage = 100;
+        
+        progressLine.style.height = percentage + '%';
+      });
+    })();
+  </script>
+</section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Social Links & Contact">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1DL6SnDUaj/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/arkinfra_97?igsh=MTgxZWxza2djOGk1OA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#" id="openPrivacy">Privacy Policy</a>
+        <a href="#" id="openTerms">Terms &amp; Conditions</a>
+        <a href="admin.html">Admin / CEO Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="lightbox" id="projectLightbox" role="dialog" aria-modal="true" aria-label="Project details">
+    <button class="lightbox-close" id="projectLightboxClose" aria-label="Close">&times;</button>
+    <div class="project-lightbox-content">
+      <img loading="lazy" src="" alt="Project image" id="projectLightboxImg">
+      <div class="project-lightbox-details">
+        <span class="project-lightbox-status" id="projectLightboxStatus"></span>
+        <h3 id="projectLightboxTitle"></h3>
+        <p id="projectLightboxDesc"></p>
+        
+        <div class="project-lightbox-highlights" id="projectLightboxHighlightsSection" style="display: none;">
+          <div class="highlights-grid">
+            <div class="highlights-col" id="colLayoutFeatures" style="display: none;">
+              <h4>Layout Features</h4>
+              <ul id="listLayoutFeatures"></ul>
+            </div>
+            <div class="highlights-col" id="colProjectHighlights" style="display: none;">
+              <h4>Project Highlights</h4>
+              <ul id="listProjectHighlights"></ul>
+            </div>
+            <div class="highlights-col" id="colLocationHighlights" style="display: none;">
+              <h4>Location Highlights</h4>
+              <ul id="listLocationHighlights"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-lightbox-meta" id="projectLightboxMeta"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="privacyModal" role="dialog" aria-labelledby="privacyTitle" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      <h3 id="privacyTitle">Privacy Policy</h3>
+      <p>ARK Infra ("we") respects your privacy. We collect personal information such as name, email, and phone number only when you voluntarily submit our contact form or inquire about properties.</p>
+      <p>We use this information solely to respond to your inquiries, process transactions, and improve our services. We do not sell your data to third parties.</p>
+    </div>
+  </div>
+  <div class="modal" id="termsModal" role="dialog" aria-labelledby="termsTitle" aria-modal="true">
+    <div class="modal-content">
+      <button class="modal-close" data-close-modal aria-label="Close">&times;</button>
+      <h3 id="termsTitle">Terms &amp; Conditions</h3>
+      <p>By accessing the ARK Infra website, you agree to these terms. All content, images, and project information are for informational purposes and subject to change without notice.</p>
+      <p>Property details, pricing, and availability must be confirmed in writing with authorized ARK Infra representatives.</p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const header = document.getElementById('header');
+      const menuToggle = document.getElementById('menuToggle');
+      const navMobile = document.getElementById('navMobile');
+
+      window.addEventListener('scroll', function () {
+        header.classList.toggle('scrolled', window.scrollY > 50);
+      });
+
+      menuToggle.addEventListener('click', function () {
+        const open = navMobile.classList.toggle('open');
+        menuToggle.classList.toggle('active', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        menuToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      navMobile.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('open');
+          menuToggle.classList.remove('active');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        });
+      });
+
+      const revealEls = document.querySelectorAll('.reveal');
+      const revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      revealEls.forEach(function (el) { revealObserver.observe(el); });
+
+      function openModal(id) {
+        document.getElementById(id).classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeModals() {
+        document.querySelectorAll('.modal').forEach(function (m) { m.classList.remove('open'); });
+        document.body.style.overflow = '';
+      }
+      if (document.getElementById('openPrivacy')) {
+        document.getElementById('openPrivacy').addEventListener('click', function (e) { e.preventDefault(); openModal('privacyModal'); });
+      }
+      if (document.getElementById('openTerms')) {
+        document.getElementById('openTerms').addEventListener('click', function (e) { e.preventDefault(); openModal('termsModal'); });
+      }
+      document.querySelectorAll('[data-close-modal], .modal-close').forEach(function (btn) {
+        btn.addEventListener('click', closeModals);
+      });
+      document.querySelectorAll('.modal').forEach(function (modal) {
+        modal.addEventListener('click', function (e) { if (e.target === modal) closeModals(); });
+      });
+                  const projectsData = [
+        {
+          title: "Gokulavanam",
+          desc: "A Premium Open Plot Venture near Anakapalle",
+          image: "images/gokulavanam.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "TLP Approved", "Anakapalle"],
+          layoutFeatures: [
+            "TLP Approved Layout",
+            "Loan Facility Available",
+            "Clear Title & Documentation",
+            "Wide Roads & Well Planned Layout",
+            "Pollution-Free Environment",
+            "Ideal for Investment & Dream Home"
+          ],
+          projectHighlights: [
+            "TLP Approved Layout",
+            "Plot Price: \u20B912,500/- Per Sq. Yard",
+            "Special Payment Plan: 1st Payment \u20B91 Lakh, 2nd Payment \u20B92 Lakh",
+            "Limited Period Offer!",
+            "Contact: 81792 42683"
+          ],
+          locationHighlights: [
+            "Near Anakapalle, Andhra Pradesh",
+            "200 Meters from Collector Bungalow",
+            "3 KM from NH-16",
+            "6 KM from Collector Office",
+            "7 KM from Anakapalle",
+            "17 KM from Gajuwaka",
+            "Adjacent to 400 Acres Auto Nagar SEZ",
+            "Near MIMSE Park",
+            "Rapidly Developing Investment Corridor"
+          ]
+        },
+        {
+          title: "Alakananda - Highway City",
+          desc: "VMRDA & AP RERA Approved Layout at Tallapalem",
+          image: "images/highway-city-layout.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "Approved"],
+          layoutFeatures: [
+            "APRERA Approved Layout",
+            "VMRDA Approved Layout",
+            "Gated Community, Attractive Arch",
+            "Compound wall with total layout",
+            "40' Feet Black Top Roads",
+            "Electricity with Street Lighting",
+            "Avenue Plantation",
+            "Children Parks",
+            "Spot Registrations",
+            "Bank Loan Available",
+            "100% Vaasthu and Clear title",
+            "Drainage Facility"
+          ]
+        },
+        {
+          title: "Education City - Phase 1",
+          desc: "VMRDA Proposed Plotted Development at Sabbavaram",
+          image: "images/education-city-layout.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "Proposed"],
+          projectHighlights: [
+            "100 Meters Road Facing (Master Plan)",
+            "40 Feet Black Top Roads",
+            "Grand Entrance Arch",
+            "Underground Drainage",
+            "Underground Electrification",
+            "Avenue Plantation",
+            "Park",
+            "Children Play Area",
+            "24 Hrs security Provision",
+            "VMRDA Norms Development",
+            "100% Vasthu Layout",
+            "Premium Gated Community",
+            "Pollution free Environment"
+          ],
+          locationHighlights: [
+            "Located between Sabbavaram 6 lane NH-16 & Raipur 6 lane NH-26",
+            "0.5 km from Raipur 6 Lane NH-26",
+            "2 km from Sabbavaram 6 Lane NH-16",
+            "3 km from Pinagadi National Highway",
+            "6 km from Damodaram Sanjivayya National University",
+            "8 km from Indian Maritime University",
+            "8 km from Indian Institute of Petroleum & Energy",
+            "19 km from NAD Junction",
+            "21 km from Airport",
+            "25 km from Railway Station",
+            "25 km from Anakapalli",
+            "28 km from Health City"
+          ]
+        },
+        {
+          title: "Sandal Valley",
+          desc: "Premium Plotted Layout near Ballanki Junction at Anandapuram",
+          image: "images/sandal-valley.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "Anandapuram"],
+          layoutFeatures: [
+            "VMRDA Approved Layout",
+            "Gated Community with Grand Entry Arch",
+            "40' and 30' Feet Blacktop Roads",
+            "Electricity with Street Lighting",
+            "Underground Drainage System",
+            "Avenue Plantation & Green Parks",
+            "100% Vaasthu & Clear Title",
+            "Spot Registration & Bank Loan Facility"
+          ],
+          projectHighlights: [
+            "Located in the High-Appreciation Zone of Anandapuram",
+            "Fully gated community with 24/7 Security",
+            "Beautifully landscaped children's parks"
+          ],
+          locationHighlights: [
+            "Near Anandapuram Junction (NH-16)",
+            "Close to prestigious schools and colleges",
+            "25-minute drive to Vizag city center"
+          ]
+        },
+
+        {
+          title: "Vaibhav Classic",
+          desc: "Completed premium plotted venture at Gandigudam, Simhachalam",
+          image: "images/vaibhav-classic.webp",
+          status: "Completed",
+          category: "luxury completed",
+          meta: ["Plots", "Simhachalam"],
+          layoutFeatures: [
+            "VMRDA Approved Gated Community",
+            "Fully compound-walled layout",
+            "40' Feet Blacktop Roads",
+            "Overhead Water Tank & Water Pipelines",
+            "Electricity with street lighting",
+            "Children's play park with seating",
+            "Clear title and immediate registration"
+          ],
+          projectHighlights: [
+            "Completed venture ready for instant housing construction",
+            "100% Vasthu compliant layout",
+            "Scenic pollution-free environment at Simhachalam foothills"
+          ],
+          locationHighlights: [
+            "Located at Gandigudam, Simhachalam",
+            "Close to the historic Simhachalam Temple",
+            "15 minutes drive to NAD Junction",
+            "Easy connectivity to Gopalapatnam and Pendurthi"
+          ]
+        },
+        {
+          title: "Belmonk Layout Premium",
+          desc: "Elite gated plotted community starting at \u20B923,000/- per Sq. Yd at Tagarapuvalasa",
+          image: "images/belmonk-layout-premium.webp",
+          status: "Ongoing",
+          category: "luxury ongoing",
+          meta: ["Plots", "Tagarapuvalasa"],
+          layoutFeatures: [
+            "VMRDA Approved premium gated community",
+            "Grand Entrance Arch with security post",
+            "Wide 40' Feet Blacktop Roads",
+            "Underground drainage and underground cabling",
+            "Fully secure compound wall for entire layout",
+            "Overhead water storage tank"
+          ],
+          projectHighlights: [
+            "Premium pricing at \u20B923,000/- per Sq. Yd",
+            "Designed for luxury villa constructions",
+            "Extensive landscape parks and children's play areas"
+          ],
+          locationHighlights: [
+            "Located along the fast-developing Tagarapuvalasa corridor",
+            "Very close to the 6-lane National Highway (NH-16)",
+            "Surrounded by residential villa developments"
+          ]
+        },
+        {
+          title: "Sri Sampath Ganesh Nagar",
+          desc: "Successfully completed plotted layout at Lankelapalem",
+          image: "images/sampath-ganesh-nagar.webp",
+          status: "Completed",
+          category: "residential completed",
+          meta: ["Plots", "Lankelapalem"],
+          layoutFeatures: [
+            "VMRDA approved gated community",
+            "Completed layout with well-laid 40' blacktop roads",
+            "Electricity network with street lights",
+            "Underground drainage and layout protection wall",
+            "Beautiful avenue plantations",
+            "Spot registration with clean titles"
+          ],
+          projectHighlights: [
+            "Fully completed venture ready for house construction",
+            "Surrounded by fully inhabited residential areas",
+            "Bank loan options available with top banks"
+          ],
+          locationHighlights: [
+            "Located at Lankelapalem, Visakhapatnam",
+            "Near Lankelapalem Junction and NH-16",
+            "Minutes away from Lankelapalem industrial SEZ hubs",
+            "Close to schools, hospitals, and shopping centers"
+          ]
+        },
+        {
+          title: "Kodduru Venture - Anakapalli",
+          desc: "Plotted gated community with swimming pool starting at \u20B916,000/- per Sq. Yd",
+          image: "images/annakapalli-kodduru.webp",
+          status: "Ongoing",
+          category: "luxury ongoing",
+          meta: ["Plots", "Anakapalli"],
+          layoutFeatures: [
+            "VMRDA Approved gated layout",
+            "Grand entrance arch and security cabin",
+            "Fully operational swimming pool for residents",
+            "40' and 33' Feet Blacktop Roads",
+            "Underground drainage and sewage treatment lines",
+            "Overhead water tank and piped water supply to each plot"
+          ],
+          projectHighlights: [
+            "Premium lifestyle amenities including swimming pool and clubhouse area",
+            "Gated community with 24/7 security surveillance",
+            "Attractive landscaping and children's park"
+          ],
+          locationHighlights: [
+            "Located at Kodduru near Anakapalli",
+            "Excellent connectivity to Anakapalli bypass road",
+            "Quick access to Visakhapatnam-Chennai highway NH-16",
+            "Close to upcoming industrial hubs"
+          ]
+        },
+        {
+          title: "RTC Depot Backside Venture",
+          desc: "Premium commercial & residential plots starting at \u20B923,000/- per Sq. Yd at Kothavalasa",
+          image: "images/kothavalasa.webp",
+          status: "Ongoing",
+          category: "commercial ongoing",
+          meta: ["Plots", "Kothavalasa"],
+          layoutFeatures: [
+            "VMRDA approved layout",
+            "Grand entry arch and secure fencing",
+            "40' and 33' Feet wide Blacktop Roads",
+            "Electricity and modern street lighting network",
+            "Underground drainage and sewage lanes",
+            "Water connection facility for every plot"
+          ],
+          projectHighlights: [
+            "Located directly behind Kothavalasa RTC Depot",
+            "Premium pricing at \u20B923,000/- per Sq. Yd",
+            "Ideal for both commercial shops and premium residential homes"
+          ],
+          locationHighlights: [
+            "Located right behind the RTC Bus Depot in Kothavalasa",
+            "Excellent connectivity to Araku-Vizag highway road",
+            "Walkable distance to local transit, markets, and railway station"
+          ]
+        },
+        {
+          title: "Kokkirapalli Venture (Phase 1)",
+          desc: "Premium residential layout starting at \u20B916,000/- per Sq. Yd at Yelamanchili",
+          image: "images/kokkirapalli.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "Yelamanchili"],
+          layoutFeatures: [
+            "VMRDA Approved Layout",
+            "Decorative Entrance Arch with security outpost",
+            "40' Feet Blacktop Roads throughout the layout",
+            "Underground drainage and waste management lines",
+            "Electricity lines with streetlights installed",
+            "Plantation on either side of roads"
+          ],
+          projectHighlights: [
+            "Venture price of \u20B916,000/- per Sq. Yd",
+            "Clear title and spot registration",
+            "100% Vaasthu layout with beautiful open spacing"
+          ],
+          locationHighlights: [
+            "Located in Kokkirapalli near Yelamanchili",
+            "Close to Yelamanchili railway station and town center",
+            "15 minutes drive to Atchutapuram SEZ industrial corridor"
+          ]
+        },
+        {
+          title: "Golden Acres - Bhogapuram",
+          desc: "Elite plotted venture at Kopparla starting at \u20B917,000/- per Sq. Yd near Airport",
+          image: "images/golden-acres.webp",
+          status: "Ongoing",
+          category: "luxury ongoing",
+          meta: ["Plots", "Bhogapuram"],
+          layoutFeatures: [
+            "VMRDA & AP RERA Approved premium gated community",
+            "Attractive Entrance Gate with 24/7 security staff",
+            "Wide 40' Feet Blacktop Roads",
+            "Modern streetlights and electricity network",
+            "Drainage and water lines pre-laid",
+            "Avenue plantation and landscaped park zone"
+          ],
+          projectHighlights: [
+            "Located at Kopparla in the fast-growing Bhogapuram region",
+            "Launch price of \u20B917,000/- per Sq. Yd",
+            "Designed for high capital gains near the international airport"
+          ],
+          locationHighlights: [
+            "Just 10 minutes drive from the upcoming Bhogapuram International Airport",
+            "Direct connectivity to National Highway NH-16",
+            "Close to premium beach resorts and educational institutions"
+          ]
+        },
+        {
+          title: "Sri Muktha Gardens",
+          desc: "Completed budget-friendly plots starting at \u20B97,500/- per Sq. Yd at Desapathrunipalem",
+          image: "images/sri-muktha-gardens.webp",
+          status: "Completed",
+          category: "residential completed",
+          meta: ["Plots", "Desapathrunipalem"],
+          layoutFeatures: [
+            "VMRDA Approved plotted development",
+            "Completed blacktop roads (40' and 33' feet)",
+            "Well-developed drainage system",
+            "Electricity lines and avenue plants",
+            "Entire layout compound fencing",
+            "Spot registration with immediate construction option"
+          ],
+          projectHighlights: [
+            "Highly budget-friendly entry price of \u20B97,500/- per Sq. Yd",
+            "Ready for immediate registration and house construction",
+            "Vaastu compliant plots with clear titles"
+          ],
+          locationHighlights: [
+            "Located at Desapathrunipalem near steel plant zone",
+            "Close to steel plant sector gate and NH-16",
+            "Surrounded by schools, colleges, and transportation options"
+          ]
+        },
+        {
+          title: "Kokkirapalli Venture (Phase 2)",
+          desc: "Premium gated residential plots starting at \u20B916,000/- per Sq. Yd at Yelamanchili",
+          image: "images/kokkirapalli-alternate.webp",
+          status: "Ongoing",
+          category: "residential ongoing",
+          meta: ["Plots", "Yelamanchili"],
+          layoutFeatures: [
+            "VMRDA Approved Layout - Phase 2 extension",
+            "Gated community with grand entry arch and compound wall",
+            "Wide 40' and 33' blacktop roads",
+            "Advanced drainage facilities and electricity grids",
+            "Landscaped children parks and seating areas"
+          ],
+          projectHighlights: [
+            "Extension phase with competitive pricing of \u20B916,000/- per Sq. Yd",
+            "High investment yield potential",
+            "100% Vaasthu compliant layouts with immediate registration"
+          ],
+          locationHighlights: [
+            "Located at Yelamanchili, Kokkirapalli corridor",
+            "Easy access to Anakapalli-Yelamanchili National Highway",
+            "Close to major educational academies and business zones"
+          ]
+        }
+      ];
+
+      const projectsGrid = document.getElementById('projectsGrid');
+      if (projectsGrid) {
+        projectsData.forEach(function (project, index) {
+          const card = document.createElement('article');
+          const delayClass = 'reveal-delay-' + (index % 3 + 1);
+          card.className = 'project-card reveal ' + delayClass;
+          card.dataset.category = project.category;
+          
+          let metaSpans = '';
+          project.meta.forEach(function (m) {
+            metaSpans += '<span>' + m + '</span>';
+          });
+
+          card.innerHTML = `
+            <img src="${project.image}" alt="${project.title}" loading="lazy">
+            <div class="project-overlay">
+              <span class="project-status">${project.status}</span>
+              <h3>${project.title}</h3>
+              <p>${project.desc}</p>
+              <div class="project-meta">${metaSpans}</div>
+            </div>
+          `;
+          card.addEventListener('click', function () {
+            openProjectLightbox(project);
+          });
+          projectsGrid.appendChild(card);
+          revealObserver.observe(card);
+        });
+      }
+
+      document.querySelectorAll('.project-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.project-tab').forEach(function (t) {
+            t.classList.remove('active');
+            t.setAttribute('aria-selected', 'false');
+          });
+          tab.classList.add('active');
+          tab.setAttribute('aria-selected', 'true');
+          const filter = tab.dataset.filter;
+          document.querySelectorAll('.project-card').forEach(function (card) {
+            const cats = card.dataset.category.split(' ');
+            const show = filter === 'all' || cats.includes(filter);
+            card.classList.toggle('hidden', !show);
+          });
+        });
+      });
+
+      const projectLightbox = document.getElementById('projectLightbox');
+      const projectLightboxImg = document.getElementById('projectLightboxImg');
+      const projectLightboxStatus = document.getElementById('projectLightboxStatus');
+      const projectLightboxTitle = document.getElementById('projectLightboxTitle');
+      const projectLightboxDesc = document.getElementById('projectLightboxDesc');
+      const projectLightboxMeta = document.getElementById('projectLightboxMeta');
+
+      const projectLightboxHighlightsSection = document.getElementById('projectLightboxHighlightsSection');
+      const colLayoutFeatures = document.getElementById('colLayoutFeatures');
+      const listLayoutFeatures = document.getElementById('listLayoutFeatures');
+      const colProjectHighlights = document.getElementById('colProjectHighlights');
+      const listProjectHighlights = document.getElementById('listProjectHighlights');
+      const colLocationHighlights = document.getElementById('colLocationHighlights');
+      const listLocationHighlights = document.getElementById('listLocationHighlights');
+
+      function openProjectLightbox(project) {
+        projectLightboxImg.src = project.image;
+        projectLightboxImg.alt = project.title;
+        projectLightboxStatus.textContent = project.status;
+        projectLightboxTitle.textContent = project.title;
+        projectLightboxDesc.textContent = project.desc;
+        
+        projectLightboxMeta.innerHTML = '';
+        project.meta.forEach(function (m) {
+          const span = document.createElement('span');
+          span.textContent = m;
+          projectLightboxMeta.appendChild(span);
+        });
+
+        let hasHighlights = false;
+
+        if (project.layoutFeatures && project.layoutFeatures.length > 0) {
+          colLayoutFeatures.style.display = 'block';
+          listLayoutFeatures.innerHTML = project.layoutFeatures.map(item => `<li>${item}</li>`).join('');
+          hasHighlights = true;
+        } else {
+          colLayoutFeatures.style.display = 'none';
+        }
+
+        if (project.projectHighlights && project.projectHighlights.length > 0) {
+          colProjectHighlights.style.display = 'block';
+          listProjectHighlights.innerHTML = project.projectHighlights.map(item => `<li>${item}</li>`).join('');
+          hasHighlights = true;
+        } else {
+          colProjectHighlights.style.display = 'none';
+        }
+
+        if (project.locationHighlights && project.locationHighlights.length > 0) {
+          colLocationHighlights.style.display = 'block';
+          listLocationHighlights.innerHTML = project.locationHighlights.map(item => `<li>${item}</li>`).join('');
+          hasHighlights = true;
+        } else {
+          colLocationHighlights.style.display = 'none';
+        }
+
+        projectLightboxHighlightsSection.style.display = hasHighlights ? 'block' : 'none';
+
+        projectLightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeProjectLightbox() {
+        if (projectLightbox) {
+          projectLightbox.classList.remove('open');
+          if (!document.getElementById('privacyModal').classList.contains('open') && 
+              !document.getElementById('termsModal').classList.contains('open')) {
+            document.body.style.overflow = '';
+          }
+        }
+      }
+      if (document.getElementById('projectLightboxClose')) {
+        document.getElementById('projectLightboxClose').addEventListener('click', closeProjectLightbox);
+      }
+      if (projectLightbox) {
+        projectLightbox.addEventListener('click', function (e) {
+          if (e.target === projectLightbox) closeProjectLightbox();
+        });
+      }
+      
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeProjectLightbox();
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          closeModals();
+        }
+      });
+    })();
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

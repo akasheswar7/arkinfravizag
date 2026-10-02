@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Thank you for contacting ARK Infra. View our interactive project price list.">
+  <title>Thank You | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --off-white: #f4f6f9;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    ul { list-style: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 2rem; }
+    .nav-desktop a {
+      font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: 0; top: var(--header-h);
+      background: rgba(5, 13, 26, 0.98);
+      padding: 2rem 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition), visibility var(--transition);
+      z-index: 999;
+      visibility: hidden;
+    }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
+    .nav-mobile a {
+      display: block; padding: 1rem 0;
+      font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    /* Main Container & Top Padding */
+    .thankyou-section {
+      padding: calc(var(--header-h) + 3rem) 1.5rem 4rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      animation: scaleUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes scaleUp {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .thankyou-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .thankyou-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 38rem;
+      margin-bottom: 3rem;
+    }
+
+    /* Flyer Section */
+    .flyer-heading {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .flyer-container {
+      width: 100%;
+      max-width: 700px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 8px;
+      background: rgba(10, 22, 40, 0.6);
+      backdrop-filter: blur(20px);
+      padding: 1.5rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      margin-bottom: 3rem;
+    }
+
+    .flyer-container img {
+      width: 100%;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 1rem 2rem; font-size: 0.8125rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; border-radius: 2px;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      box-shadow: var(--shadow-gold);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201, 169, 98, 0.4); }
+    .btn-outline {
+      border: 1px solid var(--gold); color: var(--gold);
+      background: transparent;
+    }
+    .btn-outline:hover { background: rgba(201, 169, 98, 0.1); transform: translateY(-2px); }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Footer */
+    .site-footer {
+      background: #030811;
+      padding: 5rem 1.5rem 2rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+      margin-top: auto;
+    }
+    .footer-grid {
+      max-width: var(--max-w); margin: 0 auto 3rem;
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 3rem;
+    }
+    .footer-brand p { margin: 1.25rem 0; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.6; }
+    .footer-social {
+      display: flex; gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .footer-social a {
+      width: 40px; height: 40px; border: 1px solid rgba(201, 169, 98, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 0.875rem; font-weight: 600;
+      transition: var(--transition);
+    }
+    .footer-social a:hover { background: var(--gold); color: var(--navy-deep); }
+    .footer-col h4 {
+      color: var(--white); font-size: 0.875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .footer-col ul li { margin-bottom: 0.75rem; font-size: 0.875rem; color: var(--text-muted); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 0 auto; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8125rem; color: var(--text-muted);
+    }
+    .footer-legal a { margin-left: 1.5rem; }
+    .footer-legal a:hover { color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
+    }
+
+    /* Interactive Price List Styles */
+    .price-list-section {
+      width: 100%;
+      max-width: 1100px;
+      margin: 2rem auto 4rem;
+      padding: 0;
+      text-align: left;
+    }
+
+    .price-search-bar {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      flex: 1;
+      max-width: 450px;
+      min-width: 280px;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      padding-left: 3rem;
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+
+    .search-input-wrapper input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.25);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(10, 22, 40, 0.4);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 4px;
+      color: var(--text-muted);
+      transition: all var(--transition);
+    }
+
+    .filter-tab:hover, .filter-tab.active {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      border-color: var(--gold);
+    }
+
+    .table-container {
+      background: rgba(10, 22, 40, 0.5);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .price-table th {
+      background: rgba(5, 13, 26, 0.85);
+      color: var(--gold);
+      font-family: var(--font-sans);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 2px solid rgba(201, 169, 98, 0.3);
+    }
+
+    .price-table td {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.1);
+      font-size: 0.9rem;
+      color: var(--text-body);
+    }
+
+    .price-table tr {
+      transition: background var(--transition);
+    }
+
+    .price-table tr:hover {
+      background: rgba(201, 169, 98, 0.04);
+    }
+
+    .price-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .price-badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      border-radius: 2px;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-vmrda {
+      background: rgba(59, 130, 246, 0.12);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.25);
+    }
+
+    .badge-panchayat {
+      background: rgba(16, 185, 129, 0.12);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+    }
+
+    .badge-premium {
+      background: rgba(245, 158, 11, 0.12);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.25);
+    }
+
+    .highlight-price {
+      color: var(--white);
+      font-weight: 600;
+      font-family: var(--font-sans);
+    }
+
+    .mobile-cards-container {
+      display: none;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .mobile-price-card {
+      background: rgba(10, 22, 40, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 6px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      text-align: left;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-row:last-child {
+      margin-bottom: 0;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .card-value {
+      font-size: 0.9rem;
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .table-container { display: none; }
+      .mobile-cards-container { display: flex; }
+      .price-search-bar { flex-direction: column; align-items: stretch; gap: 1rem; }
+      .search-input-wrapper { max-width: 100%; }
+      .filter-tabs { overflow-x: auto; padding-bottom: 0.25rem; justify-content: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+        <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+        ARK <span>Infra</span>
+      </a>
+              <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="insights.html">Insights</a>
+          <a href="why.html">Why Us</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
+        </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+      <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="insights.html">Insights</a>
+      <a href="why.html">Why Us</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  <main class="thankyou-section">
+    <div class="success-icon">✓</div>
+    <h1 class="thankyou-title">Thank You!</h1>
+    <p class="thankyou-desc">
+      Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.
+    </p>
+
+    <h2 class="flyer-heading">ARK Infra Project Price List</h2>
+    
+    <div class="price-list-section">
+      <!-- Search & Filters -->
+      <div class="price-search-bar">
+        <div class="search-input-wrapper">
+          <svg style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 1.25rem; height: 1.25rem; fill: var(--gold); opacity: 0.7;" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <input type="text" id="priceSearch" placeholder="Search layouts, locations, prices...">
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active" data-filter="all">All Projects</button>
+          <button class="filter-tab" data-filter="vmrda">VMRDA</button>
+          <button class="filter-tab" data-filter="panchayat">Panchayat</button>
+          <button class="filter-tab" data-filter="premium">Premium/RERA</button>
+        </div>
+      </div>
+
+      <!-- Desktop Table View -->
+      <div class="table-container">
+        <table class="price-table">
+          <thead>
+            <tr>
+              <th>Project / Layout Name</th>
+              <th>Location</th>
+              <th>Approval Type</th>
+              <th>Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Golden Acres</td>
+              <td>Kopparla, Bhogapuram</td>
+              <td><span class="price-badge badge-vmrda">VMRDA Project</span></td>
+              <td class="highlight-price">₹17,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Thallapalem</td>
+              <td>Anakapalli</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (17/2025)</span></td>
+              <td class="highlight-price">₹14,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kokkirapalli (100m to NH)</td>
+              <td>Yelamanchili</td>
+              <td><span class="price-badge badge-vmrda">VMRDA</span></td>
+              <td class="highlight-price">₹16,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kokkirapalli (200m to NH)</td>
+              <td>Yelamanchili</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (51/2023)</span></td>
+              <td class="highlight-price">₹13,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Anakapalli - Koduru</td>
+              <td>Swimming Pool area, 300m to NH</td>
+              <td><span class="price-badge badge-vmrda">VMRDA</span></td>
+              <td class="highlight-price">₹16,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sri Muktha Gardens</td>
+              <td>Desapathrunipalem</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹7,500/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sri Sampath Ganesh Nagar</td>
+              <td>Lankelapalem</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹9,799/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Kothavalasa (RTC Depo Backside)</td>
+              <td>Kothavalasa, 300m to NH</td>
+              <td><span class="price-badge badge-vmrda">VMRDA (66/2023)</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="premium">
+              <td style="color: var(--white); font-weight: 500;">Belmond Layout</td>
+              <td>Y-Junction, Tagarapuvalasa</td>
+              <td><span class="price-badge badge-premium">VMRDA / AP RERA</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Education City</td>
+              <td>Sabbavaram - Gullepalli @ Y.J.J.</td>
+              <td><span class="price-badge badge-vmrda">VMRDA / RERA</span></td>
+              <td class="highlight-price">₹14,000/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="premium">
+              <td style="color: var(--white); font-weight: 500;">Belmok Layout</td>
+              <td>Y-Junction, Tagarapuvalasa</td>
+              <td><span class="price-badge badge-premium">VMRDA / AP RERA</span></td>
+              <td class="highlight-price">₹3,999/- per SFT</td>
+            </tr>
+            <tr data-category="panchayat">
+              <td style="color: var(--white); font-weight: 500;">Sandal Valley</td>
+              <td>Ballanki @ S. Anandapuram, Kothavalasa</td>
+              <td><span class="price-badge badge-panchayat">Panchayat Layout</span></td>
+              <td class="highlight-price">₹4,999/- per Sq. Yd</td>
+            </tr>
+            <tr data-category="vmrda">
+              <td style="color: var(--white); font-weight: 500;">Vaibhav Classic</td>
+              <td>Gandigundam, Simhachalam</td>
+              <td><span class="price-badge badge-vmrda">VUDA / VMRDA</span></td>
+              <td class="highlight-price">₹23,000/- per Sq. Yd</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Mobile Cards View -->
+      <div class="mobile-cards-container">
+        <!-- Golden Acres -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Golden Acres</span>
+            <span class="price-badge badge-vmrda">VMRDA Project</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Kopparla, Bhogapuram</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹17,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Thallapalem -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Thallapalem</span>
+            <span class="price-badge badge-vmrda">VMRDA (17/2025)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Anakapalli</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹14,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kokkirapalli 100m -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kokkirapalli (100m to NH)</span>
+            <span class="price-badge badge-vmrda">VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Yelamanchili</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹16,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kokkirapalli 200m -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kokkirapalli (200m to NH)</span>
+            <span class="price-badge badge-vmrda">VMRDA (51/2023)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Yelamanchili</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹13,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Anakapalli Koduru -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Anakapalli - Koduru</span>
+            <span class="price-badge badge-vmrda">VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Swimming Pool, 300m to NH</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹16,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Sri Muktha Gardens -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sri Muktha Gardens</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Desapathrunipalem</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹7,500/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Sri Sampath Ganesh Nagar -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sri Sampath Ganesh Nagar</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Lankelapalem</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹9,799/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Kothavalasa -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Kothavalasa</span>
+            <span class="price-badge badge-vmrda">VMRDA (66/2023)</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">RTC Depo Backside, 300m to NH</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Belmond Layout -->
+        <div class="mobile-price-card" data-category="premium">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Belmond Layout</span>
+            <span class="price-badge badge-premium">VMRDA / AP RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Y-Junction, Tagarapuvalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Education City -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Education City</span>
+            <span class="price-badge badge-vmrda">VMRDA / RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Sabbavaram - Gullepalli @ Y.J.J.</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹14,000/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Belmok Layout -->
+        <div class="mobile-price-card" data-category="premium">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Belmok Layout</span>
+            <span class="price-badge badge-premium">VMRDA / AP RERA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Y-Junction, Tagarapuvalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹3,999/- per SFT</span>
+          </div>
+        </div>
+
+        <!-- Sandal Valley -->
+        <div class="mobile-price-card" data-category="panchayat">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Sandal Valley</span>
+            <span class="price-badge badge-panchayat">Panchayat Layout</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Ballanki @ S. Anandapuram, Kothavalasa</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹4,999/- per Sq. Yd</span>
+          </div>
+        </div>
+
+        <!-- Vaibhav Classic -->
+        <div class="mobile-price-card" data-category="vmrda">
+          <div class="card-row">
+            <span class="card-value" style="font-weight: 600; color: var(--gold);">Vaibhav Classic</span>
+            <span class="price-badge badge-vmrda">VUDA / VMRDA</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Location</span>
+            <span class="card-value">Gandigundam, Simhachalam</span>
+          </div>
+          <div class="card-row">
+            <span class="card-label">Price</span>
+            <span class="card-value" style="color: var(--white); font-weight: 600;">₹23,000/- per Sq. Yd</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <a href="index.html" class="btn btn-outline">Back to Home</a>
+      <a href="projects.html" class="btn btn-outline">Explore Projects</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Social Links & Contact">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1DL6SnDUaj/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/arkinfra_97?igsh=MTgxZWxza2djOGk1OA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const menuToggle = document.getElementById('menuToggle');
+      const navMobile = document.getElementById('navMobile');
+
+      menuToggle.addEventListener('click', function () {
+        const open = navMobile.classList.toggle('open');
+        menuToggle.classList.toggle('active', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      navMobile.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('open');
+          menuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // Setup dynamic CSS styles for simulated call UI
+      const callStyle = document.createElement('style');
+      callStyle.textContent = `
+        .whatsapp-redirect-container {
+          background: rgba(37, 211, 102, 0.08);
+          border: 1px solid rgba(37, 211, 102, 0.25);
+          border-radius: 6px;
+          padding: 1.75rem;
+          margin-bottom: 2rem;
+          max-width: 38rem;
+          width: 100%;
+          text-align: center;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+          animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+          from { transform: translateY(-20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .whatsapp-redirect-title {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.65rem;
+          font-family: var(--font-display);
+          font-size: 1.5rem;
+          color: #25D366;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+        }
+        .whatsapp-redirect-title svg {
+          width: 24px;
+          height: 24px;
+          fill: currentColor;
+        }
+        .whatsapp-redirect-text {
+          font-size: 0.9rem;
+          color: var(--text-body);
+          margin-bottom: 1.25rem;
+          line-height: 1.5;
+        }
+        .whatsapp-manual-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #25D366;
+          color: #fff;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-size: 0.75rem;
+          padding: 0.75rem 1.5rem;
+          border-radius: 2px;
+          transition: background 0.3s, transform 0.3s;
+        }
+        .whatsapp-manual-btn:hover {
+          background: #20ba5a;
+          transform: translateY(-2px);
+          color: #fff;
+        }
+        .call-notification {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+          background: rgba(201, 169, 98, 0.08);
+          border: 1px solid rgba(201, 169, 98, 0.2);
+          border-radius: 4px;
+          padding: 1rem 1.5rem;
+          margin: 1.5rem auto 2.5rem;
+          max-width: 38rem;
+          width: 100%;
+          color: var(--gold-light);
+          font-size: 0.9rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          animation: fadeInCall 0.5s ease-out;
+        }
+        .pulse-dot {
+          width: 8px;
+          height: 8px;
+          background: #25d366;
+          border-radius: 50%;
+          box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+          animation: pulse-ring 1.5s infinite;
+        }
+        @keyframes pulse-ring {
+          0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+          70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(37, 211, 102, 0); }
+          100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        .call-overlay {
+          position: fixed;
+          bottom: 2rem;
+          right: 2rem;
+          z-index: 11000;
+          display: flex;
+          align-items: flex-end;
+          justify-content: flex-end;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
+          transform: translateY(40px);
+        }
+        .call-overlay.active {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        .call-box {
+          background: rgba(10, 22, 40, 0.95);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(201, 169, 98, 0.3);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+          border-radius: 16px;
+          width: 320px;
+          padding: 2.25rem 1.5rem;
+          text-align: center;
+        }
+        @media (max-width: 480px) {
+          .call-overlay {
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            justify-content: center;
+            align-items: center;
+          }
+          .call-box {
+            width: 100%;
+            max-width: 100%;
+            padding: 1.75rem 1rem;
+          }
+          .call-header {
+            margin-bottom: 1.5rem;
+          }
+          .call-avatar {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 0.75rem;
+          }
+          .call-header h2 {
+            font-size: 1.4rem;
+          }
+        }
+        .call-header {
+          margin-bottom: 2.5rem;
+        }
+        .call-avatar {
+          width: 88px;
+          height: 88px;
+          border-radius: 50%;
+          background: var(--white);
+          border: 3px solid var(--gold);
+          margin: 0 auto 1.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        .call-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          padding: 4px;
+        }
+        .call-avatar::before {
+          content: "";
+          position: absolute;
+          inset: -6px;
+          border-radius: 50%;
+          border: 2px solid var(--gold);
+          opacity: 0;
+          animation: ripple-pulse 2s infinite;
+        }
+        @keyframes ripple-pulse {
+          0% { transform: scale(0.95); opacity: 1; }
+          100% { transform: scale(1.35); opacity: 0; }
+        }
+        .call-header h2 {
+          font-family: var(--font-display);
+          font-size: 1.6rem;
+          color: var(--white);
+          margin-bottom: 0.4rem;
+          letter-spacing: 0.02em;
+        }
+        .call-header p {
+          font-size: 0.85rem;
+          color: var(--text-muted);
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+        }
+        .call-actions {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin-top: 1rem;
+          gap: 1.5rem;
+        }
+        .call-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.65rem;
+          color: var(--white);
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          transition: transform 0.2s;
+          outline: none;
+          flex: 1;
+        }
+        .call-btn:hover {
+          transform: scale(1.08);
+        }
+        .call-btn svg {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          padding: 15px;
+          color: var(--white);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+          transition: box-shadow 0.3s;
+        }
+        .call-btn.decline svg {
+          background: #ea4335;
+        }
+        .call-btn.decline:hover svg {
+          box-shadow: 0 4px 20px rgba(234, 67, 53, 0.6);
+        }
+        .call-btn.accept svg {
+          background: #34a853;
+          animation: phone-shake 0.8s infinite alternate;
+        }
+        .call-btn.accept:hover svg {
+          box-shadow: 0 4px 20px rgba(52, 168, 83, 0.6);
+        }
+        @keyframes phone-shake {
+          0% { transform: rotate(-8deg); }
+          100% { transform: rotate(8deg); }
+        }
+        .call-box.active-call .call-btn.accept {
+          display: none;
+        }
+        .call-box.active-call .call-avatar::before {
+          animation: none;
+        }
+        .call-box.active-call .call-actions {
+          justify-content: center;
+        }
+        @keyframes fadeInCall {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `;
+      document.head.appendChild(callStyle);
+
+      // Create the call overlay element immediately so it's always ready
+      const callOverlay = document.createElement('div');
+      callOverlay.id = 'callOverlay';
+      callOverlay.className = 'call-overlay';
+      callOverlay.setAttribute('role', 'dialog');
+      callOverlay.setAttribute('aria-modal', 'true');
+      callOverlay.setAttribute('aria-label', 'Incoming Call from ARK Infra');
+      callOverlay.innerHTML = `
+        <div class="call-box" id="callBox">
+          <div class="call-header">
+            <div class="call-avatar">
+              <img loading="lazy" src="images/logo.webp" alt="ARK Infra Logo">
+            </div>
+            <h2>ARK Infra Hotline</h2>
+            <p id="callStatus">Incoming Call...</p>
+          </div>
+          <div class="call-actions">
+            <button class="call-btn decline" id="declineBtn" aria-label="Decline Call">
+              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-1.01.49-1.94 1.15-2.77 1.93-.21.2-.52.28-.82.16L.51 14.7a.992.992 0 0 1-.51-.83c0-.26.1-.51.27-.68C3.76 9.62 7.63 7.5 12 7.5s8.24 2.12 11.73 5.69c.18.17.27.42.27.68 0 .37-.2.71-.51.83l-2.74 1.11c-.3.12-.61.04-.82-.16-.83-.78-1.76-1.44-2.77-1.93-.33-.16-.56-.51-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg>
+              <span id="declineText">Decline</span>
+            </button>
+            <button class="call-btn accept" id="acceptBtn" aria-label="Accept Call">
+              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.57a.987.987 0 0 0-1.01.24l-2.2 2.2a15.045 15.045 0 0 1-6.59-6.59l2.2-2.21a.96.96 0 0 0 .25-1A11.36 11.36 0 0 1 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+              <span>Accept</span>
+            </button>
+          </div>
+          <div id="callCaption" style="margin-top: 1.5rem; color: var(--gold-light); font-size: 0.95rem; line-height: 1.5; font-style: italic; display: none; padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid rgba(201,169,98,0.1);"></div>
+        </div>
+      `;
+      document.body.appendChild(callOverlay);
+
+      // Sound generator logic using real iPhone ringtone audio
+      let ringtoneAudio = null;
+
+      function startRinging() {
+        try {
+          ringtoneAudio = new Audio('iphone-ringtone.m4a');
+          ringtoneAudio.loop = true;
+          ringtoneAudio.play().catch(e => {
+            console.error('Ringtone playback blocked or failed:', e);
+          });
+        } catch (e) {
+          console.error('Ringtone error:', e);
+        }
+      }
+
+      // Preload voice assets immediately
+      const enAudio = new Audio('announcement.mp3');
+      const teAudio = new Audio('announcement-te.mp3');
+
+      // Unlock browser audio restrictions on first user interaction
+      let audioCtx = null;
+      const unlockAudio = () => {
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+        } catch (e) {}
+      };
+      document.addEventListener('click', unlockAudio);
+      document.addEventListener('touchstart', unlockAudio);
+
+      function stopRinging() {
+        if (ringtoneAudio) {
+          ringtoneAudio.pause();
+          ringtoneAudio = null;
+        }
+      }
+
+      function playHangupSound() {
+        try {
+          const ctx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          
+          osc.frequency.value = 425;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.setValueAtTime(0, ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime + 0.6);
+          gain.gain.setValueAtTime(0, ctx.currentTime + 0.9);
+          
+          osc.start();
+          osc.stop(ctx.currentTime + 1.1);
+          setTimeout(() => ctx.close(), 1500);
+        } catch(e) {}
+      }
+
+      let callTimerInterval = null;
+      let callSeconds = 0;
+      let activeCallAudio = null;
+
+      function formatCallTime(secs) {
+        const m = Math.floor(secs / 60).toString().padStart(2, '0');
+        const s = (secs % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      }
+
+      function triggerSimulatedCall() {
+        const callNotification = document.getElementById('callNotification');
+        if (callNotification) {
+          callNotification.style.display = 'none';
+        }
+        callOverlay.classList.add('active');
+        startRinging();
+      }
+
+      // Handle WhatsApp Redirect URL
+      let whatsappUrl = '';
+      const params = new URLSearchParams(window.location.search);
+      const isWhatsAppRedirect = params.get('whatsapp') === 'true';
+
+      if (isWhatsAppRedirect) {
+        const name = params.get('name') || '';
+        const email = params.get('email') || '';
+        const phone = params.get('phone') || '';
+        const message = params.get('message') || '';
+        const whatsappText = `Hello ARK Infra! I am ${name}. I just filled out the contact form on your website. Here are my details:\n\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`;
+        whatsappUrl = `https://wa.me/918125547801?text=${encodeURIComponent(whatsappText)}`;
+      } else {
+        whatsappUrl = 'https://wa.me/918125547801';
+      }
+
+      function hangUpCall() {
+        stopRinging();
+        if (activeCallAudio) {
+          activeCallAudio.pause();
+          activeCallAudio = null;
+        }
+        if (callTimerInterval) {
+          clearInterval(callTimerInterval);
+          callTimerInterval = null;
+        }
+        playHangupSound();
+        callOverlay.classList.remove('active');
+        setTimeout(() => {
+          document.getElementById('callBox').classList.remove('active-call');
+          document.getElementById('callStatus').textContent = 'Incoming Call...';
+          document.getElementById('declineText').textContent = 'Decline';
+          document.getElementById('callCaption').style.display = 'none';
+          
+          // Redirect to WhatsApp after the call ends
+          const finalUrl = whatsappUrl || 'https://wa.me/918125547801';
+          window.location.href = finalUrl;
+        }, 500);
+      }
+
+      document.getElementById('declineBtn').addEventListener('click', hangUpCall);
+      
+      document.getElementById('acceptBtn').addEventListener('click', () => {
+        stopRinging();
+        
+        const callBox = document.getElementById('callBox');
+        const callStatus = document.getElementById('callStatus');
+        const declineText = document.getElementById('declineText');
+        const callCaption = document.getElementById('callCaption');
+        
+        callBox.classList.add('active-call');
+        declineText.textContent = 'End Call';
+        
+        callSeconds = 0;
+        callStatus.textContent = '00:00';
+        callTimerInterval = setInterval(() => {
+          callSeconds++;
+          callStatus.textContent = formatCallTime(callSeconds);
+        }, 1000);
+        
+        const announceTextEn = "Thank you for contacting ARK Infra: Building dreams and creating landmarks. Our CEO, Mr. Konathala Hanumantharao (Arun), and our support team will contact you in 24 hours.";
+        const announceTextTe = "ఆర్క్ ఇన్ఫ్రాను సంప్రదించినందుకు ధన్యవాదాలు: కలలను నిర్మించడం మరియు మైలురాళ్లను సృష్టించడం. మా సీఈఓ శ్రీ కోనతాల హనుమంతరావు (అరుణ్) మరియు మా సపోర్ట్ టీమ్ 24 గంటల్లో మిమ్మల్ని సంప్రదిస్తారు.";
+        
+        // Show English caption first
+        callCaption.textContent = announceTextEn;
+        callCaption.style.display = 'block';
+        
+        // Play English voice announcement first
+        activeCallAudio = enAudio;
+        activeCallAudio.play().catch(e => {
+          console.error("Audio playback error:", e);
+          setTimeout(hangUpCall, 15000);
+        });
+        
+        // When English announcement ends, play Telugu announcement sequentially
+        activeCallAudio.onended = function () {
+          callCaption.textContent = announceTextTe;
+          
+          activeCallAudio = teAudio;
+          activeCallAudio.play().catch(e => {
+            console.error("Audio playback error:", e);
+            setTimeout(hangUpCall, 10000);
+          });
+          
+          // Hang up call 2 seconds after Telugu voice message ends
+          activeCallAudio.onended = function () {
+            setTimeout(hangUpCall, 2000);
+          };
+        };
+      });
+
+      const mainSection = document.querySelector('.support-section') || document.querySelector('.thankyou-section');
+      const thankyouDesc = document.querySelector('.thankyou-desc');
+
+      if (isWhatsAppRedirect) {
+        // Create a beautiful redirect container
+        if (mainSection) {
+          const redirectBanner = document.createElement('div');
+          redirectBanner.className = 'whatsapp-redirect-container';
+          redirectBanner.innerHTML = `
+            <div class="whatsapp-redirect-title">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Opening WhatsApp chat...
+            </div>
+            <div class="whatsapp-redirect-text">
+              We are connecting you to WhatsApp in a new tab. 
+              Please click "Send" in WhatsApp to start chatting with our team!
+            </div>
+            <a href="${whatsappUrl}" target="_blank" class="whatsapp-manual-btn">
+              <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; fill: currentColor; margin-right: 5px;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Chat on WhatsApp Now
+            </a>
+          `;
+          mainSection.insertBefore(redirectBanner, mainSection.firstChild);
+        }
+
+        // Create success modal dynamically to unlock audio context on click
+        const successModal = document.createElement('div');
+        successModal.className = 'modal open';
+        successModal.id = 'successModal';
+        successModal.style.cssText = 'display: flex; align-items: center; justify-content: center; z-index: 11000; position: fixed; inset: 0; background: rgba(5, 13, 26, 0.9);';
+        successModal.innerHTML = `
+          <div class="modal-content" style="text-align: center; max-width: 400px; padding: 2.5rem; background: var(--navy); border: 1px solid rgba(201, 169, 98, 0.3); border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <div style="font-size: 3.5rem; color: var(--gold); margin-bottom: 1rem; line-height: 1;">✓</div>
+            <h3 style="font-family: var(--font-display); font-size: 2rem; color: var(--white); margin-bottom: 0.5rem;">Message Sent!</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.5;">Your inquiry has been successfully sent to our CEO.</p>
+            <button id="closeSuccessBtn" class="btn btn-primary" style="width: 100%; border-radius: 4px;">Proceed</button>
+          </div>
+        `;
+        document.body.appendChild(successModal);
+
+        // Click handler to start countdown and play ringtone with sound
+        document.getElementById('closeSuccessBtn').addEventListener('click', () => {
+          successModal.classList.remove('open');
+          successModal.style.display = 'none';
+
+          // Create the countdown notification banner
+          const callNotification = document.createElement('div');
+          callNotification.id = 'callNotification';
+          callNotification.className = 'call-notification';
+          callNotification.innerHTML = `
+            <span class="pulse-dot"></span>
+            <span>Hotline: Demonstration call from CEO & Support in <strong id="callCountdown">5</strong> seconds... Keep this tab open!</span>
+          `;
+          if (thankyouDesc) {
+            thankyouDesc.parentNode.insertBefore(callNotification, thankyouDesc.nextSibling);
+          } else if (mainSection) {
+            mainSection.appendChild(callNotification);
+          }
+
+          // Start 5 seconds auto countdown
+          let timeLeft = 5;
+          const countdownEl = document.getElementById('callCountdown');
+          const countdownInterval = setInterval(() => {
+            timeLeft--;
+            if (countdownEl) {
+              countdownEl.textContent = timeLeft;
+            }
+            if (timeLeft <= 0) {
+              clearInterval(countdownInterval);
+              triggerSimulatedCall();
+            }
+          }, 1000);
+        });
+
+      } else {
+        // DIRECT OPEN / TEST MODE
+        // Show a premium developer/testing bar at the top of the thankyou card
+        const testNotification = document.createElement('div');
+        testNotification.id = 'callNotification';
+        testNotification.className = 'call-notification';
+        testNotification.style.background = 'rgba(201, 169, 98, 0.12)';
+        testNotification.style.border = '1px dashed var(--gold)';
+        testNotification.innerHTML = `
+          <span class="pulse-dot" style="background: var(--gold); box-shadow: 0 0 0 0 rgba(201,169,98,0.4); animation: none;"></span>
+          <span style="color: var(--white); font-weight: 500;">Direct Test Mode: You opened this file directly.</span>
+          <button id="startTestCallBtn" class="btn btn-primary" style="padding: 0.45rem 1rem; font-size: 0.75rem; letter-spacing: 0.08em; border-radius: 4px; box-shadow: none; margin-left: auto;">
+            📞 Test Hotline Call
+          </button>
+        `;
+
+        if (thankyouDesc) {
+          thankyouDesc.parentNode.insertBefore(testNotification, thankyouDesc.nextSibling);
+        } else if (mainSection) {
+          mainSection.appendChild(testNotification);
+        }
+
+        // Click handler triggers the call immediately and bypasses autoplay restriction
+        const startTestCallBtn = document.getElementById('startTestCallBtn');
+        if (startTestCallBtn) {
+          startTestCallBtn.addEventListener('click', () => {
+            testNotification.style.display = 'none';
+            triggerSimulatedCall();
+          });
+        }
+      }
+    })();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('priceSearch');
+      const filterTabs = document.querySelectorAll('.filter-tab');
+      const tableRows = document.querySelectorAll('.price-table tbody tr');
+      const mobileCards = document.querySelectorAll('.mobile-price-card');
+
+      function filterItems() {
+        const query = searchInput.value.toLowerCase().trim();
+        const activeTab = document.querySelector('.filter-tab.active').getAttribute('data-filter');
+
+        // Filter Table Rows
+        tableRows.forEach(row => {
+          const text = row.innerText.toLowerCase();
+          const category = row.getAttribute('data-category');
+          const matchesQuery = text.includes(query);
+          const matchesTab = activeTab === 'all' || category === activeTab;
+
+          if (matchesQuery && matchesTab) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        // Filter Mobile Cards
+        mobileCards.forEach(card => {
+          const text = card.innerText.toLowerCase();
+          const category = card.getAttribute('data-category');
+          const matchesQuery = text.includes(query);
+          const matchesTab = activeTab === 'all' || category === activeTab;
+
+          if (matchesQuery && matchesTab) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterItems);
+      }
+
+      filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          filterTabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          filterItems();
+        });
+      });
+    });
+  </script>
+</body>
+</html>

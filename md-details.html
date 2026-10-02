@@ -421,6 +421,12 @@
           <p>Collaborating directly with municipal planning boards, surveyors, and financial institutions, he leads the efforts that secure bank loan eligibilities and VMRDA layout approvals. His strict oversight creates a solid framework of safety and commercial viability for all residential plot subdivisions and luxury housing investments.</p>
         </div>
 
+        <!-- Dynamic Associated Team & Agents Section -->
+        <div class="values-section" id="assignedAgentsSection" style="display: none; margin-bottom: 2.5rem;">
+          <h3 class="values-title">Assigned Field Agents &amp; Executive Team</h3>
+          <div class="values-grid" id="assignedAgentsGrid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+        </div>
+
         <div class="values-section">
           <h3 class="values-title">Focus Areas</h3>
           <div class="values-grid">
@@ -508,6 +514,7 @@
       <div class="footer-legal">
         <a href="#" id="openPrivacy">Privacy Policy</a>
         <a href="#" id="openTerms">Terms &amp; Conditions</a>
+        <a href="admin.html">Admin / CEO Portal</a>
       </div>
     </div>
   </footer>
@@ -558,6 +565,33 @@
         }
       });
     })();
+  </script>
+  <script src="js/api.js"></script>
+  <script>
+    // Hydrate agents under Managing Director Adari Ramakrishna
+    document.addEventListener("DOMContentLoaded", async function() {
+      if (!window.ArkApi) return;
+      try {
+        const directors = await window.ArkApi.getDirectors();
+        const md = directors.find(d => d.name.toLowerCase().includes("ramakrishna"));
+        if (md) {
+          const agents = await window.ArkApi.getAgentsByDirector(md.id);
+          if (agents && agents.length > 0) {
+            const grid = document.getElementById("assignedAgentsGrid");
+            const sec = document.getElementById("assignedAgentsSection");
+            grid.innerHTML = agents.map(a => `
+              <div class="value-card" style="text-align:center;padding:1.25rem 1rem;">
+                <img src="${a.profile_image}" onerror="this.src='images/logo.webp'" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 0.75rem;border:2px solid var(--gold);display:block;">
+                <h4 style="font-size:0.95rem;color:var(--white);margin-bottom:0.25rem;">${a.full_name}</h4>
+                <p style="font-size:0.75rem;color:var(--gold);margin-bottom:0.5rem;">${a.designation || 'Real Estate Consultant'}</p>
+                <a href="tel:${a.phone}" style="display:inline-block;padding:0.3rem 0.6rem;background:rgba(201,169,98,0.15);border:1px solid var(--gold);color:var(--gold);font-size:0.75rem;border-radius:3px;text-decoration:none;">${a.phone}</a>
+              </div>
+            `).join('');
+            sec.style.display = "block";
+          }
+        }
+      } catch(e) { console.warn("Could not load dynamic agents:", e); }
+    });
   </script>
   <script src="chatbot.js"></script>
 </body>

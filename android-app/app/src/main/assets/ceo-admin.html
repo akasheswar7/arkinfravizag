@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CEO Update Center | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --off-white: #f4f6f9;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      background-image: radial-gradient(circle at top, var(--navy) 0%, var(--navy-deep) 100%);
+      color: var(--text-body);
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid rgba(201, 169, 98, 0.2);
+      padding-bottom: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand img {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 1px solid var(--gold);
+      background: var(--white);
+      padding: 2px;
+      border-radius: 2px;
+    }
+
+    .brand-text {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+
+    .brand-text span {
+      color: var(--gold);
+    }
+
+    .btn-signout {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #f87171;
+      border-radius: 4px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-signout:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: #f87171;
+    }
+
+    .dashboard-card {
+      background: rgba(10, 22, 40, 0.5);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 8px;
+      padding: 2.5rem;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 2rem;
+    }
+
+    .welcome-text {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .intro-desc {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    /* Live status display */
+    .status-panel {
+      background: rgba(5, 13, 26, 0.4);
+      border-left: 4px solid var(--gold);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 2.5rem;
+    }
+
+    .status-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold-light);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-content {
+      font-size: 1.05rem;
+      color: var(--white);
+      font-style: italic;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-content.empty {
+      color: var(--text-muted);
+      font-style: normal;
+    }
+
+    /* Form editor */
+    .editor-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .textarea-field {
+      width: 100%;
+      min-height: 120px;
+      height: auto;
+      overflow-y: hidden;
+      padding: 1.25rem;
+      background: rgba(5, 13, 26, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 4px;
+      color: var(--white);
+      font-family: inherit;
+      font-size: 1rem;
+      line-height: 1.6;
+      resize: none;
+      margin-bottom: 0.5rem;
+      transition: border-color 0.3s, height 0.1s ease-out;
+    }
+
+    .textarea-field:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 1rem;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      box-shadow: 0 4px 15px rgba(201, 169, 98, 0.2);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 24px rgba(201, 169, 98, 0.35);
+      opacity: 0.95;
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      background: transparent;
+      color: var(--gold-light);
+    }
+
+    .btn-outline:hover {
+      background: rgba(201, 169, 98, 0.08);
+      border-color: var(--gold);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Notifications */
+    .notify {
+      display: none;
+      padding: 1rem;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+
+    .notify-success {
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
+    }
+
+    .notify-error {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+    }
+
+    .loader {
+      display: none;
+      width: 1.15rem;
+      height: 1.15rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: var(--white);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .btn-primary .loader {
+      border-color: rgba(5, 13, 26, 0.2);
+      border-top-color: var(--navy-deep);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div class="brand">
+        <img loading="lazy" src="images/logo.webp" alt="ARK Logo">
+        <div class="brand-text">ARK <span>Infra</span></div>
+      </div>
+      <button class="btn-signout" onclick="handleSignOut()">Sign Out</button>
+    </header>
+
+    <main class="dashboard-card">
+      <h1 class="welcome-text">CEO Announcement Center</h1>
+      <p class="intro-desc">Publish meetings, launch invitations, site inaugurations, or general venture announcements. Your active update will be pinned to the top of the homepage in real-time. Clearing the text will hide the banner.</p>
+
+      <div class="notify" id="notifyBox"></div>
+
+      <div class="status-panel">
+        <div class="status-title">Currently Active Update:</div>
+        <div class="status-content" id="activeUpdateText">Loading current update...</div>
+      </div>
+
+      <form id="updateForm">
+        <label class="editor-label" for="updateText">Type New Update</label>
+        <textarea 
+          class="textarea-field" 
+          id="updateText" 
+          maxlength="750" 
+          placeholder="Type update message here... (e.g. 'Inauguration ceremony for Sabbavaram Venture on July 10th at 10 AM! Site visits are open.')"
+          oninput="updateCount()"
+        ></textarea>
+        <div class="char-count"><span id="charNum">750</span> characters remaining</div>
+
+        <div class="btn-group">
+          <button class="btn btn-outline" type="button" id="clearBtn" onclick="publishUpdate(true)">
+            <span>Clear Announcement</span>
+            <div class="loader" id="clearLoader"></div>
+          </button>
+          
+          <button class="btn btn-primary" type="button" id="publishBtn" onclick="publishUpdate(false)">
+            <span>Publish Update</span>
+            <div class="loader" id="publishLoader"></div>
+          </button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script>
+    // 1. Session Auth Protection
+    let isLoggedIn = false;
+    try {
+      isLoggedIn = sessionStorage.getItem('ceo_logged_in') === 'true';
+    } catch (e) {
+      console.warn("sessionStorage read failed:", e);
+    }
+
+    if (!isLoggedIn) {
+      window.location.href = 'ceo-login.html';
+    }
+
+    const KV_URL = 'https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update';
+    const KV_UPDATE_URL = 'https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/owsihrx6/arkinfra_active_update';
+
+    // Safe encoding/decoding helper utilities to transmit values via URL path segments
+    // We use a backward-compatible Base64 format prefixed with 'b64_' to support up to 750 characters.
+    // Older Hex-encoded values are automatically detected and decoded.
+    function encodeValue(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return 'b64_' + window.btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
+    function decodeValue(str) {
+      if (str.startsWith('b64_')) {
+        let base64 = str.substring(4).replace(/-/g, '+').replace(/_/g, '/');
+        while (base64.length % 4) {
+          base64 += '=';
+        }
+        const binary = window.atob(base64);
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+          bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder().decode(bytes);
+      } else {
+        // Fallback to older Hex decoding
+        const bytes = new Uint8Array(str.length / 2);
+        for (let i = 0; i < str.length; i += 2) {
+          bytes[i / 2] = parseInt(str.substring(i, i + 2), 16);
+        }
+        return new TextDecoder().decode(bytes);
+      }
+    }
+
+    // 2. Fetch Active Update on Load
+    window.addEventListener('DOMContentLoaded', fetchActiveUpdate);
+
+    async function fetchActiveUpdate() {
+      const activeTextEl = document.getElementById('activeUpdateText');
+      const textarea = document.getElementById('updateText');
+      
+      try {
+        const response = await fetch(KV_URL + '?t=' + Date.now());
+        if (!response.ok) {
+          activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
+          activeTextEl.classList.add('empty');
+          return;
+        }
+        let text = await response.text();
+        if (text) {
+          text = text.trim();
+          if (text.startsWith('"') && text.endsWith('"')) {
+            text = text.substring(1, text.length - 1);
+          }
+        }
+        
+        if (text && text !== 'null' && text !== '-') {
+          try {
+            const decoded = decodeValue(text);
+            if (decoded && decoded.trim() && decoded !== '-') {
+              activeTextEl.textContent = `"${decoded.trim()}"`;
+              activeTextEl.classList.remove('empty');
+              textarea.value = decoded.trim();
+              updateCount();
+              return;
+            }
+          } catch (e) {
+            console.error("Hex decoding failed:", e);
+          }
+        }
+        
+        activeTextEl.textContent = "No active updates (homepage banner is currently hidden).";
+        activeTextEl.classList.add('empty');
+        textarea.value = "";
+        updateCount();
+      } catch (err) {
+        console.error(err);
+        activeTextEl.textContent = "Unable to fetch active announcement status.";
+      }
+    }
+
+    // 3. Publish Update
+    async function publishUpdate(shouldClear) {
+      const textarea = document.getElementById('updateText');
+      const updateValue = shouldClear ? "" : textarea.value.trim();
+      
+      const publishBtn = document.getElementById('publishBtn');
+      const clearBtn = document.getElementById('clearBtn');
+      const publishLoader = document.getElementById('publishLoader');
+      const clearLoader = document.getElementById('clearLoader');
+      const notifyBox = document.getElementById('notifyBox');
+
+      if (!shouldClear && !updateValue) {
+        showNotification("Please write some text before publishing.", "error");
+        return;
+      }
+
+      // Show loader
+      notifyBox.style.display = 'none';
+      publishBtn.disabled = true;
+      clearBtn.disabled = true;
+      if (shouldClear) {
+        clearLoader.style.display = 'block';
+      } else {
+        publishLoader.style.display = 'block';
+      }
+
+      try {
+        const encodedValue = updateValue ? encodeValue(updateValue) : '-';
+        const response = await fetch(`${KV_UPDATE_URL}?value=${encodedValue}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: 'update=true'
+        });
+
+        if (response.ok) {
+          showNotification(
+            shouldClear ? "Announcement successfully cleared from website." : "Announcement published successfully!",
+            "success"
+          );
+          if (shouldClear) {
+            textarea.value = "";
+            updateCount();
+          }
+          fetchActiveUpdate();
+        } else {
+          showNotification("Failed to update database. Please try again.", "error");
+        }
+      } catch (err) {
+        console.error(err);
+        showNotification("Connection lost. Failed to contact update database.", "error");
+      } finally {
+        publishBtn.disabled = false;
+        clearBtn.disabled = false;
+        publishLoader.style.display = 'none';
+        clearLoader.style.display = 'none';
+      }
+    }
+
+    // 4. Helper Utilities
+    function updateCount() {
+      const textarea = document.getElementById('updateText');
+      const charNum = document.getElementById('charNum');
+      
+      // Auto-grow height to fit content
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+      
+      charNum.textContent = 750 - textarea.value.length;
+    }
+
+    function showNotification(msg, type) {
+      const notifyBox = document.getElementById('notifyBox');
+      notifyBox.className = `notify notify-${type}`;
+      notifyBox.textContent = msg;
+      notifyBox.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleSignOut() {
+      try {
+        sessionStorage.removeItem('ceo_logged_in');
+      } catch (e) {
+        console.warn("sessionStorage removeItem failed:", e);
+      }
+      window.location.href = 'ceo-login.html';
+    }
+  </script>
+</body>
+</html>

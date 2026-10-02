@@ -1243,7 +1243,7 @@
     YOUR_PROJECT_*      ? Project cards in Featured Projects
     -----------------------------------------------------------
   -->
-  <a href="#main" class="skip-link">Skip to main content</a>
+
 
   <header class="site-header" id="header">
     <div class="header-inner">
@@ -1478,6 +1478,7 @@
       <div class="footer-legal">
         <a href="#" id="openPrivacy">Privacy Policy</a>
         <a href="#" id="openTerms">Terms &amp; Conditions</a>
+        <a href="admin.html">Admin / CEO Portal</a>
       </div>
     </div>
   </footer>
@@ -1494,6 +1495,10 @@
         <div id="teamModalContact" style="display: none; border-top: 1px solid rgba(201, 169, 98, 0.15); padding-top: 1rem;">
           <h4 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.5rem;">Contact Info</h4>
           <p id="teamModalPhone" style="font-size: 0.9375rem; color: var(--white);"></p>
+        </div>
+        <div id="teamModalAgents" style="display: none; border-top: 1px solid rgba(201, 169, 98, 0.15); padding-top: 1rem; margin-top: 1rem;">
+          <h4 style="font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;">Assigned Field Agents &amp; Team</h4>
+          <div id="teamModalAgentsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem;"></div>
         </div>
       </div>
     </div>
@@ -1620,6 +1625,34 @@
           teamModalContact.style.display = 'none';
         }
 
+        // Fetch dynamic agents for this Director if available
+        const agentsBox = document.getElementById('teamModalAgents');
+        const agentsList = document.getElementById('teamModalAgentsList');
+        if (agentsBox && agentsList) {
+          agentsBox.style.display = 'none';
+          agentsList.innerHTML = '';
+          if (window.ArkApi && member.role && member.role.toLowerCase().includes('director')) {
+            window.ArkApi.getDirectors().then(directors => {
+              const matched = directors.find(d => d.name.toLowerCase().includes(member.name.toLowerCase()) || member.name.toLowerCase().includes(d.name.toLowerCase()));
+              if (matched) {
+                window.ArkApi.getAgentsByDirector(matched.id).then(agents => {
+                  if (agents && agents.length > 0) {
+                    agentsList.innerHTML = agents.map(a => `
+                      <div style="background:rgba(5,13,26,0.6);border:1px solid rgba(201,169,98,0.25);border-radius:4px;padding:0.6rem;text-align:center;">
+                        <img src="${a.profile_image}" onerror="this.src='images/logo.webp'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;margin:0 auto 0.4rem;border:1px solid var(--gold);">
+                        <div style="font-size:0.75rem;font-weight:600;color:var(--white);">${a.full_name}</div>
+                        <div style="font-size:0.68rem;color:var(--gold);">${a.designation || 'Agent'}</div>
+                        <a href="tel:${a.phone}" style="font-size:0.7rem;color:var(--text-body);display:block;margin-top:0.2rem;">${a.phone}</a>
+                      </div>
+                    `).join('');
+                    agentsBox.style.display = 'block';
+                  }
+                });
+              }
+            });
+          }
+        }
+
         teamModal.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
@@ -1669,6 +1702,15 @@
         }
 
         try {
+          // Check dynamic FastAPI announcement first
+          if (window.ArkApi) {
+            const dynamicAnn = await window.ArkApi.getActiveAnnouncement();
+            if (dynamicAnn && dynamicAnn.message && dynamicAnn.message.trim()) {
+              document.getElementById('ceoUpdateText').textContent = dynamicAnn.message.trim();
+              document.getElementById('ceoUpdateBanner').style.display = 'flex';
+              return;
+            }
+          }
           const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update?t=' + Date.now());
           if (response.ok) {
             let encodedText = await response.text();
@@ -1732,6 +1774,7 @@
       initPreloaderTransition();
     })();
   </script>
+  <script src="js/api.js"></script>
   <script src="chatbot.js"></script>
 </body>
 </html>

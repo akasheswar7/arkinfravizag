@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="shortcut icon" href="images/logo.webp" type="image/jpeg">
+  <link rel="apple-touch-icon" href="images/logo.webp">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Calculate your home loan EMI dynamically for ARK Infra projects. Estimate monthly installments, total interest, and connect directly on WhatsApp.">
+  <title>EMI & Loan Calculator | ARK Infra</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chatbot.css">
+  <style>
+    :root {
+      --navy-deep: #050d1a;
+      --navy: #0a1628;
+      --navy-mid: #122a47;
+      --navy-light: #1e3d66;
+      --gold: #c9a962;
+      --gold-light: #e4d4a8;
+      --gold-dark: #9a7b3a;
+      --white: #ffffff;
+      --text-muted: #94a3b8;
+      --text-body: #cbd5e1;
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-sans: "Inter", system-ui, sans-serif;
+      --header-h: 5rem;
+      --transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-gold: 0 4px 24px rgba(201, 169, 98, 0.25);
+      --max-w: 75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--navy-deep);
+      color: var(--text-body);
+      line-height: 1.7;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* Header */
+    .site-header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      height: var(--header-h);
+      background: rgba(5, 13, 26, 0.92);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(201, 169, 98, 0.15);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto; padding: 0 1.5rem;
+      height: 100%; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: var(--font-display); font-size: 1.75rem; font-weight: 700;
+      color: var(--white); letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .logo span { color: var(--gold); }
+    .logo-badge-img {
+      width: 2.5rem; height: 2.5rem;
+      border: 2px solid var(--gold);
+      background: var(--white);
+      object-fit: contain;
+      padding: 2px;
+      border-radius: 2px;
+    }
+    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop a {
+      font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--text-body);
+    }
+    .nav-desktop a:hover { color: var(--gold); }
+    .nav-cta {
+      padding: 0.65rem 1.5rem !important;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep) !important; border-radius: 2px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--navy-deep) !important; }
+    
+    .menu-toggle {
+      display: none; flex-direction: column; gap: 5px; padding: 0.5rem;
+    }
+    .menu-toggle span {
+      width: 26px; height: 2px; background: var(--gold);
+      transition: var(--transition);
+    }
+    @media (max-width: 1120px) {
+      .nav-desktop { display: none !important; }
+      .menu-toggle { display: flex !important; }
+    }
+    .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .menu-toggle.active span:nth-child(2) { opacity: 0; }
+    .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .nav-mobile {
+      position: fixed; inset: 0; top: var(--header-h);
+      background: rgba(5, 13, 26, 0.98);
+      padding: 2rem 1.5rem;
+      transform: translateX(100%);
+      transition: transform var(--transition), visibility var(--transition);
+      z-index: 999;
+      visibility: hidden;
+    }
+    .nav-mobile.open { transform: translateX(0); visibility: visible; }
+    .nav-mobile a {
+      display: block; padding: 1rem 0;
+      font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--white); border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+    .nav-mobile a:hover { color: var(--gold); }
+
+    /* Calculator Layout */
+    .calculator-section {
+      padding: calc(var(--header-h) + 3rem) 1.5rem 5rem;
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .section-title {
+      font-family: var(--font-display); font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 500; color: var(--white); text-align: center; margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 1.05rem; color: var(--text-muted); text-align: center;
+      max-width: 38rem; margin: 0 auto 3.5rem; line-height: 1.6;
+    }
+
+    .calc-container {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* Column 1: Controls */
+    .calc-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 8px;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+    .input-group {
+      margin-bottom: 2rem;
+    }
+    .input-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .input-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .input-val-box {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .input-val-box span {
+      color: var(--gold);
+      font-size: 0.9375rem;
+      font-weight: 600;
+    }
+    .input-val-box input {
+      background: transparent;
+      border: none;
+      color: var(--white);
+      font-family: inherit;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      width: 110px;
+      text-align: right;
+      outline: none;
+    }
+    
+    /* Range Sliders styling */
+    .range-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+      margin: 1rem 0;
+      transition: background 0.3s;
+    }
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
+      transition: transform 0.2s;
+    }
+    .range-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+    .range-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border: none;
+      border-radius: 50%;
+      background: var(--gold);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(201, 169, 98, 0.5);
+      transition: transform 0.2s;
+    }
+    .range-slider::-moz-range-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Column 2: Results & Chart */
+    .results-card {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy));
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 8px;
+      padding: 2.5rem;
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+      text-align: center;
+    }
+    
+    .emi-display {
+      margin-bottom: 2rem;
+    }
+    .emi-title {
+      font-size: 0.8125rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .emi-value {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1;
+    }
+    .emi-value span {
+      font-size: 1rem;
+      font-weight: 400;
+      font-family: var(--font-sans);
+      color: var(--text-muted);
+    }
+
+    /* Visual Donut Chart */
+    .chart-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto 2.5rem;
+    }
+    .chart-svg {
+      transform: rotate(-90deg);
+    }
+    .chart-bg-circle {
+      fill: transparent;
+      stroke: var(--navy-light);
+      stroke-width: 18;
+    }
+    .chart-val-circle {
+      fill: transparent;
+      stroke: var(--gold);
+      stroke-width: 18;
+      transition: stroke-dashoffset 0.35s;
+    }
+    .chart-center-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Stats breakdown list */
+    .stats-breakdown {
+      margin-bottom: 2.5rem;
+      text-align: left;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.875rem;
+    }
+    .stat-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+    .stat-name {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-body);
+    }
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .stat-dot.principal { background: var(--navy-light); }
+    .stat-dot.interest { background: var(--gold); }
+    .stat-value {
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem;
+      padding: 1rem 2rem; font-size: 0.8125rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase; border-radius: 2px;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+      width: 100%;
+      cursor: pointer;
+    }
+    .btn-whatsapp {
+      background: #25D366;
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.25);
+    }
+    .btn-whatsapp:hover {
+      background: #20ba5a;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+    }
+    .btn-whatsapp svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .calc-container { grid-template-columns: 1fr; gap: 2.5rem; }
+      .results-card { position: static; }
+    }
+    @media (max-width: 768px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: flex; }
+      .calculator-section { padding-top: calc(var(--header-h) + 2rem); }
+      .calc-card, .results-card { padding: 1.5rem; }
+    }
+
+    /* Footer */
+    .site-footer {
+      background: #030811;
+      padding: 5rem 1.5rem 2rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.1);
+      margin-top: 5rem;
+    }
+    .footer-grid {
+      max-width: var(--max-w); margin: 0 auto 3rem;
+      display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 3rem;
+    }
+    .footer-brand p { margin: 1.25rem 0; font-size: 0.9375rem; color: var(--text-muted); line-height: 1.6; }
+    .footer-social {
+      display: flex; gap: 0.75rem; margin-top: 1.5rem;
+    }
+    .footer-social a {
+      width: 40px; height: 40px; border: 1px solid rgba(201, 169, 98, 0.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold); font-size: 0.875rem; font-weight: 600;
+      transition: var(--transition);
+    }
+    .footer-social a:hover { background: var(--gold); color: var(--navy-deep); }
+    .footer-col h4 {
+      color: var(--white); font-size: 0.875rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .footer-col ul li { margin-bottom: 0.75rem; font-size: 0.875rem; color: var(--text-muted); }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-bottom {
+      max-width: var(--max-w); margin: 0 auto; padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8125rem; color: var(--text-muted);
+    }
+    .footer-legal a { margin-left: 1.5rem; }
+    .footer-legal a:hover { color: var(--gold); }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
+    }
+
+    /* Bank Interest Rates Section Styles */
+    .bank-rates-section {
+      margin-top: 3rem;
+    }
+    .bank-rates-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 500;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+      position: relative;
+      display: inline-block;
+    }
+    .bank-rates-title::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: -8px;
+      width: 40px; height: 2px;
+      background: var(--gold);
+    }
+    .bank-rates-desc {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      margin: 1.25rem 0 1.5rem;
+      line-height: 1.5;
+    }
+    .api-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      padding: 0.75rem 1.25rem;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+      font-size: 0.75rem;
+    }
+    .api-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-transform: uppercase;
+      font-size: 0.6875rem;
+      letter-spacing: 0.05em;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+    .status-dot.online {
+      background: #25D366;
+      box-shadow: 0 0 10px rgba(37, 211, 102, 0.8);
+      animation: statusPulse 2s infinite;
+    }
+    .status-dot.offline {
+      background: #ffaa00;
+      box-shadow: 0 0 10px rgba(255, 170, 0, 0.8);
+    }
+    @keyframes statusPulse {
+      0% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(0.9); opacity: 0.6; }
+    }
+    .bank-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .bank-rate-card {
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(201, 169, 98, 0.15);
+      border-radius: 6px;
+      padding: 1.5rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .bank-rate-card:hover {
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.04);
+      box-shadow: var(--shadow-gold);
+      transform: translateY(-2px);
+    }
+    .bank-rate-card.active-rate {
+      border-color: var(--gold);
+      background: rgba(201, 169, 98, 0.08);
+      box-shadow: 0 0 20px rgba(201, 169, 98, 0.15);
+    }
+    .bank-card-badge {
+      position: absolute;
+      top: 0; right: 0;
+      background: var(--gold-dark);
+      color: var(--navy-deep);
+      font-size: 0.625rem;
+      font-weight: 700;
+      padding: 0.25rem 0.625rem;
+      border-bottom-left-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .bank-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .bank-card-logo {
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 4px;
+      background: var(--white);
+      object-fit: contain;
+      padding: 4px;
+      flex-shrink: 0;
+      border: 1px solid rgba(201, 169, 98, 0.2);
+    }
+    .bank-card-logo-placeholder {
+      min-width: 2.5rem;
+      width: auto;
+      height: 2.25rem;
+      padding: 0 0.5rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .bank-card-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.3;
+    }
+    .bank-card-rate-info {
+      margin-bottom: 1.25rem;
+    }
+    .bank-card-rate-val {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1.2;
+      margin-bottom: 0.25rem;
+    }
+    .bank-card-rate-fee {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    .bank-card-action-btn {
+      width: 100%;
+      padding: 0.65rem;
+      background: transparent;
+      border: 1px dashed var(--gold);
+      color: var(--gold);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 2px;
+      text-align: center;
+      transition: var(--transition);
+    }
+    .bank-rate-card:hover .bank-card-action-btn,
+    .bank-rate-card.active-rate .bank-card-action-btn {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--navy-deep);
+      border-style: solid;
+      border-color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header" id="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+        <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+        ARK <span>Infra</span>
+      </a>
+              <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="about.html">About</a>
+          <a href="projects.html">Projects</a>
+          <a href="insights.html">Insights</a>
+          <a href="why.html">Why Us</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="testimonials.html">Testimonials</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="growth-map.html">Growth Map</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
+        </nav>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+      <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="insights.html">Insights</a>
+      <a href="why.html">Why Us</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="testimonials.html">Testimonials</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="growth-map.html">Growth Map</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+
+  <main class="calculator-section">
+    <p class="section-label">Investment Planning</p>
+    <h1 class="section-title">EMI &amp; Loan Calculator</h1>
+    <p class="section-desc">
+      Determine your monthly installments, total loan principal, and interest payable dynamically. Adjust the sliders to match your investment budget.
+    </p>
+
+    <div class="calc-container">
+      <!-- Controls -->
+      <div class="calc-card">
+        
+        <!-- Property Price -->
+        <div class="input-group">
+          <div class="input-header">
+            <label class="input-label" for="priceInput">Property Value (₹)</label>
+            <div class="input-val-box">
+              <span>₹</span>
+              <input type="text" id="priceText" value="5,00,0000" aria-label="Property value in rupees">
+            </div>
+          </div>
+          <input type="range" class="range-slider" id="priceRange" min="1000000" max="50000000" step="100000" value="5000000">
+          <div class="slider-labels">
+            <span>₹10 Lakhs</span>
+            <span>₹2.5 Crores</span>
+            <span>₹5 Crores</span>
+          </div>
+        </div>
+
+        <!-- Down Payment -->
+        <div class="input-group">
+          <div class="input-header">
+            <label class="input-label" for="downPaymentInput">Down Payment (₹)</label>
+            <div class="input-val-box">
+              <span>₹</span>
+              <input type="text" id="downPaymentText" value="1,00,0000" aria-label="Down payment in rupees">
+            </div>
+          </div>
+          <input type="range" class="range-slider" id="downPaymentRange" min="0" max="15000000" step="50000" value="1000000">
+          <div class="slider-labels">
+            <span>₹0</span>
+            <span>₹75 Lakhs</span>
+            <span>₹1.5 Crores</span>
+          </div>
+        </div>
+
+        <!-- Interest Rate -->
+        <div class="input-group">
+          <div class="input-header">
+            <label class="input-label" for="interestInput">Interest Rate (%)</label>
+            <div class="input-val-box">
+              <input type="text" id="interestText" value="8.5" style="width: 50px;" aria-label="Interest rate percentage">
+              <span>%</span>
+            </div>
+          </div>
+          <input type="range" class="range-slider" id="interestRange" min="5" max="15" step="0.1" value="8.5">
+          <div class="slider-labels">
+            <span>5%</span>
+            <span>10%</span>
+            <span>15%</span>
+          </div>
+        </div>
+
+        <!-- Loan Tenure -->
+        <div class="input-group">
+          <div class="input-header">
+            <label class="input-label" for="tenureInput">Loan Tenure (Years)</label>
+            <div class="input-val-box">
+              <input type="text" id="tenureText" value="20" style="width: 40px;" aria-label="Loan tenure in years">
+              <span>Yrs</span>
+            </div>
+          </div>
+          <input type="range" class="range-slider" id="tenureRange" min="5" max="30" step="1" value="20">
+          <div class="slider-labels">
+            <span>5 Years</span>
+            <span>17 Years</span>
+            <span>30 Years</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Results Display -->
+      <div class="results-card">
+        
+        <div class="emi-display">
+          <p class="emi-title">Monthly Payment (EMI)</p>
+          <div class="emi-value" id="emiValue">₹34,713 <span>/ month</span></div>
+        </div>
+
+        <!-- Donut Chart -->
+        <div class="chart-container">
+          <svg class="chart-svg" width="200" height="200">
+            <circle class="chart-bg-circle" cx="100" cy="100" r="75"></circle>
+            <circle class="chart-val-circle" id="chartValueCircle" cx="100" cy="100" r="75"></circle>
+          </svg>
+          <div class="chart-center-text">Breakdown</div>
+        </div>
+
+        <!-- Breakdown Details -->
+        <div class="stats-breakdown">
+          <div class="stat-row">
+            <span class="stat-name">
+              <span class="stat-dot principal"></span>
+              Loan Principal Amount
+            </span>
+            <span class="stat-value" id="principalValue">₹40,00,000</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-name">
+              <span class="stat-dot interest"></span>
+              Total Interest Payable
+            </span>
+            <span class="stat-value" id="interestValue">₹43,31,039</span>
+          </div>
+          <div class="stat-row" style="border-top: 1px dashed rgba(255,255,255,0.15); margin-top: 0.5rem; padding-top: 1rem;">
+            <span class="stat-name" style="font-weight: 600; color: var(--white);">
+              Total Cost of Loan
+            </span>
+            <span class="stat-value" id="totalValue" style="color: var(--gold);">₹83,31,039</span>
+          </div>
+        </div>
+
+        <a href="#" class="btn btn-whatsapp" id="whatsappCta">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enquire on WhatsApp
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Bank Rates Section -->
+    <div class="bank-rates-section">
+      <div class="api-status-bar">
+        <div class="api-status">
+          <span style="color: var(--gold); margin-right: 0.25rem;">ⓘ</span>
+          <span>Home Loan Rate Comparison</span>
+        </div>
+        <div class="status-indicator">
+          <span class="status-dot online" id="apiStatusDot"></span>
+          <span id="apiStatusText" style="color: var(--text-body);">Bank API: Connected</span>
+        </div>
+      </div>
+      
+      <h2 class="bank-rates-title">Compare Bank Interest Rates</h2>
+      <p class="bank-rates-desc">Select any lender below to automatically apply their interest rate to the calculator. Rates are fetched in real-time from bank API resources.</p>
+      
+      <div class="bank-cards-grid" id="bankCardsGrid">
+        <!-- Dynamically loaded bank cards will go here -->
+        <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">
+          <span>Loading dynamic bank rates...</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
+          ARK <span>Infra</span>
+        </a>
+        <p>Premium real estate development &mdash; building dreams and creating landmarks with ARK Infra.</p>
+        <div class="footer-social" aria-label="Social Links & Contact">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=arkinfraproperties@gmail.com" target="_blank" rel="noopener noreferrer" aria-label="Email Us">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/share/1DL6SnDUaj/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/arkinfra_97?igsh=MTgxZWxza2djOGk1OA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block;">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="emi-calculator.html">EMI Calculator</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Projects</h4>
+        <ul>
+          <li><a href="projects.html">Luxury Apartments</a></li>
+          <li><a href="projects.html">Residential Layouts</a></li>
+          <li><a href="projects.html">Commercial</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918125547801">+91 81255 47801</a></li>
+          <li><a href="contact.html">Enquire via form</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 ARK Infra. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // 1. Menu Controls
+      const menuToggle = document.getElementById('menuToggle');
+      const navMobile = document.getElementById('navMobile');
+
+      menuToggle.addEventListener('click', function () {
+        const open = navMobile.classList.toggle('open');
+        menuToggle.classList.toggle('active', open);
+        menuToggle.setAttribute('aria-expanded', open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      });
+
+      navMobile.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          navMobile.classList.remove('open');
+          menuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+
+      // 2. Calculator Logic
+      const priceRange = document.getElementById('priceRange');
+      const priceText = document.getElementById('priceText');
+      const downPaymentRange = document.getElementById('downPaymentRange');
+      const downPaymentText = document.getElementById('downPaymentText');
+      const interestRange = document.getElementById('interestRange');
+      const interestText = document.getElementById('interestText');
+      const tenureRange = document.getElementById('tenureRange');
+      const tenureText = document.getElementById('tenureText');
+
+      const emiValueEl = document.getElementById('emiValue');
+      const principalValueEl = document.getElementById('principalValue');
+      const interestValueEl = document.getElementById('interestValue');
+      const totalValueEl = document.getElementById('totalValue');
+      const whatsappCta = document.getElementById('whatsappCta');
+      const chartCircle = document.getElementById('chartValueCircle');
+
+      const circleCircumference = 2 * Math.PI * 75; // r = 75, C = 471.24
+      chartCircle.style.strokeDasharray = circleCircumference;
+
+      function parseFormattedNumber(val) {
+        return parseFloat(val.replace(/,/g, '')) || 0;
+      }
+
+      function formatIndianNumber(num) {
+        // Formats to Indian system, e.g. 5000000 -> 50,00,000
+        const str = Math.round(num).toString();
+        let lastThree = str.substring(str.length - 3);
+        const otherBits = str.substring(0, str.length - 3);
+        if (otherBits !== '') {
+          lastThree = ',' + lastThree;
+        }
+        const res = otherBits.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+        return res;
+      }
+
+      function updateCalculations() {
+        const propertyPrice = parseFormattedNumber(priceText.value);
+        const downPayment = parseFormattedNumber(downPaymentText.value);
+        const annualInterest = parseFloat(interestText.value) || 0;
+        const tenureYears = parseFloat(tenureText.value) || 0;
+
+        // Ensure down payment doesn't exceed property value
+        if (downPayment > propertyPrice) {
+          downPaymentText.value = formatIndianNumber(propertyPrice);
+          downPaymentRange.value = propertyPrice;
+          return updateCalculations();
+        }
+
+        const loanPrincipal = propertyPrice - downPayment;
+        
+        let emi = 0;
+        let totalInterest = 0;
+        let totalCost = propertyPrice;
+
+        if (loanPrincipal > 0 && tenureYears > 0) {
+          const monthlyRate = annualInterest / 12 / 100;
+          const months = tenureYears * 12;
+
+          if (monthlyRate === 0) {
+            emi = loanPrincipal / months;
+          } else {
+            emi = loanPrincipal * monthlyRate * Math.pow(1 + monthlyRate, months) / (Math.pow(1 + monthlyRate, months) - 1);
+          }
+
+          totalCost = emi * months;
+          totalInterest = totalCost - loanPrincipal;
+        }
+
+        // Update UI Text values
+        emiValueEl.innerHTML = `₹${formatIndianNumber(Math.round(emi))} <span>/ month</span>`;
+        principalValueEl.textContent = `₹${formatIndianNumber(Math.round(loanPrincipal))}`;
+        interestValueEl.textContent = `₹${formatIndianNumber(Math.round(totalInterest))}`;
+        totalValueEl.textContent = `₹${formatIndianNumber(Math.round(totalCost + downPayment))}`; // total cash spent including down payment
+
+        // Update SVG Donut Chart (represents ratio of Interest to total Loan amount)
+        if (loanPrincipal > 0 && totalCost > 0) {
+          const interestRatio = totalInterest / totalCost;
+          const dashoffset = circleCircumference * (1 - interestRatio);
+          chartCircle.style.strokeDashoffset = dashoffset;
+        } else {
+          chartCircle.style.strokeDashoffset = circleCircumference;
+        }
+
+        // Update WhatsApp CTA
+        const waText = `Hello ARK Infra! I have calculated my loan details using the website EMI calculator:
+
+Property Value: ₹${formatIndianNumber(propertyPrice)}
+Down Payment: ₹${formatIndianNumber(downPayment)}
+Loan Principal: ₹${formatIndianNumber(loanPrincipal)}
+Interest Rate: ${annualInterest}%
+Loan Tenure: ${tenureYears} Years
+-----------------------------------
+Estimated Monthly EMI: ₹${formatIndianNumber(Math.round(emi))}/month
+
+I would like to enquire about plots and site visit options.`;
+        whatsappCta.href = `https://wa.me/918125547801?text=${encodeURIComponent(waText)}`;
+      }
+
+      // Range Sliders Input Handlers
+      priceRange.addEventListener('input', function () {
+        priceText.value = formatIndianNumber(this.value);
+        // Dynamically adjust down payment max range to match property price
+        downPaymentRange.max = this.value;
+        updateCalculations();
+      });
+
+      downPaymentRange.addEventListener('input', function () {
+        downPaymentText.value = formatIndianNumber(this.value);
+        updateCalculations();
+      });
+
+      interestRange.addEventListener('input', function () {
+        interestText.value = this.value;
+        updateCalculations();
+      });
+
+      tenureRange.addEventListener('input', function () {
+        tenureText.value = this.value;
+        updateCalculations();
+      });
+
+      // Text Input Handlers (re-format on change, sync range slider)
+      priceText.addEventListener('blur', function () {
+        let val = parseFormattedNumber(this.value);
+        if (val < 1000000) val = 1000000;
+        if (val > 50000000) val = 50000000;
+        this.value = formatIndianNumber(val);
+        priceRange.value = val;
+        downPaymentRange.max = val;
+        updateCalculations();
+      });
+
+      downPaymentText.addEventListener('blur', function () {
+        let val = parseFormattedNumber(this.value);
+        const maxVal = parseFormattedNumber(priceText.value);
+        if (val < 0) val = 0;
+        if (val > maxVal) val = maxVal;
+        this.value = formatIndianNumber(val);
+        downPaymentRange.value = val;
+        updateCalculations();
+      });
+
+      interestText.addEventListener('blur', function () {
+        let val = parseFloat(this.value) || 8.5;
+        if (val < 5) val = 5;
+        if (val > 15) val = 15;
+        this.value = val.toFixed(1);
+        interestRange.value = val;
+        updateCalculations();
+      });
+
+      tenureText.addEventListener('blur', function () {
+        let val = parseInt(this.value) || 20;
+        if (val < 5) val = 5;
+        if (val > 30) val = 30;
+        this.value = val;
+        tenureRange.value = val;
+        updateCalculations();
+      });
+
+      // 3. Bank Rates API Integration
+      const bankCardsGrid = document.getElementById('bankCardsGrid');
+      const apiStatusDot = document.getElementById('apiStatusDot');
+      const apiStatusText = document.getElementById('apiStatusText');
+      
+      const fallbackRates = [
+        { id: "sbi", name: "State Bank of India (SBI)", minRate: 8.40, maxRate: 9.10, defaultRate: 8.50, processingFee: "0.35% of Loan (Min ₹2,000, Max ₹10,000)", badge: "Lowest rates", logoColor: "#0080c6", logoText: "SBI" },
+        { id: "hdfc", name: "HDFC Bank Ltd", minRate: 8.70, maxRate: 9.35, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Fast processing", logoColor: "#003366", logoText: "HDFC" },
+        { id: "lic", name: "LIC Housing Finance", minRate: 8.50, maxRate: 9.20, defaultRate: 8.65, processingFee: "₹10,000 + GST flat fee", badge: "High eligibility", logoColor: "#c79e24", logoText: "LIC" },
+        { id: "icici", name: "ICICI Bank Ltd", minRate: 8.75, maxRate: 9.50, defaultRate: 8.80, processingFee: "0.50% of Loan amount", badge: "Instant digital approval", logoColor: "#f06622", logoText: "ICICI" },
+        { id: "axis", name: "Axis Bank Ltd", minRate: 8.75, maxRate: 9.40, defaultRate: 8.85, processingFee: "0.50% of Loan (Min ₹10,000)", badge: "Flexible tenure", logoColor: "#97144d", logoText: "AXIS" },
+        { id: "kotak", name: "Kotak Mahindra Bank", minRate: 8.70, maxRate: 9.25, defaultRate: 8.75, processingFee: "0.50% of Loan amount", badge: "Premium benefits", logoColor: "#ed1c24", logoText: "KOTAK" },
+        { id: "bob", name: "Bank of Baroda (BoB)", minRate: 8.40, maxRate: 9.15, defaultRate: 8.45, processingFee: "0.25% of Loan amount", badge: "Government backing", logoColor: "#f26522", logoText: "BOB" },
+        { id: "pnb", name: "Punjab National Bank (PNB)", minRate: 8.45, maxRate: 9.00, defaultRate: 8.55, processingFee: "0.35% of Loan amount", badge: "Low interest", logoColor: "#a51c24", logoText: "PNB" },
+        { id: "union", name: "Union Bank of India", minRate: 8.50, maxRate: 9.05, defaultRate: 8.60, processingFee: "0.40% of Loan amount", badge: "Flexible repayment", logoColor: "#0054a6", logoText: "UNION" },
+        { id: "canara", name: "Canara Bank", minRate: 8.55, maxRate: 9.10, defaultRate: 8.65, processingFee: "0.50% of Loan amount", badge: "Nil prepayment penalty", logoColor: "#0091ff", logoText: "CANARA" },
+        { id: "federal", name: "Federal Bank", minRate: 8.80, maxRate: 9.60, defaultRate: 8.90, processingFee: "0.50% of Loan (Min ₹3,000)", badge: "Nil foreclosure fee", logoColor: "#0c5096", logoText: "FED" },
+        { id: "idbi", name: "IDBI Bank Ltd", minRate: 8.75, maxRate: 9.35, defaultRate: 8.85, processingFee: "0.50% of Loan amount", badge: "Quick documentation", logoColor: "#00935f", logoText: "IDBI" },
+        { id: "boi", name: "Bank of India (BoI)", minRate: 8.45, maxRate: 9.05, defaultRate: 8.50, processingFee: "0.25% of Loan amount", badge: "Easy sanction", logoColor: "#003b87", logoText: "BOI" },
+        { id: "indusind", name: "IndusInd Bank", minRate: 8.75, maxRate: 9.50, defaultRate: 8.95, processingFee: "0.50% of Loan amount", badge: "High loan amount", logoColor: "#8b2031", logoText: "INDUS" },
+        { id: "yes", name: "Yes Bank Ltd", minRate: 8.95, maxRate: 9.75, defaultRate: 9.15, processingFee: "0.50% of Loan amount", badge: "Co-signed offers", logoColor: "#0b5294", logoText: "YES" },
+        { id: "indian", name: "Indian Bank", minRate: 8.50, maxRate: 9.10, defaultRate: 8.60, processingFee: "0.25% of Loan amount", badge: "Trusted public sector", logoColor: "#0a43a4", logoText: "INDIAN" },
+        { id: "central", name: "Central Bank of India", minRate: 8.55, maxRate: 9.05, defaultRate: 8.65, processingFee: "0.35% of Loan amount", badge: "Reputable service", logoColor: "#023c91", logoText: "CBI" },
+        { id: "iob", name: "Indian Overseas Bank", minRate: 8.60, maxRate: 9.15, defaultRate: 8.70, processingFee: "0.40% of Loan amount", badge: "Flexible schemes", logoColor: "#0c3c9c", logoText: "IOB" },
+        { id: "idfc", name: "IDFC First Bank", minRate: 8.85, maxRate: 9.40, defaultRate: 8.90, processingFee: "0.50% of Loan amount", badge: "High customer trust", logoColor: "#990033", logoText: "IDFC" },
+        { id: "maharashtra", name: "Bank of Maharashtra", minRate: 8.35, maxRate: 8.95, defaultRate: 8.40, processingFee: "0.20% of Loan amount", badge: "Lowest starting rate", logoColor: "#08418c", logoText: "BOM" }
+      ];
+
+      function renderBankCards(banks, isLive) {
+        bankCardsGrid.innerHTML = '';
+        
+        if (isLive) {
+          apiStatusDot.className = 'status-dot online';
+          apiStatusText.textContent = 'Bank API: Connected';
+        } else {
+          apiStatusDot.className = 'status-dot offline';
+          apiStatusText.textContent = 'Bank API: Offline (Cached)';
+        }
+
+        banks.forEach(bank => {
+          const card = document.createElement('div');
+          card.className = 'bank-rate-card';
+          card.setAttribute('data-rate', bank.defaultRate);
+          card.setAttribute('data-id', bank.id);
+          
+          // Get official logo text abbreviation or fallback to parsed initials
+          const logoText = bank.logoText || bank.name.split(' ').map(n => n[0]).join('').substring(0, 3).toUpperCase();
+          const logoHtml = `<div class="bank-card-logo-placeholder" style="background-color: ${bank.logoColor || '#c9a962'}">${logoText}</div>`;
+          
+          let badgeHtml = '';
+          if (bank.badge) {
+            badgeHtml = `<div class="bank-card-badge">${bank.badge}</div>`;
+          }
+
+          card.innerHTML = `
+            ${badgeHtml}
+            <div>
+              <div class="bank-card-header">
+                ${logoHtml}
+                <div class="bank-card-name">${bank.name}</div>
+              </div>
+              <div class="bank-card-rate-info">
+                <div class="bank-card-rate-val">${bank.minRate.toFixed(2)}% - ${bank.maxRate.toFixed(2)}%</div>
+                <div class="bank-card-rate-fee">Fee: ${bank.processingFee}</div>
+              </div>
+            </div>
+            <button class="bank-card-action-btn">Apply ${bank.defaultRate.toFixed(2)}% Rate</button>
+          `;
+
+          card.addEventListener('click', function () {
+            // Remove active class from all cards
+            document.querySelectorAll('.bank-rate-card').forEach(c => c.classList.remove('active-rate'));
+            
+            // Add active class to this card
+            card.classList.add('active-rate');
+            
+            // Update slider & text values
+            interestRange.value = bank.defaultRate;
+            interestText.value = bank.defaultRate;
+            
+            // Re-calculate
+            updateCalculations();
+          });
+
+          bankCardsGrid.appendChild(card);
+        });
+
+        // Initialize active highlight if default interest matches one of the banks
+        highlightMatchingBankCard(parseFloat(interestText.value));
+      }
+
+      function highlightMatchingBankCard(currentRate) {
+        document.querySelectorAll('.bank-rate-card').forEach(card => {
+          const cardRate = parseFloat(card.getAttribute('data-rate'));
+          if (Math.abs(cardRate - currentRate) < 0.01) {
+            card.classList.add('active-rate');
+          } else {
+            card.classList.remove('active-rate');
+          }
+        });
+      }
+
+      // Hook into manual input changes to update selected state of cards
+      interestRange.addEventListener('input', function() {
+        highlightMatchingBankCard(parseFloat(this.value));
+      });
+      interestText.addEventListener('blur', function() {
+        highlightMatchingBankCard(parseFloat(this.value));
+      });
+
+      // Load rates from API (local JSON file with cache buster)
+      fetch('data/bank-rates.json?v=' + Date.now())
+        .then(response => {
+          if (!response.ok) throw new Error('API request failed');
+          return response.json();
+        })
+        .then(data => {
+          renderBankCards(data, true);
+        })
+        .catch(error => {
+          console.warn('Bank rates API failed, loading local fallback rates:', error);
+          renderBankCards(fallbackRates, false);
+        });
+
+      // Trigger initial calculation
+      updateCalculations();
+    })();
+  </script>
+  <script src="chatbot.js"></script>
+</body>
+</html>

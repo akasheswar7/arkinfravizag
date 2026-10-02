@@ -1021,6 +1021,7 @@
       <div class="footer-legal">
         <a href="#" id="openPrivacy">Privacy Policy</a>
         <a href="#" id="openTerms">Terms &amp; Conditions</a>
+        <a href="admin.html">Admin / CEO Portal</a>
       </div>
     </div>
   </footer>
@@ -1046,7 +1047,7 @@
       <p>Property details, pricing, and availability must be confirmed in writing with authorized ARK Infra representatives.</p>
     </div>
   </div>
-
+  <script src="js/api.js"></script>
   <script>
     (function () {
       const header = document.getElementById('header');
@@ -1105,6 +1106,48 @@
       document.querySelectorAll('.modal').forEach(function (modal) {
         modal.addEventListener('click', function (e) { if (e.target === modal) closeModals(); });
       });
+      // Dynamic Gallery Hydration from FastAPI / MongoDB
+      function bindGalleryLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        document.querySelectorAll('.gallery-item img').forEach(function (img) {
+          img.onclick = function () {
+            lightboxImg.src = img.dataset.full || img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          };
+        });
+      }
+
+      async function hydrateDynamicGallery() {
+        if (!window.ArkApi) return;
+        try {
+          const items = await window.ArkApi.getGallery('all');
+          if (items && items.length > 0) {
+            const grid = document.getElementById('galleryGrid');
+            if (grid) {
+              grid.innerHTML = items.map((g, idx) => {
+                let tag = "event";
+                if (g.category && (g.category.toLowerCase().includes("site") || g.category.toLowerCase().includes("project"))) {
+                  tag = "site";
+                }
+                const isTall = idx % 4 === 0 ? " tall" : (idx % 4 === 3 ? " wide" : "");
+                return `
+                  <div class="gallery-item${isTall}" data-gallery="${tag}">
+                    <img src="${g.thumbnail_url || g.image_url}" alt="${g.title}" loading="lazy" data-full="${g.image_url}">
+                  </div>
+                `;
+              }).join('');
+              bindGalleryLightbox();
+            }
+          }
+        } catch (e) {
+          console.warn("Could not load dynamic gallery, using static fallback.");
+        }
+      }
+      hydrateDynamicGallery();
+
       document.querySelectorAll('.gallery-filter').forEach(function (btn) {
         btn.addEventListener('click', function () {
           document.querySelectorAll('.gallery-filter').forEach(function (b) { b.classList.remove('active'); });
@@ -1152,6 +1195,7 @@
       });
     })();
   </script>
+
   <script src="chatbot.js"></script>
 </body>
 </html>
