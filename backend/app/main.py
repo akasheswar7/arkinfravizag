@@ -1,7 +1,14 @@
 import os
+import sys
 import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
+
+# Ensure backend directory is in sys.path for serverless environments (Vercel)
+backend_dir = Path(__file__).resolve().parent.parent
+if str(backend_dir) not in sys.path:
+    sys.path.insert(0, str(backend_dir))
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
