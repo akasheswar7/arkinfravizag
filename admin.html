@@ -2026,10 +2026,1724 @@
     }
 
     // --- 4. Customers CRUD ---
+    const DEFAULT_DIRECTORS = [
+  {
+    "id": "6ab51350498b4e47714a2bd5",
+    "name": "ADARI RAMAKRISHNA",
+    "role": "MANAGING DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e8ddda31a8ce.webp",
+    "phone": "+91 98484 98070",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6ab51665f127d6b0ce2c9a83",
+    "name": "KONATHALA ARUN",
+    "role": "CEO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_1b20c5ee3158.webp",
+    "phone": "+91 8125547801",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf694e75af2063649ed571",
+    "name": "ADARI VENKATARAO ",
+    "role": "EXECUTIVE DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_04d961f0c282.webp",
+    "phone": "+91 9848393473",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf6abe75af2063649ed57a",
+    "name": "Y.VIGNESH",
+    "role": "BRANCH MANAGER",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_67341f182311.webp",
+    "phone": "+91 9014550481",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf6cbdf6ddc0b96e3581f1",
+    "name": "ASSISTANT BRANCH MANAGER",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8ff1e21477b5.webp",
+    "phone": "",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf6eb226f6ea401698e128",
+    "name": "M.SRAVANI",
+    "role": "HR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_966f56f9d139.webp",
+    "phone": "+91 8247785065",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf701926f6ea401698e12d",
+    "name": "MISHRA",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_234d68f01edf.webp",
+    "phone": "+91 9440357159",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf706b2220b0a9ccec225b",
+    "name": "DHANARAJ",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_a15fdbc2e870.webp",
+    "phone": "+91 9347117705",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf70f626f6ea401698e132",
+    "name": "NANAJI",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_12a0593cd0f3.webp",
+    "phone": "+91 9398435677",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf72d326f6ea401698e13b",
+    "name": "BALU ",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ae561182c88f.webp",
+    "phone": "+91 7842192064",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf731926f6ea401698e13c",
+    "name": "VENKAT",
+    "role": "DIRECTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_40ff831f22da.webp",
+    "phone": "+91 9177777026",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf73fb2220b0a9ccec225c",
+    "name": "RATNAM",
+    "role": "OFFICE ASSISSTANT ",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_a479aa9a87fb.webp",
+    "phone": "+91 8143178744",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf84aa6ee5502f446b9b88",
+    "name": "SRAVANI",
+    "role": "TEAM LEADER",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_026a43970584.webp",
+    "phone": "+91 7893278271",
+    "email": "arkinfraproperties@gmail.com"
+  },
+  {
+    "id": "6abf9521a69fde9c3b78be6b",
+    "name": "SAMBHA",
+    "role": "TEAM LEADER",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_53cf2d75836c.webp",
+    "phone": "+91 9010202755",
+    "email": "arkinfraproperties@gmail.com"
+  }
+];
+
+const DEFAULT_AGENTS = [
+  {
+    "id": "6abf7fdb6ee5502f446b9b6f",
+    "full_name": "NALINI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bd4d3a96d170.webp",
+    "phone": "+91 9603617735",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf7ffd6ee5502f446b9b74",
+    "full_name": "SAMBHA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_fe5669ccada0.webp",
+    "phone": "+91 9010202755",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf801b6ee5502f446b9b79",
+    "full_name": "GAYATHRI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_5be6018ee449.webp",
+    "phone": "+91 7205757189",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf80dfde39bc04ef49fded",
+    "full_name": "SRI KIRAN",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_4c0b883d50ba.webp",
+    "phone": "+91 9393268194",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf80fbde39bc04ef49fdf2",
+    "full_name": "M.NAYAK",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ab0aa6ba49b5.webp",
+    "phone": "+91 8463964367",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf811d6ee5502f446b9b7e",
+    "full_name": "NAGESHWARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_f5dd590055fc.webp",
+    "phone": "+91 9705297662",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf813c6ee5502f446b9b83",
+    "full_name": "KANAKARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_f2fe8d21189f.webp",
+    "phone": "+91 9491606998",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf816aa9a87ccd5334c300",
+    "full_name": "SRINIVAS",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ca236beff46d.webp",
+    "phone": "+91 7075351720",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8199de39bc04ef49fdf7",
+    "full_name": "SAVITRI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_87bcb74675ca.webp",
+    "phone": "+91 8106411563",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf81b6de39bc04ef49fdfc",
+    "full_name": "SUDHA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_173f86838a5c.webp",
+    "phone": "+91 9493439908",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf81dea9a87ccd5334c305",
+    "full_name": "TRINADH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e819ab74d942.webp",
+    "phone": "+91 8074324269",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf81f9de39bc04ef49fe01",
+    "full_name": "KRISHNA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_dca484824368.webp",
+    "phone": "+91 9177632130",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8221de39bc04ef49fe06",
+    "full_name": "VENKATESHWARULLU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_370ecf9b5f1d.webp",
+    "phone": "+91 9951711903",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf82a3a9a87ccd5334c30a",
+    "full_name": "BEGAM",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_34e6ff1bdcab.webp",
+    "phone": "+91 9391507764",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf82ffa9a87ccd5334c31b",
+    "full_name": "VAASU(STEEL PLANT)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bbcd3bec6459.webp",
+    "phone": "+91 7075810535",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8329de39bc04ef49fe0b",
+    "full_name": "PRASHAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_d26ee0d4178f.webp",
+    "phone": "+91 9505767067",
+    "director_id": "6abf701926f6ea401698e12d",
+    "team_head_name": "MISHRA",
+    "director_name": "MISHRA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8518a9a87ccd5334c320",
+    "full_name": "S.LAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_50624afca17b.webp",
+    "phone": "+91 8374097794",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf853fa9a87ccd5334c325",
+    "full_name": "D.DHANALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ec2446de3948.webp",
+    "phone": "+91 9100250846",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf855f26fab5edb87dc427",
+    "full_name": "VARALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_deda13cfbf00.webp",
+    "phone": "+91 9704838196",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf85e326fab5edb87dc431",
+    "full_name": "PARASURAM",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ee31b7c951be.webp",
+    "phone": "+91 9063737169",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf86026ee5502f446b9b8d",
+    "full_name": "ANURADHA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_076243d4dd25.webp",
+    "phone": "+91 8886207982",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf861a6ee5502f446b9b92",
+    "full_name": "RAMANI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_9684461ad441.webp",
+    "phone": "+91 8374913218",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf863fa9a87ccd5334c32a",
+    "full_name": "KUMARI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_b0700a2cbeef.webp",
+    "phone": "+91 8019649668",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf865d26fab5edb87dc436",
+    "full_name": "RAMALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_dc33489ff8ff.webp",
+    "phone": "+91 8341955411",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf867fa9a87ccd5334c32f",
+    "full_name": "SANTHI PRIYA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_13b2f20481d4.webp",
+    "phone": "+91 7670843250",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf86a526fab5edb87dc43b",
+    "full_name": "N.APPALARAJU(STEEL PLANT)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c5208835a836.webp",
+    "phone": "+91 9849187418",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf86df26fab5edb87dc440",
+    "full_name": "LOVARAJU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_3dcd05e15ed2.webp",
+    "phone": "+91 9789027912",
+    "director_id": "6abf84aa6ee5502f446b9b88",
+    "team_head_name": "SRAVANI",
+    "director_name": "SRAVANI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf870926fab5edb87dc445",
+    "full_name": "NAGHESHWARI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_6e106d552aea.webp",
+    "phone": "+91 9676333366",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf87306ee5502f446b9b97",
+    "full_name": "KALYANI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ec29497b97f3.webp",
+    "phone": "+91 9347095513",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf87576ee5502f446b9b9c",
+    "full_name": "DEEPTHI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_d1ccdbd99f36.webp",
+    "phone": "+91 8099667044",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf877426fab5edb87dc44a",
+    "full_name": "VASUNDHARA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_f5012221ba39.webp",
+    "phone": "+91 9866461410",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf879326fab5edb87dc44f",
+    "full_name": "BHASKARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_803d56865356.webp",
+    "phone": "+91 6301920613",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf87b46ee5502f446b9ba1",
+    "full_name": "Y.RAMALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_a3d46b0e3425.webp",
+    "phone": "+91 7013642269",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf87d66ee5502f446b9ba6",
+    "full_name": "K.LAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c8da18cbc6ac.webp",
+    "phone": "+91 9347996305",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8817a9a87ccd5334c334",
+    "full_name": "ASI RAMANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_dbd5ed37d2e3.webp",
+    "phone": "+91 9299853575",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf88376ee5502f446b9bab",
+    "full_name": "VARALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_804300041622.webp",
+    "phone": "+91 7731074006",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf885d26fab5edb87dc454",
+    "full_name": "NARAYANA RAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_d4c2b12ada3d.webp",
+    "phone": "+91 9000535373",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf88986ee5502f446b9bb0",
+    "full_name": "LALITHA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c81de8e36607.webp",
+    "phone": "+91 9391341933",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf88b86ee5502f446b9bb5",
+    "full_name": "ANNAPURNA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_4522401f2d7d.webp",
+    "phone": "+91 9581057099",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf88e6a9a87ccd5334c339",
+    "full_name": "BHIMA RAO(X-ARMY)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8ff336bad492.webp",
+    "phone": "+91 8106420862",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8902a9a87ccd5334c33e",
+    "full_name": "V.PARVATHI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_db8cea275455.webp",
+    "phone": "+91 8328674417",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf89226ee5502f446b9bba",
+    "full_name": "MANJULAA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c4fcc6ac6ac7.webp",
+    "phone": "+91 9550972625",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf894f6ee5502f446b9bbf",
+    "full_name": "TEJASWINI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_6b66aa5d355e.webp",
+    "phone": "+91 7660952922",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf899e26fab5edb87dc459",
+    "full_name": "U.SRINU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_3289c58474ed.webp",
+    "phone": "+91 9581531044",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf89b96ee5502f446b9bc4",
+    "full_name": "SRINIVAS",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_36ab7e05b5dd.webp",
+    "phone": "+91 9010303690",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf89d6a9a87ccd5334c343",
+    "full_name": "LAKSHITH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bdb8674a68a5.webp",
+    "phone": "+91 7901457078",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf89f1a9a87ccd5334c348",
+    "full_name": "RAMYA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_92bbc70a6f5f.webp",
+    "phone": "+91 7036154533",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8a0f6ee5502f446b9bc9",
+    "full_name": "RAMADEVI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_fddd6bac5f00.webp",
+    "phone": "+91 8688042142",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8a2ba9a87ccd5334c34d",
+    "full_name": "AMMAJI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8f3087d1a378.webp",
+    "phone": "+91 9398333021",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8a456ee5502f446b9bce",
+    "full_name": "MANGA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_11e57805f956.webp",
+    "phone": "+91 8886573658",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8a5f6ee5502f446b9bd3",
+    "full_name": "INDHU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_f36c3832f1eb.webp",
+    "phone": "+91 9110775442",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8a7e6ee5502f446b9bd8",
+    "full_name": "M.LAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_1264bad60555.webp",
+    "phone": "+91 7993386334",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8aeaa9a87ccd5334c352",
+    "full_name": "JAYAAMMA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_34b902b3ab3c.webp",
+    "phone": "+91 6281029628",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8b0ba9a87ccd5334c357",
+    "full_name": "M.SHIVA LAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_71092999a6c7.webp",
+    "phone": "+91 9951888469",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8b256ee5502f446b9bdd",
+    "full_name": "CH.RAMALAKSHMI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_de15b23a5fd8.webp",
+    "phone": "+91 9154200684",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8b3e6ee5502f446b9be2",
+    "full_name": "K.ANITHA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_de432fd6847c.webp",
+    "phone": "+91 9676600848",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8b626ee5502f446b9be7",
+    "full_name": "CH.SUKANYA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_a8bea3233f33.webp",
+    "phone": "+91 7396094744",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8b84a9a87ccd5334c35c",
+    "full_name": "K.RAJU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_cdec62eb6b03.webp",
+    "phone": "+91 9908330020",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8ba3a9a87ccd5334c361",
+    "full_name": "K.RAVI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8bfeb01a8d04.webp",
+    "phone": "+91 8639993634",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8bd1a9a87ccd5334c366",
+    "full_name": "VISHAL",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_9a9eeb28f162.webp",
+    "phone": "+91 8106347168",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8bf526fab5edb87dc45e",
+    "full_name": "SAROJA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_093e6d8aa921.webp",
+    "phone": "+91 9440822917",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8c1d26fab5edb87dc463",
+    "full_name": "SRINIVAS RAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ae88678ce816.webp",
+    "phone": "+91 9849197393",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8c4a26fab5edb87dc468",
+    "full_name": "MINNI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_66c8d3e25864.webp",
+    "phone": "+91 7075637170",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8c656ee5502f446b9bec",
+    "full_name": "NIRMALA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_9d828fb058b0.webp",
+    "phone": "+91 9618114528",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8c866ee5502f446b9bf1",
+    "full_name": "GOPI MARRY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_ee106b88784e.webp",
+    "phone": "+91 9653314894",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8ca56ee5502f446b9bf6",
+    "full_name": "SUDHA RANI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c53e97317f1b.webp",
+    "phone": "+91 9963357978",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8cbda9a87ccd5334c36b",
+    "full_name": "BABY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_3d1c1e94ed75.webp",
+    "phone": "+91 9100916328",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8dbfa69fde9c3b78be20",
+    "full_name": "SUNIL",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_30f55da7caf0.webp",
+    "phone": "+91 8978448762",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8ddba69fde9c3b78be25",
+    "full_name": "RAJESH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_19f5869abd6a.webp",
+    "phone": "+91 7036951254",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8df7a69fde9c3b78be2a",
+    "full_name": "N.V.RAMANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_b91549e2d22b.webp",
+    "phone": "+91 9346423426",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8e55a69fde9c3b78be2f",
+    "full_name": "K.SATYANARAYANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_348e5a322346.webp",
+    "phone": "+91 8106410189",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8e79e50a190702063cd7",
+    "full_name": "G.SATYANARAYANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_d93be7e2dd75.webp",
+    "phone": "+91 8106745864",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8e99a69fde9c3b78be34",
+    "full_name": "KARRI.PRASAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_53f7936f27d7.webp",
+    "phone": "+91 8106820860",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8eb8a69fde9c3b78be39",
+    "full_name": "ALEKHYA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_2c6b449de026.webp",
+    "phone": "+91 9505258698",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8ed4e50a190702063cdc",
+    "full_name": "JHANSI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_5c7970142e35.webp",
+    "phone": "+91 9603673899",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8ef5a69fde9c3b78be3e",
+    "full_name": "VAASU(DOKYARD)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_67405f33f8a1.webp",
+    "phone": "+91 9059904509",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8f1ae50a190702063ce1",
+    "full_name": "ARUN(WAFFALET)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_fcaa268fd2da.webp",
+    "phone": "+91 9505967190",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8f4ae50a190702063ce6",
+    "full_name": "RAMA CHANDRA RAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_28c87c18763c.webp",
+    "phone": "+91 9959379336",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8f872970ddcb3e0b2a96",
+    "full_name": "SOMESWARAO(DOKYARD)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c373c02cd777.webp",
+    "phone": "+91 9550598268",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8fa82970ddcb3e0b2a9b",
+    "full_name": "GANGADHAR(ANDHRA BANK)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_97a4959c8d0d.webp",
+    "phone": "+91 9848521412",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf8fcae50a190702063ceb",
+    "full_name": "NANI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_365b06800cf9.webp",
+    "phone": "+91 8897845033",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf90322970ddcb3e0b2aa0",
+    "full_name": "Y.SANYASI RAO(N.V.RAMANA)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_fcd28532c28a.webp",
+    "phone": "+91 9985650839",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf90632970ddcb3e0b2aa5",
+    "full_name": "P.MURTHY(N.V.RAMANA)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e4a9798bc6a4.webp",
+    "phone": "+91 9392115086",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf90ade50a190702063cf0",
+    "full_name": "ARUN SINGH(MINNI)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8c487345626e.webp",
+    "phone": "+91 9502143363",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf90e6a69fde9c3b78be43",
+    "full_name": "SIMHACHALAM",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8d52f055f871.webp",
+    "phone": "+91 7780287619",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9101a69fde9c3b78be48",
+    "full_name": "SRINIVAS REDDY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_6afc83dd5a23.webp",
+    "phone": "+91 9505488204",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf912ae50a190702063cf5",
+    "full_name": "SAFETY OFFICER",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_92c4b55b76be.webp",
+    "phone": "+91 9642920786",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9147e50a190702063cfa",
+    "full_name": "APPARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_02cb7fa812ac.webp",
+    "phone": "+91 9701837908",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9160e50a190702063cff",
+    "full_name": "PRABHAKAR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_62f55f384ee9.webp",
+    "phone": "+91 9866615889",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf917e2970ddcb3e0b2aaa",
+    "full_name": "CHITTI BABU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_1b713fb0db32.webp",
+    "phone": "+91 7386265777",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf91982970ddcb3e0b2aaf",
+    "full_name": "MANOJ",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c5bbf0139999.webp",
+    "phone": "+91 8688497946",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf91aee50a190702063d04",
+    "full_name": "SRINU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_40da84795f64.webp",
+    "phone": "+91 9959930163",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf91cc2970ddcb3e0b2ab4",
+    "full_name": "SANTHOSH(HR)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_91a5ab475a48.webp",
+    "phone": "+91 9398160081",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf91ea2970ddcb3e0b2ab9",
+    "full_name": "VIJAY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_b91ac5ba8ea6.webp",
+    "phone": "+91 7674076044",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9208e50a190702063d09",
+    "full_name": "VENKATESH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e5f47f63b35e.webp",
+    "phone": "+91 9666055248",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9224a69fde9c3b78be4d",
+    "full_name": "M.MURALI KRISHNA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_48c42b765ec2.webp",
+    "phone": "+91 9550939495",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf92412970ddcb3e0b2abe",
+    "full_name": "GANGADHAR REDDY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_293e4ef3dea7.webp",
+    "phone": "+91 7893015218",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf925fa69fde9c3b78be52",
+    "full_name": "DHASKANTARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_10e4aecb098e.webp",
+    "phone": "+91 9346156222",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf92a4a69fde9c3b78be57",
+    "full_name": "LAKSHMAN(RTC)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_28e05cd99fcf.webp",
+    "phone": "+91 9000597286",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf92c1e50a190702063d0e",
+    "full_name": "RAMANA REDDY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c8baeae57019.webp",
+    "phone": "+91 8367358728",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf931b2970ddcb3e0b2ac3",
+    "full_name": "RAJ KUMAR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8db9fb117dbc.webp",
+    "phone": "+91 9390425166",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf933aa69fde9c3b78be5c",
+    "full_name": "P.V.V.S.MURTHY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_6ac95d66898d.webp",
+    "phone": "+91 8330987124",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9353a69fde9c3b78be61",
+    "full_name": "BHAGYA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bd62bf5b4ab0.webp",
+    "phone": "+91 9490840729",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf936ba69fde9c3b78be66",
+    "full_name": "K.K.DOCTOR",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_7e3cc398c385.webp",
+    "phone": "+91 9603446898",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf938be50a190702063d13",
+    "full_name": "D.R.RAVINDHRA RAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_8c22ddc92389.webp",
+    "phone": "+91 9989372298",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf93a4e50a190702063d18",
+    "full_name": "FAIYAT",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_316b5d486a24.webp",
+    "phone": "+91 9985057086",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf93bd2970ddcb3e0b2ac8",
+    "full_name": "KAASI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_4a9861979283.webp",
+    "phone": "+91 9966497040",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf93d7e50a190702063d1d",
+    "full_name": "LOKESH(DOKYARD)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_70398d13e9d7.webp",
+    "phone": "+91 9652560034",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf93f52970ddcb3e0b2acd",
+    "full_name": "PRASAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_1e560217e067.webp",
+    "phone": "+91 7396057234",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf940d2970ddcb3e0b2ad2",
+    "full_name": "ACHIBABU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_72adead861a6.webp",
+    "phone": "+91 9492171201",
+    "director_id": "6abf6abe75af2063649ed57a",
+    "team_head_name": "Y.VIGNESH",
+    "director_name": "Y.VIGNESH",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf957ba69fde9c3b78be70",
+    "full_name": "K.PRASAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_838e58b418a7.webp",
+    "phone": "+91 6300850006",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9598a69fde9c3b78be75",
+    "full_name": "T.VENKATA SWAMY",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e1b0e2886004.webp",
+    "phone": "+91 9666043461",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf95b4e50a190702063d22",
+    "full_name": "M.VENKATA RAMANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_7256dd4d1157.webp",
+    "phone": "+91 9246638225",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf95d0e50a190702063d27",
+    "full_name": "B.KRISHNA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e32f5c5bd972.webp",
+    "phone": "+91 9110739227",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf960f2970ddcb3e0b2adb",
+    "full_name": "D.GANESH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bdb0ff0582de.webp",
+    "phone": "+91 9247285564",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9659a69fde9c3b78be7a",
+    "full_name": "B.RAMESH",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_de059650fe9e.webp",
+    "phone": "+91 7893557745",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf967e2970ddcb3e0b2ae0",
+    "full_name": "B.RAMANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_19895c24e9d2.webp",
+    "phone": "+91 9848427824",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf969ee50a190702063d2c",
+    "full_name": "V.ESHWARI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_3ca1dda755d1.webp",
+    "phone": "+91 8522895727",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf97032970ddcb3e0b2ae5",
+    "full_name": "M.PADMA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_4622e0783e59.webp",
+    "phone": "+91 9704012371",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf97222970ddcb3e0b2aea",
+    "full_name": "K.SRINU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_b9f6f32110cf.webp",
+    "phone": "+91 9440002507",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf973ae50a190702063d31",
+    "full_name": "N.SRINIVAS",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_2a3878933378.webp",
+    "phone": "+91 8917601119",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf97562970ddcb3e0b2aef",
+    "full_name": "G.PRASAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_7825c4603a46.webp",
+    "phone": "+91 9603136851",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9773a69fde9c3b78be7f",
+    "full_name": "S.PRASAD",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_72763538a43e.webp",
+    "phone": "+91 9949360209",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf978d2970ddcb3e0b2af4",
+    "full_name": "P.JAGAN",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_502ba5bebe54.webp",
+    "phone": "+91 9426854291",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf97bda69fde9c3b78be84",
+    "full_name": "B.SAI TARUN",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_4c71cd988d5e.webp",
+    "phone": "+91 7026815782",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9906a69fde9c3b78be89",
+    "full_name": "G.S.N.RAJU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_d30447f2a97a.webp",
+    "phone": "+91 9440631875",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf99322970ddcb3e0b2af9",
+    "full_name": "SREE RAMULU NAIDU",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e8bd9bf22b0b.webp",
+    "phone": "+91 9866190939",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf994ce50a190702063d36",
+    "full_name": "G.RAMANA",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_618892c6a45f.webp",
+    "phone": "+91 9121537809",
+    "director_id": "6abf9521a69fde9c3b78be6b",
+    "team_head_name": "SAMBHA",
+    "director_name": "SAMBHA",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf99b1e50a190702063d3b",
+    "full_name": "JYOTHI(AMMAJI)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_bdabefe2bec5.webp",
+    "phone": "+91 9951158980",
+    "director_id": "6abf72d326f6ea401698e13b",
+    "team_head_name": "BALU ",
+    "director_name": "BALU ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf99e2a69fde9c3b78be8e",
+    "full_name": "APPARAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_b975d8d2500e.webp",
+    "phone": "+91 7396372094",
+    "director_id": "6abf706b2220b0a9ccec225b",
+    "team_head_name": "DHANARAJ",
+    "director_name": "DHANARAJ",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9a40a69fde9c3b78be93",
+    "full_name": "VAASU BHOOMATHA(A.S.I)",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e5d18949ce7b.webp",
+    "phone": "+91 9059904509",
+    "director_id": "6abf70f626f6ea401698e132",
+    "team_head_name": "NANAJI",
+    "director_name": "NANAJI",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9fba2970ddcb3e0b2b2a",
+    "full_name": "JAGADHESWARI",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_c6a06ed6c60a.webp",
+    "phone": "+91 8328119748",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  },
+  {
+    "id": "6abf9fdc1049cf70c8836c9e",
+    "full_name": "K.GOVINDHA RAO",
+    "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_192e968559aa.webp",
+    "phone": "+91 8106162959",
+    "director_id": "6ab51665f127d6b0ce2c9a83",
+    "team_head_name": "KONATHALA ARUN",
+    "director_name": "KONATHALA ARUN",
+    "designation": "",
+    "email": null
+  }
+];
+
+const DEFAULT_PROJECTS = [
+  {
+    "id": "6ac1288a6f0bb60505a9313b",
+    "title": "Gokulavanam",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Anakapalle",
+    "price": "\u20b912,500 / Sq. Yd",
+    "image_url": "https://arkinfravizagadminportal.vercel.app/images/gokulavanam.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288b6f0bb60505a9313c",
+    "title": "Alakananda - Highway City",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Tallapalem",
+    "price": "Market Rate",
+    "image_url": "images/highway-city-layout.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288b6f0bb60505a9313d",
+    "title": "Education City - Phase 1",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Sabbavaram",
+    "price": "Market Rate",
+    "image_url": "images/education-city-layout.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288b6f0bb60505a9313e",
+    "title": "Sandal Valley",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Anandapuram",
+    "price": "Market Rate",
+    "image_url": "images/sandal-valley.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288c6f0bb60505a9313f",
+    "title": "Vaibhav Classic",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Simhachalam",
+    "price": "Completed",
+    "image_url": "https://arkinfravizagadminportal.vercel.app/images/vaibhav-classic.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288c6f0bb60505a93140",
+    "title": "Belmonk Layout Premium",
+    "tag": "VILLA PLOTS",
+    "status": "Ongoing",
+    "location": "Tagarapuvalasa",
+    "price": "\u20b923,000 / Sq. Yd",
+    "image_url": "images/belmonk-layout-premium.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288d6f0bb60505a93141",
+    "title": "Sri Sampath Ganesh Nagar",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Lankelapalem",
+    "price": "Completed",
+    "image_url": "https://arkinfravizagadminportal.vercel.app/images/sampath-ganesh-nagar.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288d6f0bb60505a93142",
+    "title": "Kodduru Venture - Anakapalli",
+    "tag": "LUXURY PLOTS",
+    "status": "Ongoing",
+    "location": "Anakapalli",
+    "price": "\u20b916,000 / Sq. Yd",
+    "image_url": "images/annakapalli-kodduru.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288d6f0bb60505a93143",
+    "title": "RTC Depot Backside Venture",
+    "tag": "COMMERCIAL",
+    "status": "Ongoing",
+    "location": "Kothavalasa",
+    "price": "\u20b923,000 / Sq. Yd",
+    "image_url": "images/kothavalasa.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288e6f0bb60505a93144",
+    "title": "Kokkirapalli Venture (Phase 1)",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Yelamanchili",
+    "price": "\u20b916,000 / Sq. Yd",
+    "image_url": "images/kokkirapalli.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288e6f0bb60505a93145",
+    "title": "Golden Acres - Bhogapuram",
+    "tag": "AIRPORT PLOTS",
+    "status": "Ongoing",
+    "location": "Bhogapuram",
+    "price": "\u20b917,000 / Sq. Yd",
+    "image_url": "https://arkinfravizagadminportal.vercel.app/images/golden-acres.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288e6f0bb60505a93146",
+    "title": "Sri Muktha Gardens",
+    "tag": "BUDGET PLOTS",
+    "status": "Ongoing",
+    "location": "Desapathrunipalem",
+    "price": "\u20b97,500 / Sq. Yd",
+    "image_url": "https://arkinfravizagadminportal.vercel.app/images/sri-muktha-gardens.webp",
+    "is_published": true
+  },
+  {
+    "id": "6ac1288f6f0bb60505a93147",
+    "title": "Kokkirapalli Venture (Phase 2)",
+    "tag": "PLOTS",
+    "status": "Ongoing",
+    "location": "Yelamanchili",
+    "price": "\u20b916,000 / Sq. Yd",
+    "image_url": "images/kokkirapalli-alternate.webp",
+    "is_published": true
+  }
+];
+
     let cachedCustomers = [];
-    let allDirectorsList = [];
-    let allAgentsList = [];
-    let allProjectsList = [];
+    let allDirectorsList = DEFAULT_DIRECTORS;
+    let allAgentsList = DEFAULT_AGENTS;
+    let allProjectsList = DEFAULT_PROJECTS;
 
     async function ensureDirectorsLoaded(force = false) {
       if (!force && Array.isArray(allDirectorsList) && allDirectorsList.length > 0) return allDirectorsList;
