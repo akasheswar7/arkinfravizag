@@ -1374,17 +1374,6 @@
       const file = (e && e.target && e.target.files) ? e.target.files[0] : e;
       if (!file) return;
 
-      // Client-side file size check (Vercel serverless limit is ~4.5MB payload)
-      if (file.size > 4.5 * 1024 * 1024) {
-        showArkAlert(
-          "File Size Exceeds Limit (4.5MB)",
-          `The selected file "${file.name}" is ${(file.size / (1024 * 1024)).toFixed(1)}MB. For large videos, please paste a YouTube URL or direct video link in the "Video URL" box instead of direct uploading.`,
-          "warning"
-        );
-        if (e && e.target) { try { e.target.value = ""; } catch (ign) {} }
-        return;
-      }
-
       const targetInput = document.getElementById(targetUrlInputId);
       const container = document.getElementById(previewContainerId);
 
@@ -1398,11 +1387,12 @@
           submitBtn.dataset.origText = submitBtn.innerHTML;
         }
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `⏳ Uploading & Optimizing Media...`;
+        submitBtn.innerHTML = `⏳ Uploading & Processing Media...`;
       }
       activeUploadsCount++;
 
       // Immediate local preview so user gets instant confirmation
+      const statusDiv = container ? (container.querySelector(".upload-status") || container.querySelector("div > div:last-child")) : null;
       if (container) {
         const thumb = container.querySelector(".preview-thumb");
         if (thumb) {
@@ -1412,7 +1402,6 @@
         }
         const nameEl = container.querySelector("[id$='PhotoName']");
         if (nameEl) nameEl.textContent = file.name || "Selected File";
-        const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
         if (statusDiv) {
           statusDiv.className = "upload-status";
           statusDiv.style.color = "var(--gold)";
@@ -1423,29 +1412,68 @@
 
       showToast(`Uploading & processing "${file.name || 'file'}"...`);
 
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", folder);
+      const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB per chunk (safely below Vercel 4.5MB limit)
 
       try {
-        const res = await apiRequest("/admin/upload", {
-          method: "POST",
-          body: formData
-        });
-
         let data = {};
-        const textRes = await res.text();
-        try {
-          data = JSON.parse(textRes);
-        } catch (jsonErr) {
-          if (res.status === 413 || textRes.includes("Request Entity Too Large")) {
-            data = { detail: "File size too large for direct upload (Limit: 4.5MB). Please use YouTube URL for large videos." };
-          } else {
-            data = { detail: textRes || `Upload error HTTP ${res.status}` };
+
+        if (file.size <= CHUNK_SIZE) {
+          // Standard single upload for small files
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("folder", folder);
+
+          const res = await apiRequest("/admin/upload", {
+            method: "POST",
+            body: formData
+          });
+
+          const textRes = await res.text();
+          try { data = JSON.parse(textRes); } catch (jsonErr) { data = { detail: textRes || `Upload error HTTP ${res.status}` }; }
+        } else {
+          // Chunked upload for large files (MP4 videos, HD photos up to 500MB+)
+          const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+          const uploadId = "up_" + Date.now() + "_" + Math.random().toString(36).substring(2, 8);
+
+          for (let i = 0; i < totalChunks; i++) {
+            const start = i * CHUNK_SIZE;
+            const end = Math.min(file.size, start + CHUNK_SIZE);
+            const chunkBlob = file.slice(start, end);
+
+            const percent = Math.round(((i + 1) / totalChunks) * 100);
+            if (statusDiv) {
+              statusDiv.style.color = "var(--gold)";
+              statusDiv.innerHTML = `⏳ Uploading file chunk ${i + 1}/${totalChunks} (${percent}%)...`;
+            }
+
+            const chunkForm = new FormData();
+            chunkForm.append("file", chunkBlob, file.name);
+            chunkForm.append("upload_id", uploadId);
+            chunkForm.append("chunk_index", i);
+            chunkForm.append("total_chunks", totalChunks);
+            chunkForm.append("filename", file.name);
+            chunkForm.append("folder", folder);
+
+            const res = await apiRequest("/admin/upload-chunk", {
+              method: "POST",
+              body: chunkForm
+            });
+
+            const textRes = await res.text();
+            let chunkData = {};
+            try { chunkData = JSON.parse(textRes); } catch (jsonErr) { chunkData = { detail: textRes || `Chunk HTTP error ${res.status}` }; }
+
+            if (!res.ok || !chunkData.success) {
+              throw new Error(chunkData.detail || chunkData.message || `Chunk ${i + 1}/${totalChunks} upload failed.`);
+            }
+
+            if (chunkData.completed) {
+              data = chunkData;
+            }
           }
         }
 
-        if (res.ok && data.success) {
+        if (data && data.success) {
           const absoluteUrl = normalizeImageUrl(data.url);
           
           if (data.is_video || data.video_url) {
@@ -1465,7 +1493,6 @@
             if (thumb) thumb.src = absoluteUrl;
             const nameEl = container.querySelector("[id$='PhotoName']");
             if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Media";
-            const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
             if (statusDiv) {
               statusDiv.style.color = "#4ade80";
               statusDiv.innerHTML = `✓ Uploaded and optimized successfully`;
@@ -1476,23 +1503,17 @@
           const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Upload failed.");
           showToast(errMsg, true);
           if (targetInput) targetInput.value = "";
-          if (container) {
-            const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
-            if (statusDiv) {
-              statusDiv.style.color = "#ef4444";
-              statusDiv.innerHTML = `✗ Upload failed: ${errMsg}`;
-            }
+          if (container && statusDiv) {
+            statusDiv.style.color = "#ef4444";
+            statusDiv.innerHTML = `✗ Upload failed: ${errMsg}`;
           }
         }
       } catch (err) {
         showToast("Error uploading file: " + err.message, true);
         if (targetInput) targetInput.value = "";
-        if (container) {
-          const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
-          if (statusDiv) {
-            statusDiv.style.color = "#ef4444";
-            statusDiv.innerHTML = `✗ Upload error: ${err.message}`;
-          }
+        if (container && statusDiv) {
+          statusDiv.style.color = "#ef4444";
+          statusDiv.innerHTML = `✗ Upload error: ${err.message}`;
         }
       } finally {
         activeUploadsCount = Math.max(0, activeUploadsCount - 1);
