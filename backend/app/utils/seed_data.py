@@ -396,12 +396,71 @@ INITIAL_PROJECTS = [
     }
 ]
 
+INITIAL_GALLERY = [
+    {
+        "title": "Construction Site Visit & Layout Inspection",
+        "category": "Site Visits",
+        "media_type": "site_visit",
+        "image_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+        "thumbnail_url": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80",
+        "description": "On-site layout inspection and engineering survey at prime location.",
+        "is_published": True
+    },
+    {
+        "title": "Project Grand Launch Event",
+        "category": "Events",
+        "media_type": "photo",
+        "image_url": "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80",
+        "thumbnail_url": "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&q=80",
+        "description": "Official venture launch celebration with directors & clients.",
+        "is_published": True
+    },
+    {
+        "title": "Client Layout Inspection & Walkthrough",
+        "category": "Site Visits",
+        "media_type": "site_visit",
+        "image_url": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80",
+        "thumbnail_url": "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80",
+        "description": "Guided layout tour and spot registration verification with buyers.",
+        "is_published": True
+    },
+    {
+        "title": "Corporate Gala & Annual Celebration",
+        "category": "Events",
+        "media_type": "photo",
+        "image_url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        "thumbnail_url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80",
+        "description": "ARK Infra annual corporate meet & executive team milestone awards.",
+        "is_published": True
+    },
+    {
+        "title": "Gokulavanam Layout Aerial View",
+        "category": "Site Visits",
+        "media_type": "site_visit",
+        "image_url": "images/gokulavanam.webp",
+        "thumbnail_url": "images/gokulavanam.webp",
+        "description": "Aerial progress view of Gokulavanam open plot venture at Anakapalle.",
+        "is_published": True
+    },
+    {
+        "title": "Alakananda Highway City Walkthrough Video",
+        "category": "Videos",
+        "media_type": "video",
+        "image_url": "images/highway-city-layout.webp",
+        "thumbnail_url": "images/highway-city-layout.webp",
+        "video_url": "video.mp4",
+        "description": "Complete video tour of Alakananda Highway City layout development.",
+        "is_published": True
+    }
+]
+
 async def seed_initial_database():
     """
-    Ensures the default admin account exists and seeds default projects if missing.
+    Ensures default admin exists and seeds initial projects & gallery items.
     """
     admins_col = get_collection("admins")
     projects_col = get_collection("projects")
+    gallery_col = get_collection("gallery")
     now = datetime.now(timezone.utc)
 
     # Admin Seed
@@ -426,6 +485,16 @@ async def seed_initial_database():
             if not existing:
                 doc = {**p, "created_at": now, "updated_at": now}
                 await projects_col.insert_one(doc)
+
+    # Gallery Seed
+    gallery_count = await gallery_col.count_documents({})
+    if gallery_count < len(INITIAL_GALLERY):
+        logger.info("Seeding initial gallery items into MongoDB database...")
+        for g in INITIAL_GALLERY:
+            existing = await gallery_col.find_one({"title": g["title"]})
+            if not existing:
+                doc = {**g, "created_at": now, "updated_at": now}
+                await gallery_col.insert_one(doc)
 
     logger.info("Database startup check completed.")
 
