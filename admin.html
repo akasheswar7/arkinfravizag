@@ -2366,14 +2366,14 @@
     }
 
     async function openAddCustomerModal() {
-      await syncAllCustomerMetadata();
-      document.getElementById("customerModalTitle").textContent = "Add Customer Lead";
       document.getElementById("customerForm").reset();
       document.getElementById("customerEditId").value = "";
       document.getElementById("customerPhotoUrl").value = "";
       document.getElementById("customerReceiptUrl").value = "";
       document.getElementById("customerPhotoPreview").style.display = "none";
       document.getElementById("customerReceiptPreview").style.display = "none";
+      await syncAllCustomerMetadata(true);
+      document.getElementById("customerModalTitle").textContent = "Add Customer Lead";
       await onModalDirectorChange(true);
       openModal("customerModal");
     }
