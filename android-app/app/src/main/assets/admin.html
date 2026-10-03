@@ -1593,8 +1593,8 @@
           let absoluteUrl = normalizeImageUrl(data.url);
           if (absoluteUrl.endsWith(",")) absoluteUrl = absoluteUrl.slice(0, -1).trim();
 
-          const isVideoFile = data.is_video || data.video_url || absoluteUrl.endsWith(".mp4") || absoluteUrl.endsWith(".webm") || absoluteUrl.endsWith(".mov") || (file && file.type && file.type.startsWith("video/"));
-          
+          const isPdfFile = data.is_pdf || absoluteUrl.endsWith(".pdf") || (file && file.type === "application/pdf");
+
           if (isVideoFile) {
             const videoInput = document.getElementById("galleryVideoUrl");
             const mediaTypeSelect = document.getElementById("galleryMediaType");
@@ -1623,16 +1623,22 @@
             if (targetInput) targetInput.value = absoluteUrl;
             if (container) {
               const thumb = container.querySelector(".preview-thumb");
-              if (thumb) thumb.src = absoluteUrl;
-              const nameEl = container.querySelector("[id$='PhotoName']");
-              if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Image";
+              if (thumb && !isPdfFile) thumb.src = absoluteUrl;
+              const nameEl = container.querySelector("[id$='PhotoName']") || container.querySelector("#customerReceiptStatus");
+              if (nameEl) {
+                if (isPdfFile) {
+                  nameEl.innerHTML = `📄 PDF Document: <b>${data.filename || (file ? file.name : 'Document.pdf')}</b>`;
+                } else {
+                  nameEl.textContent = data.filename || (file ? file.name : "Uploaded File");
+                }
+              }
               if (statusDiv) {
                 statusDiv.style.color = "#4ade80";
-                statusDiv.innerHTML = `✓ Uploaded and optimized successfully`;
+                statusDiv.innerHTML = isPdfFile ? `✓ PDF / Document uploaded successfully` : `✓ Uploaded and optimized successfully`;
               }
             }
           }
-          showToast("Media uploaded successfully!");
+          showToast(isPdfFile ? "PDF Document uploaded successfully!" : "Media uploaded successfully!");
         } else {
           const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Upload failed.");
           showToast(errMsg, true);
