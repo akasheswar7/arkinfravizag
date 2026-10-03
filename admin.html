@@ -1330,6 +1330,7 @@
           hideLoginOverlay();
           loadDashboardStats();
           loadDirectors();
+          syncAllCustomerMetadata();
         } else {
           showLoginOverlay();
         }
@@ -1833,6 +1834,7 @@
           closeModal("directorModal");
           showToast(id ? "Director updated successfully!" : "Director created successfully!");
           loadDirectors();
+          syncAllCustomerMetadata();
           loadDashboardStats();
         } else {
           const data = await res.json().catch(() => ({}));
@@ -1864,6 +1866,7 @@
           if (res.ok) {
             showToast(`Director "${name}" deleted.`);
             loadDirectors();
+            syncAllCustomerMetadata();
             loadDashboardStats();
           } else {
             const data = await res.json();
@@ -1980,6 +1983,7 @@
           showToast(id ? "Agent updated!" : "Agent created!");
           loadAgents();
           loadDirectors();
+          syncAllCustomerMetadata();
           loadDashboardStats();
         } else {
           const data = await res.json().catch(() => ({}));
@@ -2004,6 +2008,7 @@
             showToast(`Agent "${name}" removed.`);
             loadAgents();
             loadDirectors();
+            syncAllCustomerMetadata();
             loadDashboardStats();
           }
         }
@@ -2012,6 +2017,25 @@
 
     // --- 4. Customers CRUD ---
     let cachedCustomers = [];
+    let allDirectorsList = [];
+    let allAgentsList = [];
+    let allProjectsList = [];
+
+    async function syncAllCustomerMetadata() {
+      try {
+        const [dRes, aRes, pRes] = await Promise.all([
+          apiRequest("/admin/directors"),
+          apiRequest("/admin/agents"),
+          apiRequest("/admin/projects")
+        ]);
+        if (dRes.ok) allDirectorsList = await dRes.json();
+        if (aRes.ok) allAgentsList = await aRes.json();
+        if (pRes.ok) allProjectsList = await pRes.json();
+        populateCustomerDropdowns();
+      } catch (e) {
+        console.error("Error syncing customer metadata:", e);
+      }
+    }
 
     function updateCustomerPhotoPreview(val) {
       if (!val) return;
@@ -2027,13 +2051,16 @@
     }
 
     function populateCustomerDropdowns() {
+      const dirs = allDirectorsList.length > 0 ? allDirectorsList : (cachedDirectors || []);
+      const projs = allProjectsList.length > 0 ? allProjectsList : (cachedProjects || []);
+
       // 1. Directors Filter & Modal Select
       const dirFilter = document.getElementById("customerDirectorFilter");
       const dirSelect = document.getElementById("customerDirectorSelect");
       if (dirFilter) {
         const cur = dirFilter.value;
         dirFilter.innerHTML = '<option value="All">All Directors</option>';
-        (cachedDirectors || []).forEach(d => {
+        dirs.forEach(d => {
           dirFilter.innerHTML += `<option value="${d.id}">${d.name || d.full_name}</option>`;
         });
         if (cur) dirFilter.value = cur;
@@ -2041,7 +2068,7 @@
       if (dirSelect) {
         const cur = dirSelect.value;
         dirSelect.innerHTML = '<option value="">Select Director...</option>';
-        (cachedDirectors || []).forEach(d => {
+        dirs.forEach(d => {
           dirSelect.innerHTML += `<option value="${d.id}" data-name="${d.name || d.full_name}">${d.name || d.full_name}</option>`;
         });
         if (cur) dirSelect.value = cur;
@@ -2056,7 +2083,7 @@
       if (projSelect) {
         const cur = projSelect.value;
         projSelect.innerHTML = '<option value="">Select Venture...</option>';
-        (cachedProjects || []).forEach(p => {
+        projs.forEach(p => {
           projSelect.innerHTML += `<option value="${p.title}">${p.title}</option>`;
         });
         if (cur) projSelect.value = cur;
@@ -2066,12 +2093,13 @@
     function onCustomerDirectorFilterChange(shouldReload = true) {
       const dirId = document.getElementById("customerDirectorFilter")?.value || "All";
       const agentFilter = document.getElementById("customerAgentFilter");
+      const ags = allAgentsList.length > 0 ? allAgentsList : (cachedAgents || []);
       if (agentFilter) {
         const cur = agentFilter.value;
         agentFilter.innerHTML = '<option value="All">All Agents</option>';
-        (cachedAgents || []).forEach(a => {
-          if (dirId === "All" || a.director_id === dirId) {
-            agentFilter.innerHTML += `<option value="${a.id}">${a.name || a.full_name}</option>`;
+        ags.forEach(a => {
+          if (dirId === "All" || String(a.director_id) === String(dirId)) {
+            agentFilter.innerHTML += `<option value="${a.id}">${a.full_name || a.name}</option>`;
           }
         });
         if (cur) agentFilter.value = cur;
@@ -2079,18 +2107,49 @@
       if (shouldReload) loadCustomers();
     }
 
-    function onModalDirectorChange(resetAgent = true) {
-      const dirId = document.getElementById("customerDirectorSelect")?.value || "";
+    async function onModalDirectorChange(resetAgent = true) {
+      const dirSelect = document.getElementById("customerDirectorSelect");
+      const dirId = dirSelect ? dirSelect.value : "";
+      const selectedOpt = dirSelect && dirSelect.selectedIndex >= 0 ? dirSelect.options[dirSelect.selectedIndex] : null;
+      const dirName = selectedOpt ? (selectedOpt.dataset.name || selectedOpt.text).trim().toLowerCase() : "";
+
       const agentSelect = document.getElementById("customerAgentSelect");
-      if (agentSelect) {
-        const cur = agentSelect.value;
-        agentSelect.innerHTML = '<option value="">Select Agent...</option>';
-        (cachedAgents || []).forEach(a => {
-          if (!dirId || a.director_id === dirId) {
-            agentSelect.innerHTML += `<option value="${a.id}" data-name="${a.name || a.full_name}">${a.name || a.full_name} (${a.director_name || 'Independent'})</option>`;
-          }
-        });
-        if (!resetAgent && cur) agentSelect.value = cur;
+      if (!agentSelect) return;
+
+      const cur = agentSelect.value;
+      agentSelect.innerHTML = '<option value="">Select Agent...</option>';
+
+      if (!allAgentsList || allAgentsList.length === 0) {
+        try {
+          const res = await apiRequest("/admin/agents");
+          if (res.ok) allAgentsList = await res.json();
+        } catch (e) {
+          console.error("Error fetching agents list on demand:", e);
+        }
+      }
+
+      const ags = (allAgentsList && allAgentsList.length > 0) ? allAgentsList : (cachedAgents || []);
+
+      let matchingAgents = ags.filter(a => {
+        if (!dirId) return true;
+        const aDirId = String(a.director_id || "");
+        const aDirName = String(a.director_name || a.team_head_name || "").trim().toLowerCase();
+        return (aDirId && aDirId === String(dirId)) || (dirName && dirName !== "select director..." && aDirName === dirName);
+      });
+
+      // Fallback: If no agents match the specific director, list all agents with their director name so list is never empty!
+      if (matchingAgents.length === 0 && ags.length > 0) {
+        matchingAgents = ags;
+      }
+
+      matchingAgents.forEach(a => {
+        const aName = a.full_name || a.name || "Agent";
+        const dName = a.director_name || a.team_head_name || "Independent";
+        agentSelect.innerHTML += `<option value="${a.id}" data-name="${aName}">${aName} (${dName})</option>`;
+      });
+
+      if (!resetAgent && cur) {
+        agentSelect.value = cur;
       }
     }
 
@@ -2105,7 +2164,7 @@
     }
 
     async function loadCustomers() {
-      populateCustomerDropdowns();
+      await syncAllCustomerMetadata();
       const status = document.getElementById("customerStatusFilter")?.value || "All";
       const directorId = document.getElementById("customerDirectorFilter")?.value || "All";
       const agentId = document.getElementById("customerAgentFilter")?.value || "All";
@@ -2181,8 +2240,8 @@
       } catch (e) { console.error(e); }
     }
 
-    function openAddCustomerModal() {
-      populateCustomerDropdowns();
+    async function openAddCustomerModal() {
+      await syncAllCustomerMetadata();
       document.getElementById("customerModalTitle").textContent = "Add Customer Lead";
       document.getElementById("customerForm").reset();
       document.getElementById("customerEditId").value = "";
@@ -2190,11 +2249,12 @@
       document.getElementById("customerReceiptUrl").value = "";
       document.getElementById("customerPhotoPreview").style.display = "none";
       document.getElementById("customerReceiptPreview").style.display = "none";
+      await onModalDirectorChange(true);
       openModal("customerModal");
     }
 
-    function editCustomer(id) {
-      populateCustomerDropdowns();
+    async function editCustomer(id) {
+      await syncAllCustomerMetadata();
       const c = cachedCustomers.find(x => x.id === id);
       if (!c) return;
 
@@ -2209,7 +2269,7 @@
       document.getElementById("customerAddress").value = c.address || "";
 
       document.getElementById("customerDirectorSelect").value = c.director_id || "";
-      onModalDirectorChange(false);
+      await onModalDirectorChange(false);
       document.getElementById("customerAgentSelect").value = c.agent_id || "";
 
       document.getElementById("customerStatusSelect").value = c.site_visit_status || "Pending";
