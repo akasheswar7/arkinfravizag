@@ -1064,8 +1064,8 @@
       window.location.protocol === "file:" ||
       !window.location.hostname
     )
-      ? "http://localhost:8000"
-      : window.location.origin;
+      ? "http://localhost:8000/api"
+      : window.location.origin + "/api";
     // --- Custom Luxury ARK Alert & Confirm Dialogs (Replaces native browser popups) ---
     function showArkAlert(title, message, iconType = "warning") {
       document.getElementById("arkAlertTitle").textContent = title;
