@@ -9,6 +9,8 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "backend/app/main.py" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/", "dest": "/admin.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
