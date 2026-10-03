@@ -2021,6 +2021,57 @@
     let allAgentsList = [];
     let allProjectsList = [];
 
+    async function ensureDirectorsLoaded() {
+      if (Array.isArray(allDirectorsList) && allDirectorsList.length > 0) return allDirectorsList;
+      try {
+        const res = await apiRequest("/admin/directors");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            allDirectorsList = data;
+            return allDirectorsList;
+          }
+        }
+      } catch (e) {
+        console.error("Error ensuring directors loaded:", e);
+      }
+      return Array.isArray(cachedDirectors) ? cachedDirectors : [];
+    }
+
+    async function ensureAgentsLoaded() {
+      if (Array.isArray(allAgentsList) && allAgentsList.length > 0) return allAgentsList;
+      try {
+        const res = await apiRequest("/admin/agents");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            allAgentsList = data;
+            return allAgentsList;
+          }
+        }
+      } catch (e) {
+        console.error("Error ensuring agents loaded:", e);
+      }
+      return Array.isArray(cachedAgents) ? cachedAgents : [];
+    }
+
+    async function ensureProjectsLoaded() {
+      if (Array.isArray(allProjectsList) && allProjectsList.length > 0) return allProjectsList;
+      try {
+        const res = await apiRequest("/admin/projects");
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) {
+            allProjectsList = data;
+            return allProjectsList;
+          }
+        }
+      } catch (e) {
+        console.error("Error ensuring projects loaded:", e);
+      }
+      return Array.isArray(cachedProjects) ? cachedProjects : [];
+    }
+
     async function syncAllCustomerMetadata() {
       try {
         const [dRes, aRes, pRes] = await Promise.all([
@@ -2044,7 +2095,7 @@
       } catch (e) {
         console.error("Error syncing customer metadata:", e);
       } finally {
-        populateCustomerDropdowns();
+        await populateCustomerDropdowns();
       }
     }
 
@@ -2061,9 +2112,9 @@
       }
     }
 
-    function populateCustomerDropdowns() {
-      const dirs = (Array.isArray(allDirectorsList) && allDirectorsList.length > 0) ? allDirectorsList : (Array.isArray(cachedDirectors) ? cachedDirectors : []);
-      const projs = (Array.isArray(allProjectsList) && allProjectsList.length > 0) ? allProjectsList : (Array.isArray(cachedProjects) ? cachedProjects : []);
+    async function populateCustomerDropdowns() {
+      const dirs = await ensureDirectorsLoaded();
+      const projs = await ensureProjectsLoaded();
 
       // 1. Directors Filter & Modal Select
       const dirFilter = document.getElementById("customerDirectorFilter");
@@ -2089,8 +2140,8 @@
       }
 
       // 2. Agents Filter & Modal Select
-      onCustomerDirectorFilterChange(false);
-      onModalDirectorChange(false);
+      await onCustomerDirectorFilterChange(false);
+      await onModalDirectorChange(false);
 
       // 3. Projects / Venture Select
       const projSelect = document.getElementById("customerProjectSelect");
@@ -2106,10 +2157,10 @@
       }
     }
 
-    function onCustomerDirectorFilterChange(shouldReload = true) {
+    async function onCustomerDirectorFilterChange(shouldReload = true) {
       const dirId = document.getElementById("customerDirectorFilter")?.value || "All";
       const agentFilter = document.getElementById("customerAgentFilter");
-      const ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
+      const ags = await ensureAgentsLoaded();
       if (agentFilter) {
         const cur = agentFilter.value;
         let html = '<option value="All">All Agents</option>';
@@ -2125,7 +2176,7 @@
       if (shouldReload) loadCustomers();
     }
 
-    function onModalDirectorChange(resetAgent = true) {
+    async function onModalDirectorChange(resetAgent = true) {
       const dirSelect = document.getElementById("customerDirectorSelect");
       const dirId = dirSelect ? dirSelect.value : "";
       const selectedOpt = dirSelect && dirSelect.selectedIndex >= 0 ? dirSelect.options[dirSelect.selectedIndex] : null;
@@ -2135,12 +2186,7 @@
       if (!agentSelect) return;
 
       const cur = agentSelect.value;
-      let ags = [];
-      if (Array.isArray(allAgentsList) && allAgentsList.length > 0) {
-        ags = allAgentsList;
-      } else if (Array.isArray(cachedAgents) && cachedAgents.length > 0) {
-        ags = cachedAgents;
-      }
+      const ags = await ensureAgentsLoaded();
 
       let optionsHtml = '<option value="">Select Agent...</option>';
 
