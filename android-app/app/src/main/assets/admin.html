@@ -2050,9 +2050,18 @@
       }
     }
 
-    function populateCustomerDropdowns() {
-      const dirs = allDirectorsList.length > 0 ? allDirectorsList : (cachedDirectors || []);
-      const projs = allProjectsList.length > 0 ? allProjectsList : (cachedProjects || []);
+    async function populateCustomerDropdowns() {
+      if (!allProjectsList || allProjectsList.length === 0) {
+        try {
+          const pRes = await apiRequest("/admin/projects");
+          if (pRes.ok) allProjectsList = await pRes.json();
+        } catch (e) {
+          console.error("Error fetching projects for dropdown:", e);
+        }
+      }
+
+      const dirs = (allDirectorsList && allDirectorsList.length > 0) ? allDirectorsList : (cachedDirectors || []);
+      const projs = (allProjectsList && allProjectsList.length > 0) ? allProjectsList : (cachedProjects || []);
 
       // 1. Directors Filter & Modal Select
       const dirFilter = document.getElementById("customerDirectorFilter");
@@ -2076,15 +2085,16 @@
 
       // 2. Agents Filter & Modal Select
       onCustomerDirectorFilterChange(false);
-      onModalDirectorChange(false);
+      await onModalDirectorChange(false);
 
-      // 3. Projects Select
+      // 3. Projects / Venture Select
       const projSelect = document.getElementById("customerProjectSelect");
       if (projSelect) {
         const cur = projSelect.value;
         projSelect.innerHTML = '<option value="">Select Venture...</option>';
         projs.forEach(p => {
-          projSelect.innerHTML += `<option value="${p.title}">${p.title}</option>`;
+          const title = p.title || p.name || "Venture";
+          projSelect.innerHTML += `<option value="${title}">${title}</option>`;
         });
         if (cur) projSelect.value = cur;
       }
@@ -2707,6 +2717,7 @@
           closeModal("projectModal");
           showToast(editId ? "Project updated!" : "New project added live!");
           loadProjects();
+          syncAllCustomerMetadata();
         } else {
           const data = await res.json().catch(() => ({}));
           showToast(formatErrorMessage(data.detail || "Failed to save project."), true);
@@ -2724,6 +2735,7 @@
       if (res.ok) {
         showToast("Project publish status updated.");
         loadProjects();
+        syncAllCustomerMetadata();
       }
     }
 
@@ -2736,6 +2748,7 @@
           if (res.ok) {
             showToast("Project deleted.");
             loadProjects();
+            syncAllCustomerMetadata();
           }
         }
       );
