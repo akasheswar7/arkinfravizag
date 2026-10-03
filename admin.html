@@ -1140,24 +1140,16 @@
 
     let cachedDirectors = [];
 
-    // --- Authentication Helpers (Session Storage with In-Memory fallback) ---
+    // --- Strict In-Memory Authentication (No Auto-Session Restore) ---
     let inMemoryToken = null;
     function getToken() {
-      if (!inMemoryToken) {
-        try {
-          inMemoryToken = sessionStorage.getItem("ark_admin_token");
-        } catch (e) {}
-      }
       return inMemoryToken;
     }
     function setToken(token) {
       inMemoryToken = token;
       try {
-        if (token) {
-          sessionStorage.setItem("ark_admin_token", token);
-        } else {
-          sessionStorage.removeItem("ark_admin_token");
-        }
+        sessionStorage.removeItem("ark_admin_token");
+        localStorage.removeItem("ark_admin_token");
       } catch (e) {}
     }
     function clearToken() { 
@@ -1180,7 +1172,7 @@
       if (response.status === 401) {
         clearToken();
         showLoginOverlay();
-        throw new Error("Session expired. Please sign in again.");
+        throw new Error("Unauthorized or session ended. Please sign in with admin password.");
       }
       return response;
     }
@@ -1256,10 +1248,7 @@
       const usernameVal = usernameInput.value.trim();
       const passwordVal = passwordInput.value;
 
-      // Sensitive safety: clear password immediately
-      passwordInput.value = "";
-
-      btn.textContent = "Signing In...";
+      btn.textContent = "Authenticating...";
       btn.disabled = true;
 
       try {
@@ -1272,18 +1261,25 @@
           })
         });
 
+        // Clear password input immediately after submit
+        passwordInput.value = "";
+
         const data = await res.json();
-        if (res.ok) {
+        if (res.ok && data.access_token) {
           usernameInput.value = "";
           setToken(data.access_token);
           hideLoginOverlay();
-          showToast("Welcome to ARK Infra Executive Portal!");
+          showToast("Authenticated! Welcome to ARK Infra Executive Portal!");
           loadDashboardStats();
           loadDirectors();
         } else {
-          showToast(data.detail || "Authentication failed", true);
+          clearToken();
+          showLoginOverlay();
+          showToast(data.detail || "Authentication failed: Incorrect credentials", true);
         }
       } catch (err) {
+        clearToken();
+        showLoginOverlay();
         showToast("Connection to backend server failed.", true);
       } finally {
         btn.textContent = "Sign In to Dashboard";
@@ -2560,15 +2556,11 @@
       });
     }
 
-    // Initialize application: verify session or prompt sign in
+    // Initialize application: enforce strict login authentication on every visit
     window.addEventListener("DOMContentLoaded", () => {
       initUploadDropZones();
-      const token = getToken();
-      if (token) {
-        checkAuth();
-      } else {
-        showLoginOverlay();
-      }
+      clearToken();
+      showLoginOverlay();
     });
   </script>
 </body>
