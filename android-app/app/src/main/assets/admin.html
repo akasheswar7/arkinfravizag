@@ -1730,6 +1730,7 @@
         const res = await apiRequest("/admin/directors");
         if (res.ok) {
           cachedDirectors = await res.json();
+          allDirectorsList = cachedDirectors;
           const tbody = document.getElementById("directorsTableBody");
           tbody.innerHTML = "";
 
@@ -1895,6 +1896,9 @@
         const res = await apiRequest(url);
         if (res.ok) {
           cachedAgents = await res.json();
+          if (!directorId && !search) {
+            allAgentsList = cachedAgents;
+          }
           const tbody = document.getElementById("agentsTableBody");
           tbody.innerHTML = "";
 
@@ -2027,77 +2031,70 @@
     let allAgentsList = [];
     let allProjectsList = [];
 
-    async function ensureDirectorsLoaded() {
-      if (Array.isArray(allDirectorsList) && allDirectorsList.length > 0) return allDirectorsList;
+    async function ensureDirectorsLoaded(force = false) {
+      if (!force && Array.isArray(allDirectorsList) && allDirectorsList.length > 0) return allDirectorsList;
       try {
         const res = await apiRequest("/admin/directors");
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
             allDirectorsList = data;
+            cachedDirectors = data;
             return allDirectorsList;
           }
         }
       } catch (e) {
         console.error("Error ensuring directors loaded:", e);
       }
-      return Array.isArray(cachedDirectors) ? cachedDirectors : [];
+      return Array.isArray(allDirectorsList) && allDirectorsList.length > 0 ? allDirectorsList : (Array.isArray(cachedDirectors) ? cachedDirectors : []);
     }
 
-    async function ensureAgentsLoaded() {
-      if (Array.isArray(allAgentsList) && allAgentsList.length > 0) return allAgentsList;
+    async function ensureAgentsLoaded(force = false) {
+      if (!force && Array.isArray(allAgentsList) && allAgentsList.length > 0) return allAgentsList;
       try {
         const res = await apiRequest("/admin/agents");
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
             allAgentsList = data;
+            cachedAgents = data;
             return allAgentsList;
           }
         }
       } catch (e) {
         console.error("Error ensuring agents loaded:", e);
       }
-      return Array.isArray(cachedAgents) ? cachedAgents : [];
+      return Array.isArray(allAgentsList) && allAgentsList.length > 0 ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
     }
 
-    async function ensureProjectsLoaded() {
-      if (Array.isArray(allProjectsList) && allProjectsList.length > 0) return allProjectsList;
+    async function ensureProjectsLoaded(force = false) {
+      if (!force && Array.isArray(allProjectsList) && allProjectsList.length > 0) return allProjectsList;
       try {
         const res = await apiRequest("/admin/projects");
         if (res.ok) {
           const data = await res.json();
           if (Array.isArray(data)) {
             allProjectsList = data;
+            cachedProjects = data;
             return allProjectsList;
           }
         }
       } catch (e) {
         console.error("Error ensuring projects loaded:", e);
       }
-      return Array.isArray(cachedProjects) ? cachedProjects : [];
+      return Array.isArray(allProjectsList) && allProjectsList.length > 0 ? allProjectsList : (Array.isArray(cachedProjects) ? cachedProjects : []);
     }
 
-    async function syncAllCustomerMetadata() {
+    async function syncAllCustomerMetadata(force = true) {
       try {
-        const [dRes, aRes, pRes] = await Promise.all([
-          apiRequest("/admin/directors").catch(() => null),
-          apiRequest("/admin/agents").catch(() => null),
-          apiRequest("/admin/projects").catch(() => null)
+        const [dirs, ags, projs] = await Promise.all([
+          ensureDirectorsLoaded(force),
+          ensureAgentsLoaded(force),
+          ensureProjectsLoaded(force)
         ]);
-
-        if (dRes && dRes.ok) {
-          const dData = await dRes.json().catch(() => []);
-          if (Array.isArray(dData)) allDirectorsList = dData;
-        }
-        if (aRes && aRes.ok) {
-          const aData = await aRes.json().catch(() => []);
-          if (Array.isArray(aData)) allAgentsList = aData;
-        }
-        if (pRes && pRes.ok) {
-          const pData = await pRes.json().catch(() => []);
-          if (Array.isArray(pData)) allProjectsList = pData;
-        }
+        if (Array.isArray(dirs) && dirs.length > 0) allDirectorsList = dirs;
+        if (Array.isArray(ags) && ags.length > 0) allAgentsList = ags;
+        if (Array.isArray(projs) && projs.length > 0) allProjectsList = projs;
       } catch (e) {
         console.error("Error syncing customer metadata:", e);
       } finally {
@@ -2139,10 +2136,24 @@
         const cur = dirSelect.value;
         let html = '<option value="">Select Director...</option>';
         dirs.forEach(d => {
-          html += `<option value="${d.id}" data-name="${d.name || d.full_name}">${d.name || d.full_name}</option>`;
+          const dName = d.name || d.full_name || "Director";
+          html += `<option value="${d.id}" data-name="${dName}">${dName}</option>`;
         });
         dirSelect.innerHTML = html;
         if (cur) dirSelect.value = cur;
+      }
+
+      // Also populate Agent modal Director select & Reports Director select if present
+      const agentDirSelect = document.getElementById("agentDirectorSelect");
+      if (agentDirSelect) {
+        const cur = agentDirSelect.value;
+        let html = '<option value="">Select Director...</option>';
+        dirs.forEach(d => {
+          const dName = d.name || d.full_name || "Director";
+          html += `<option value="${d.id}">${dName} (${d.role || 'Director'})</option>`;
+        });
+        agentDirSelect.innerHTML = html;
+        if (cur) agentDirSelect.value = cur;
       }
 
       // 2. Agents Filter & Modal Select
@@ -2656,6 +2667,7 @@
         const res = await apiRequest("/admin/projects");
         if (res.ok) {
           cachedProjects = await res.json();
+          allProjectsList = cachedProjects;
           renderProjectsTable(filter);
         }
       } catch (err) {
