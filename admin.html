@@ -2203,6 +2203,19 @@
       if (shouldReload) loadCustomers();
     }
 
+    function normalizeDirectorName(s) {
+      if (!s) return "";
+      let str = String(s).toUpperCase().trim();
+      str = str.replace(/^[A-Z]\.\s*/, '');
+      str = str.replace(/[^A-Z0-9\s]/g, ' ');
+      return str.trim();
+    }
+
+    function getDirectorTokens(s) {
+      const norm = normalizeDirectorName(s);
+      return norm.split(/\s+/).filter(t => t.length > 1);
+    }
+
     function onModalDirectorChange(resetAgent = true) {
       const dirSelect = document.getElementById("customerDirectorSelect");
       const agentSelect = document.getElementById("customerAgentSelect");
@@ -2210,27 +2223,43 @@
 
       const dirId = dirSelect ? String(dirSelect.value || "").trim() : "";
       const selectedOpt = dirSelect && dirSelect.selectedIndex >= 0 ? dirSelect.options[dirSelect.selectedIndex] : null;
-      const dirName = selectedOpt ? (selectedOpt.dataset.name || selectedOpt.text || "").trim().toLowerCase() : "";
+      const rawDirName = selectedOpt ? (selectedOpt.dataset.name || selectedOpt.text || "").trim() : "";
 
       const curAgentVal = agentSelect.value;
       const ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
 
-      if (!dirId && (!dirName || dirName.includes("select director"))) {
+      if (!dirId && (!rawDirName || rawDirName.toLowerCase().includes("select director"))) {
         agentSelect.innerHTML = '<option value="">Select Director First...</option>';
         return;
       }
 
+      const dirTokens = getDirectorTokens(rawDirName);
+      const rawUpperDir = rawDirName.toUpperCase();
+
       const matchingAgents = ags.filter(a => {
         const aDirId = String(a.director_id || "").trim();
-        const aDirName = String(a.director_name || a.team_head_name || "").trim().toLowerCase();
-        
+        const aTeamHead = String(a.team_head_name || "").trim();
+        const aDirName = String(a.director_name || "").trim();
+
+        // 1. Direct ID Match
         if (dirId && aDirId && aDirId === dirId) return true;
-        if (dirName && aDirName && (aDirName === dirName || aDirName.includes(dirName) || dirName.includes(aDirName))) return true;
+
+        // 2. String equality / substring match on full raw name
+        if (aTeamHead && (aTeamHead.toUpperCase() === rawUpperDir || aTeamHead.toUpperCase().includes(rawUpperDir) || rawUpperDir.includes(aTeamHead.toUpperCase()))) return true;
+        if (aDirName && (aDirName.toUpperCase() === rawUpperDir || aDirName.toUpperCase().includes(rawUpperDir) || rawUpperDir.includes(aDirName.toUpperCase()))) return true;
+
+        // 3. Smart Token Match (e.g. M.SRAVANI vs SRAVANI, BALU  with trailing space, etc.)
+        if (dirTokens.length > 0) {
+          const headTokens = getDirectorTokens(aTeamHead).concat(getDirectorTokens(aDirName));
+          const hasCommonToken = dirTokens.some(t => headTokens.includes(t));
+          if (hasCommonToken) return true;
+        }
+
         return false;
       });
 
       if (matchingAgents.length === 0) {
-        agentSelect.innerHTML = '<option value="">No Agents under this Director</option>';
+        agentSelect.innerHTML = `<option value="">No Agents under ${rawDirName || 'this Director'}</option>`;
         return;
       }
 
