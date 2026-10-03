@@ -927,12 +927,12 @@
         <div class="form-group">
           <label class="form-label">Photo / Cover Thumbnail Image *</label>
           <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <input type="text" id="galleryPhotoUrl" class="form-input" placeholder="Cover image URL or upload below (Auto-filled for YouTube)...">
+            <input type="text" id="galleryPhotoUrl" class="form-input" placeholder="Cover image URL or upload below (Auto-filled for YouTube)..." oninput="updateGalleryPhotoPreview(this.value)">
             <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('galleryFileInput').click()" style="white-space: nowrap;">📁 Upload</button>
           </div>
           <input type="file" id="galleryFileInput" accept="image/*,video/*" style="display: none;" onchange="handleFileUpload(event, 'galleryPhotoUrl', 'galleryPhotoPreview', 'gallery')">
           <div id="galleryPhotoPreview" class="preview-box" style="display: none;">
-            <img class="preview-thumb" id="galleryPreviewImg" src="" alt="Preview">
+            <img class="preview-thumb" id="galleryPreviewImg" src="" alt="Preview" onerror="this.src='images/logo.webp'">
             <div>
               <div style="font-size: 0.8rem; color: #fff;" id="galleryPhotoName">gallery.webp</div>
               <div style="font-size: 0.7rem; color: #4ade80;">✓ Uploaded and optimized</div>
@@ -1362,8 +1362,29 @@
 
     function normalizeImageUrl(url) {
       if (!url) return "images/logo.webp";
+      url = String(url).trim().replace(/[,]+$/, '');
+      if (!url) return "images/logo.webp";
       if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) return url;
       return "https://arkinfravizagadminportal.vercel.app" + (url.startsWith("/") ? "" : "/") + url;
+    }
+
+    function updateGalleryPhotoPreview(val) {
+      if (!val) return;
+      val = String(val).trim().replace(/[,]+$/, '');
+      const prevBox = document.getElementById("galleryPhotoPreview");
+      const prevImg = document.getElementById("galleryPreviewImg");
+      const nameEl = document.getElementById("galleryPhotoName");
+      if (prevBox && prevImg) {
+        const isVid = val.endsWith(".mp4") || val.endsWith(".webm") || val.endsWith(".mov") || val.includes("/uploads/vid_");
+        if (isVid) {
+          prevImg.src = "images/logo.webp";
+          if (nameEl) nameEl.textContent = "Video Cover Placeholder";
+        } else {
+          prevImg.src = normalizeImageUrl(val);
+          if (nameEl) nameEl.textContent = "Custom Cover Image";
+        }
+        prevBox.style.display = "flex";
+      }
     }
 
     async function handleFileUpload(e, targetUrlInputId, previewContainerId, folder = "general") {
@@ -1470,28 +1491,46 @@
         }
 
         if (data && data.success) {
-          const absoluteUrl = normalizeImageUrl(data.url);
+          let absoluteUrl = normalizeImageUrl(data.url);
+          if (absoluteUrl.endsWith(",")) absoluteUrl = absoluteUrl.slice(0, -1).trim();
+
+          const isVideoFile = data.is_video || data.video_url || absoluteUrl.endsWith(".mp4") || absoluteUrl.endsWith(".webm") || absoluteUrl.endsWith(".mov") || (file && file.type && file.type.startsWith("video/"));
           
-          if (data.is_video || data.video_url) {
+          if (isVideoFile) {
             const videoInput = document.getElementById("galleryVideoUrl");
             const mediaTypeSelect = document.getElementById("galleryMediaType");
-            if (videoInput) videoInput.value = data.video_url || absoluteUrl;
+            const finalVidUrl = data.video_url || absoluteUrl;
+            if (videoInput) videoInput.value = finalVidUrl;
             if (mediaTypeSelect) mediaTypeSelect.value = "video";
             if (typeof handleAdminVideoInput === "function") {
-              handleAdminVideoInput(data.video_url || absoluteUrl);
+              handleAdminVideoInput(finalVidUrl);
             }
-          }
-
-          if (targetInput) targetInput.value = absoluteUrl;
-
-          if (container) {
-            const thumb = container.querySelector(".preview-thumb");
-            if (thumb) thumb.src = absoluteUrl;
-            const nameEl = container.querySelector("[id$='PhotoName']");
-            if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Media";
-            if (statusDiv) {
-              statusDiv.style.color = "#4ade80";
-              statusDiv.innerHTML = `✓ Uploaded and optimized successfully`;
+            if (targetUrlInputId === "galleryPhotoUrl") {
+              if (!targetInput.value || targetInput.value.endsWith(".mp4") || targetInput.value.endsWith(".webm") || targetInput.value.endsWith(".mov") || targetInput.value.includes("/uploads,")) {
+                targetInput.value = "images/logo.webp";
+              }
+              if (container) {
+                const thumb = container.querySelector(".preview-thumb");
+                if (thumb) thumb.src = normalizeImageUrl(targetInput.value);
+                const nameEl = container.querySelector("[id$='PhotoName']");
+                if (nameEl) nameEl.textContent = data.filename || (file ? file.name : "Uploaded Video");
+                if (statusDiv) {
+                  statusDiv.style.color = "#4ade80";
+                  statusDiv.innerHTML = `✓ Video uploaded & video preview ready`;
+                }
+              }
+            }
+          } else {
+            if (targetInput) targetInput.value = absoluteUrl;
+            if (container) {
+              const thumb = container.querySelector(".preview-thumb");
+              if (thumb) thumb.src = absoluteUrl;
+              const nameEl = container.querySelector("[id$='PhotoName']");
+              if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Image";
+              if (statusDiv) {
+                statusDiv.style.color = "#4ade80";
+                statusDiv.innerHTML = `✓ Uploaded and optimized successfully`;
+              }
             }
           }
           showToast("Media uploaded successfully!");
@@ -1523,9 +1562,38 @@
       }
     }
 
+    function stopAdminVideoPreview() {
+      const prevContainer = document.getElementById("galleryVideoPreview");
+      if (prevContainer) {
+        const videoEl = prevContainer.querySelector("video");
+        if (videoEl) {
+          try {
+            videoEl.pause();
+            videoEl.currentTime = 0;
+            videoEl.src = "";
+            videoEl.load();
+          } catch (e) {}
+        }
+        const iframeEl = prevContainer.querySelector("iframe");
+        if (iframeEl) {
+          try {
+            iframeEl.src = "";
+          } catch (e) {}
+        }
+        prevContainer.style.display = "none";
+        prevContainer.innerHTML = "";
+      }
+    }
+
     // --- Modals ---
     function openModal(id) { document.getElementById(id).classList.add("active"); }
-    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+    function closeModal(id) {
+      if (id === "galleryModal" || !id) {
+        stopAdminVideoPreview();
+      }
+      const el = document.getElementById(id);
+      if (el) el.classList.remove("active");
+    }
 
     // --- 1. Dashboard Overview Stats ---
     async function loadDashboardStats() {
@@ -2023,12 +2091,9 @@
 
     function openAddGalleryModal() {
       document.getElementById("galleryForm").reset();
+      stopAdminVideoPreview();
       document.getElementById("galleryPhotoUrl").value = "";
       if (document.getElementById("galleryVideoUrl")) document.getElementById("galleryVideoUrl").value = "";
-      if (document.getElementById("galleryVideoPreview")) {
-        document.getElementById("galleryVideoPreview").style.display = "none";
-        document.getElementById("galleryVideoPreview").innerHTML = "";
-      }
       document.getElementById("galleryPhotoPreview").style.display = "none";
       openModal("galleryModal");
     }
@@ -2041,8 +2106,8 @@
         return;
       }
 
-      const rawVideoUrl = (document.getElementById("galleryVideoUrl") ? document.getElementById("galleryVideoUrl").value : "").trim();
-      let photoUrl = (document.getElementById("galleryPhotoUrl").value || "").trim();
+      const rawVideoUrl = (document.getElementById("galleryVideoUrl") ? document.getElementById("galleryVideoUrl").value : "").trim().replace(/[,]+$/, '');
+      let photoUrl = (document.getElementById("galleryPhotoUrl").value || "").trim().replace(/[,]+$/, '');
       let mediaType = document.getElementById("galleryMediaType") ? document.getElementById("galleryMediaType").value : "photo";
 
       let videoUrl = rawVideoUrl;
@@ -2095,6 +2160,7 @@
           body: JSON.stringify(payload)
         });
         if (res.ok) {
+          stopAdminVideoPreview();
           closeModal("galleryModal");
           showToast("Media published to gallery showcase!");
           loadGallery();
