@@ -1374,6 +1374,17 @@
       const file = (e && e.target && e.target.files) ? e.target.files[0] : e;
       if (!file) return;
 
+      // Client-side file size check (Vercel serverless limit is ~4.5MB payload)
+      if (file.size > 4.5 * 1024 * 1024) {
+        showArkAlert(
+          "File Size Exceeds Limit (4.5MB)",
+          `The selected file "${file.name}" is ${(file.size / (1024 * 1024)).toFixed(1)}MB. For large videos, please paste a YouTube URL or direct video link in the "Video URL" box instead of direct uploading.`,
+          "warning"
+        );
+        if (e && e.target) { try { e.target.value = ""; } catch (ign) {} }
+        return;
+      }
+
       const targetInput = document.getElementById(targetUrlInputId);
       const container = document.getElementById(previewContainerId);
 
@@ -1387,7 +1398,7 @@
           submitBtn.dataset.origText = submitBtn.innerHTML;
         }
         submitBtn.disabled = true;
-        submitBtn.innerHTML = `⏳ Uploading & Optimizing Photo...`;
+        submitBtn.innerHTML = `⏳ Uploading & Optimizing Media...`;
       }
       activeUploadsCount++;
 
@@ -1400,17 +1411,17 @@
           } catch (ign) {}
         }
         const nameEl = container.querySelector("[id$='PhotoName']");
-        if (nameEl) nameEl.textContent = file.name || "Selected Photo";
+        if (nameEl) nameEl.textContent = file.name || "Selected File";
         const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
         if (statusDiv) {
           statusDiv.className = "upload-status";
           statusDiv.style.color = "var(--gold)";
-          statusDiv.innerHTML = `⏳ Uploading & converting to WebP...`;
+          statusDiv.innerHTML = `⏳ Uploading & processing file...`;
         }
         container.style.display = "flex";
       }
 
-      showToast(`Uploading & optimizing "${file.name || 'photo'}"...`);
+      showToast(`Uploading & processing "${file.name || 'file'}"...`);
 
       const formData = new FormData();
       formData.append("file", file);
@@ -1422,25 +1433,47 @@
           body: formData
         });
 
-        const data = await res.json();
+        let data = {};
+        const textRes = await res.text();
+        try {
+          data = JSON.parse(textRes);
+        } catch (jsonErr) {
+          if (res.status === 413 || textRes.includes("Request Entity Too Large")) {
+            data = { detail: "File size too large for direct upload (Limit: 4.5MB). Please use YouTube URL for large videos." };
+          } else {
+            data = { detail: textRes || `Upload error HTTP ${res.status}` };
+          }
+        }
+
         if (res.ok && data.success) {
           const absoluteUrl = normalizeImageUrl(data.url);
+          
+          if (data.is_video || data.video_url) {
+            const videoInput = document.getElementById("galleryVideoUrl");
+            const mediaTypeSelect = document.getElementById("galleryMediaType");
+            if (videoInput) videoInput.value = data.video_url || absoluteUrl;
+            if (mediaTypeSelect) mediaTypeSelect.value = "video";
+            if (typeof handleAdminVideoInput === "function") {
+              handleAdminVideoInput(data.video_url || absoluteUrl);
+            }
+          }
+
           if (targetInput) targetInput.value = absoluteUrl;
 
           if (container) {
             const thumb = container.querySelector(".preview-thumb");
             if (thumb) thumb.src = absoluteUrl;
             const nameEl = container.querySelector("[id$='PhotoName']");
-            if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Image";
+            if (nameEl) nameEl.textContent = data.filename || file.name || "Uploaded Media";
             const statusDiv = container.querySelector(".upload-status") || container.querySelector("div > div:last-child");
             if (statusDiv) {
               statusDiv.style.color = "#4ade80";
-              statusDiv.innerHTML = `✓ Uploaded and optimized`;
+              statusDiv.innerHTML = `✓ Uploaded and optimized successfully`;
             }
           }
-          showToast("Photo uploaded & converted to WebP successfully!");
+          showToast("Media uploaded successfully!");
         } else {
-          const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Photo upload failed.");
+          const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Upload failed.");
           showToast(errMsg, true);
           if (targetInput) targetInput.value = "";
           if (container) {
