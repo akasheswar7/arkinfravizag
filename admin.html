@@ -2176,7 +2176,7 @@
       if (shouldReload) loadCustomers();
     }
 
-    async function onModalDirectorChange(resetAgent = true) {
+    function onModalDirectorChange(resetAgent = true) {
       const dirSelect = document.getElementById("customerDirectorSelect");
       const dirId = dirSelect ? dirSelect.value : "";
       const selectedOpt = dirSelect && dirSelect.selectedIndex >= 0 ? dirSelect.options[dirSelect.selectedIndex] : null;
@@ -2186,28 +2186,50 @@
       if (!agentSelect) return;
 
       const cur = agentSelect.value;
-      const ags = await ensureAgentsLoaded();
+      const ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
 
       let optionsHtml = '<option value="">Select Agent...</option>';
 
       if (ags.length > 0) {
-        let matchingAgents = ags.filter(a => {
-          if (!dirId) return true;
+        const teamAgents = [];
+        const otherAgents = [];
+
+        ags.forEach(a => {
+          if (!dirId) {
+            teamAgents.push(a);
+            return;
+          }
           const aDirId = String(a.director_id || "");
           const aDirName = String(a.director_name || a.team_head_name || "").trim().toLowerCase();
-          return (aDirId && aDirId === String(dirId)) || (dirName && dirName !== "select director..." && aDirName === dirName);
+          if ((aDirId && aDirId === String(dirId)) || (dirName && dirName !== "select director..." && aDirName === dirName)) {
+            teamAgents.push(a);
+          } else {
+            otherAgents.push(a);
+          }
         });
 
-        // Fallback: If no agents match the specific director, list all agents with their director name so list is never empty!
-        if (matchingAgents.length === 0) {
-          matchingAgents = ags;
+        // 1. Render Direct Team Agents first if available
+        if (teamAgents.length > 0) {
+          if (dirId) optionsHtml += `<optgroup label="Direct Team Agents">`;
+          teamAgents.forEach(a => {
+            const aName = a.full_name || a.name || "Agent";
+            const dName = a.director_name || a.team_head_name || "Independent";
+            optionsHtml += `<option value="${a.id}" data-name="${aName}">${aName} (${dName})</option>`;
+          });
+          if (dirId) optionsHtml += `</optgroup>`;
         }
 
-        matchingAgents.forEach(a => {
-          const aName = a.full_name || a.name || "Agent";
-          const dName = a.director_name || a.team_head_name || "Independent";
-          optionsHtml += `<option value="${a.id}" data-name="${aName}">${aName} (${dName})</option>`;
-        });
+        // 2. Render All Other Agents so dropdown is NEVER empty under any circumstance
+        const remaining = dirId ? otherAgents : [];
+        if (remaining.length > 0) {
+          optionsHtml += `<optgroup label="All Other Agents">`;
+          remaining.forEach(a => {
+            const aName = a.full_name || a.name || "Agent";
+            const dName = a.director_name || a.team_head_name || "Independent";
+            optionsHtml += `<option value="${a.id}" data-name="${aName}">${aName} (${dName})</option>`;
+          });
+          optionsHtml += `</optgroup>`;
+        }
       }
 
       agentSelect.innerHTML = optionsHtml;
