@@ -1807,7 +1807,7 @@
                 projectHighlights: p.project_highlights || [],
                 locationHighlights: p.location_highlights || []
               }));
-              allProjects = [...formattedDynamic, ...projectsData];
+              allProjects = formattedDynamic;
             }
           } catch (e) {
             console.warn("Could not load dynamic projects, using static fallback.");

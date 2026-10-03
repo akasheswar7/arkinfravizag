@@ -1144,7 +1144,7 @@
                   </div>
                 `;
               }).join('');
-              grid.insertAdjacentHTML('afterbegin', dynamicHtml);
+              grid.innerHTML = dynamicHtml;
               bindGalleryLightbox();
           }
         } catch (e) {
