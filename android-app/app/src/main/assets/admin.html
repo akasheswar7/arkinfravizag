@@ -2125,8 +2125,13 @@
     }
 
     async function populateCustomerDropdowns() {
-      const dirs = await ensureDirectorsLoaded(true);
-      const projs = await ensureProjectsLoaded(true);
+      let dirs = await ensureDirectorsLoaded(true);
+      let projs = await ensureProjectsLoaded(true);
+      let ags = await ensureAgentsLoaded(true);
+
+      if (!dirs || dirs.length === 0) dirs = await ensureDirectorsLoaded(true);
+      if (!projs || projs.length === 0) projs = await ensureProjectsLoaded(true);
+      if (!ags || ags.length === 0) ags = await ensureAgentsLoaded(true);
 
       // 1. Directors Filter & Modal Select
       const dirFilter = document.getElementById("customerDirectorFilter");
@@ -2136,7 +2141,8 @@
         let html = '<option value="All">All Directors</option>';
         dirs.forEach(d => {
           const dName = d.name || d.full_name || "Director";
-          html += `<option value="${d.id}">${dName}</option>`;
+          const dId = d.id || d._id || "";
+          html += `<option value="${dId}">${dName}</option>`;
         });
         dirFilter.innerHTML = html;
         if (cur) dirFilter.value = cur;
@@ -2147,7 +2153,8 @@
         let html = '<option value="">Select Director...</option>';
         dirs.forEach(d => {
           const dName = d.name || d.full_name || "Director";
-          html += `<option value="${d.id}" data-name="${dName}">${dName}</option>`;
+          const dId = d.id || d._id || "";
+          html += `<option value="${dId}" data-name="${dName}">${dName}</option>`;
         });
         dirSelect.innerHTML = html;
         if (cur) dirSelect.value = cur;
@@ -2160,7 +2167,8 @@
         let html = '<option value="">Select Director...</option>';
         dirs.forEach(d => {
           const dName = d.name || d.full_name || "Director";
-          html += `<option value="${d.id}">${dName} (${d.role || 'Director'})</option>`;
+          const dId = d.id || d._id || "";
+          html += `<option value="${dId}">${dName} (${d.role || 'Director'})</option>`;
         });
         agentDirSelect.innerHTML = html;
         if (cur) agentDirSelect.value = cur;
@@ -2168,7 +2176,7 @@
 
       // 2. Agents Filter & Modal Select
       await onCustomerDirectorFilterChange(false);
-      onModalDirectorChange(false);
+      await onModalDirectorChange(false);
 
       // 3. Projects / Venture Select
       const projSelect = document.getElementById("customerProjectSelect");
@@ -2192,9 +2200,10 @@
         const cur = agentFilter.value;
         let html = '<option value="All">All Agents</option>';
         ags.forEach(a => {
+          const aId = a.id || a._id || "";
           if (dirId === "All" || String(a.director_id) === String(dirId)) {
             const aName = a.full_name || a.name || "Agent";
-            html += `<option value="${a.id}">${aName}</option>`;
+            html += `<option value="${aId}">${aName}</option>`;
           }
         });
         agentFilter.innerHTML = html;
@@ -2216,17 +2225,21 @@
       return norm.split(/\s+/).filter(t => t.length > 1);
     }
 
-    function onModalDirectorChange(resetAgent = true) {
+    async function onModalDirectorChange(resetAgent = true) {
       const dirSelect = document.getElementById("customerDirectorSelect");
       const agentSelect = document.getElementById("customerAgentSelect");
       if (!agentSelect) return;
 
+      let ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
+      if (!ags || ags.length === 0) {
+        ags = await ensureAgentsLoaded(true);
+      }
+
       const dirId = dirSelect ? String(dirSelect.value || "").trim() : "";
       const selectedOpt = dirSelect && dirSelect.selectedIndex >= 0 ? dirSelect.options[dirSelect.selectedIndex] : null;
-      const rawDirName = selectedOpt ? (selectedOpt.dataset.name || selectedOpt.text || "").trim() : "";
+      const rawDirName = selectedOpt ? (selectedOpt.getAttribute("data-name") || selectedOpt.dataset.name || selectedOpt.text || "").trim() : "";
 
       const curAgentVal = agentSelect.value;
-      const ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
 
       if (!dirId && (!rawDirName || rawDirName.toLowerCase().includes("select director"))) {
         agentSelect.innerHTML = '<option value="">Select Director First...</option>';
@@ -2236,19 +2249,19 @@
       const dirTokens = getDirectorTokens(rawDirName);
       const rawUpperDir = rawDirName.toUpperCase();
 
-      const matchingAgents = ags.filter(a => {
+      let matchingAgents = ags.filter(a => {
         const aDirId = String(a.director_id || "").trim();
         const aTeamHead = String(a.team_head_name || "").trim();
         const aDirName = String(a.director_name || "").trim();
 
         // 1. Direct ID Match
-        if (dirId && aDirId && aDirId === dirId) return true;
+        if (dirId && aDirId && (aDirId === dirId || String(dirId).includes(aDirId) || String(aDirId).includes(dirId))) return true;
 
         // 2. String equality / substring match on full raw name
         if (aTeamHead && (aTeamHead.toUpperCase() === rawUpperDir || aTeamHead.toUpperCase().includes(rawUpperDir) || rawUpperDir.includes(aTeamHead.toUpperCase()))) return true;
         if (aDirName && (aDirName.toUpperCase() === rawUpperDir || aDirName.toUpperCase().includes(rawUpperDir) || rawUpperDir.includes(aDirName.toUpperCase()))) return true;
 
-        // 3. Smart Token Match (e.g. M.SRAVANI vs SRAVANI, BALU  with trailing space, etc.)
+        // 3. Smart Token Match (e.g. M.SRAVANI vs SRAVANI, BALU with trailing space, etc.)
         if (dirTokens.length > 0) {
           const headTokens = getDirectorTokens(aTeamHead).concat(getDirectorTokens(aDirName));
           const hasCommonToken = dirTokens.some(t => headTokens.includes(t));
@@ -2258,22 +2271,37 @@
         return false;
       });
 
+      // Fallback: If 0 direct matches found for this director name/id, show all agents so dropdown is NEVER empty or stuck
+      const isFallback = (matchingAgents.length === 0 && ags.length > 0);
+      if (isFallback) {
+        matchingAgents = ags;
+      }
+
       if (matchingAgents.length === 0) {
-        agentSelect.innerHTML = `<option value="">No Agents under ${rawDirName || 'this Director'}</option>`;
+        agentSelect.innerHTML = `<option value="">No Agents Available</option>`;
         return;
       }
 
       let optionsHtml = '<option value="">Select Agent...</option>';
+      if (isFallback) {
+        optionsHtml += `<optgroup label="All Agents (No direct team assigned to ${rawDirName})">`;
+      }
+
       matchingAgents.forEach(a => {
         const aName = a.full_name || a.name || "Agent";
-        const phoneStr = a.phone ? ` (${a.phone})` : "";
-        optionsHtml += `<option value="${a.id}" data-name="${aName}">${aName}${phoneStr}</option>`;
+        const aId = a.id || a._id || "";
+        const teamStr = (a.team_head_name || a.director_name) ? ` (${a.team_head_name || a.director_name})` : "";
+        optionsHtml += `<option value="${aId}" data-name="${aName}">${aName}${teamStr}</option>`;
       });
+
+      if (isFallback) {
+        optionsHtml += `</optgroup>`;
+      }
 
       agentSelect.innerHTML = optionsHtml;
 
       if (!resetAgent && curAgentVal) {
-        const exists = matchingAgents.some(a => String(a.id) === String(curAgentVal));
+        const exists = matchingAgents.some(a => String(a.id || a._id) === String(curAgentVal));
         if (exists) agentSelect.value = curAgentVal;
       }
     }
