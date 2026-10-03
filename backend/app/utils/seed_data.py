@@ -456,14 +456,33 @@ INITIAL_GALLERY = [
 
 async def seed_initial_database():
     """
-    Ensures default admin exists and seeds initial projects & gallery items.
+    Ensures default admin exists and seeds initial projects & gallery items ONCE.
+    Uses a system flag document so deleted items are NEVER re-inserted on cold restarts.
     """
     admins_col = get_collection("admins")
     projects_col = get_collection("projects")
     gallery_col = get_collection("gallery")
+    system_col = get_collection("system_settings")
     now = datetime.now(timezone.utc)
 
-    # Admin Seed
+    # Check if initial database seed has already been completed in history
+    seed_flag = await system_col.find_one({"_id": "initial_seed_completed"})
+    if seed_flag:
+        logger.info("Database initial seed already performed. Skipping re-seeding.")
+        # Ensure default admin exists
+        admin_count = await admins_col.count_documents({})
+        if admin_count == 0:
+            await admins_col.insert_one({
+                "email": settings.ADMIN_EMAIL.lower().strip(),
+                "username": "admin",
+                "hashed_password": hash_password(settings.ADMIN_PASSWORD),
+                "full_name": "ARK Infra Executive Admin",
+                "role": "admin",
+                "created_at": now
+            })
+        return
+
+    # First-Time Admin Seed
     admin_count = await admins_col.count_documents({})
     if admin_count == 0:
         logger.info(f"Seeding default admin: {settings.ADMIN_EMAIL}")
@@ -476,25 +495,32 @@ async def seed_initial_database():
             "created_at": now
         })
 
-    # Projects Seed
+    # First-Time Projects Seed (Only if collection is empty)
     project_count = await projects_col.count_documents({})
-    if project_count < 13:
-        logger.info("Seeding initial 13 projects into MongoDB database...")
+    if project_count == 0:
+        logger.info("First-time seed: populating initial 13 projects into MongoDB...")
         for p in INITIAL_PROJECTS:
             existing = await projects_col.find_one({"title": p["title"]})
             if not existing:
                 doc = {**p, "created_at": now, "updated_at": now}
                 await projects_col.insert_one(doc)
 
-    # Gallery Seed
+    # First-Time Gallery Seed (Only if collection is empty)
     gallery_count = await gallery_col.count_documents({})
-    if gallery_count < len(INITIAL_GALLERY):
-        logger.info("Seeding initial gallery items into MongoDB database...")
+    if gallery_count == 0:
+        logger.info("First-time seed: populating initial gallery items into MongoDB...")
         for g in INITIAL_GALLERY:
             existing = await gallery_col.find_one({"title": g["title"]})
             if not existing:
                 doc = {**g, "created_at": now, "updated_at": now}
                 await gallery_col.insert_one(doc)
 
-    logger.info("Database startup check completed.")
+    # Mark initial seed as permanently completed
+    await system_col.update_one(
+        {"_id": "initial_seed_completed"},
+        {"$set": {"_id": "initial_seed_completed", "completed_at": now}},
+        upsert=True
+    )
+    logger.info("Initial database seeding finished and marked complete.")
+
 
