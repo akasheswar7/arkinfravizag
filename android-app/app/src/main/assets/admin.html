@@ -1898,17 +1898,27 @@
       try {
         const res = await apiRequest(url);
         if (res.ok) {
+          cachedGallery = await res.json();
+          const tbody = document.getElementById("galleryTableBody");
+          if (!tbody) return;
+          tbody.innerHTML = "";
+
+          if (cachedGallery.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No gallery media items found. Click "+ Upload Gallery Media" to add photos or videos.</td></tr>`;
+            return;
+          }
+
           cachedGallery.forEach(g => {
             const row = document.createElement("tr");
             const mediaBadge = g.media_type === "video" ? "🎥 Video" : (g.media_type === "site_visit" ? "🏗️ Site Visit" : "📷 Photo");
             row.innerHTML = `
-              <td><img class="cell-avatar" src="${normalizeImageUrl(g.thumbnail_url || g.image_url)}" style="width:50px;height:50px;" onerror="this.src='images/logo.webp'"></td>
+              <td><img class="cell-avatar" src="${normalizeImageUrl(g.thumbnail_url || g.image_url)}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1px solid var(--gold);" onerror="this.src='images/logo.webp'"></td>
               <td><b>${g.title}</b><br><span style="color:var(--text-muted);font-size:0.75rem;">${mediaBadge} &bull; ${g.description || ''}</span></td>
               <td><span class="badge badge-visit">${g.category}</span></td>
               <td><span class="badge ${g.is_published ? 'badge-reg' : 'badge-inactive'}">${g.is_published ? 'Published' : 'Hidden'}</span></td>
               <td>
                 <button class="btn btn-outline btn-sm" onclick="toggleGalleryPublish('${g.id}', ${!g.is_published})">${g.is_published ? 'Unpublish' : 'Publish'}</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${g.id}', '${g.title}')">Delete</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteGalleryItem('${g.id}', '${(g.title || '').replace(/'/g, "\\'")}')">Delete</button>
               </td>
             `;
             tbody.appendChild(row);

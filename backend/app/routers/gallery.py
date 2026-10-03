@@ -14,6 +14,8 @@ def _format_gallery(doc: dict) -> dict:
         "title": doc.get("title", ""),
         "image_url": doc.get("image_url", ""),
         "thumbnail_url": doc.get("thumbnail_url") or doc.get("image_url"),
+        "media_type": doc.get("media_type", "photo"),
+        "video_url": doc.get("video_url", ""),
         "category": doc.get("category", "Events"),
         "description": doc.get("description"),
         "is_published": doc.get("is_published", True),
