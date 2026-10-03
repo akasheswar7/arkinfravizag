@@ -1108,9 +1108,13 @@
     </div>
   </footer>
 
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Media preview">
     <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
-    <img loading="lazy" src="" alt="Gallery preview" id="lightboxImg">
+    <div style="position:relative; display:flex; align-items:center; justify-content:center; max-width:95vw; max-height:90vh;">
+      <img loading="lazy" src="" alt="Gallery preview" id="lightboxImg" style="display:none; max-height:90vh; max-width:90vw; object-fit:contain; border-radius:8px;">
+      <iframe id="lightboxIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none; width:85vw; height:80vh; max-width:1000px; border-radius:12px; border:2px solid var(--gold); background:#000;"></iframe>
+      <video id="lightboxVideo" controls autoplay style="display:none; width:85vw; max-height:80vh; max-width:1000px; border-radius:12px; border:2px solid var(--gold); background:#000;"></video>
+    </div>
   </div>
 
   <div class="modal" id="privacyModal" role="dialog" aria-labelledby="privacyTitle" aria-modal="true">
@@ -1202,17 +1206,51 @@
         });
       }
 
+      function parseYouTubeEmbed(url) {
+        if (!url) return null;
+        const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/);
+        return match && match[1] ? `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0&enablejsapi=1` : null;
+      }
+
       function bindGalleryLightbox() {
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxIframe = document.getElementById('lightboxIframe');
+        const lightboxVideo = document.getElementById('lightboxVideo');
         if (!lightbox) return;
 
         document.querySelectorAll('.gallery-item').forEach(function (item) {
           item.onclick = function () {
             const img = item.querySelector('img');
             if (!img) return;
-            lightboxImg.src = img.dataset.full || img.src;
-            lightboxImg.alt = img.alt || 'ARK Infra Gallery Item';
+
+            const fullUrl = (img.dataset.full || img.src || "").trim();
+            const ytEmbed = parseYouTubeEmbed(fullUrl);
+
+            // Reset media elements
+            if (lightboxImg) { lightboxImg.style.display = 'none'; lightboxImg.src = ''; }
+            if (lightboxIframe) { lightboxIframe.style.display = 'none'; lightboxIframe.src = ''; }
+            if (lightboxVideo) { lightboxVideo.style.display = 'none'; lightboxVideo.pause(); lightboxVideo.src = ''; }
+
+            if (ytEmbed) {
+              if (lightboxIframe) {
+                lightboxIframe.src = ytEmbed;
+                lightboxIframe.style.display = 'block';
+              }
+            } else if (fullUrl.endsWith(".mp4") || fullUrl.endsWith(".webm") || fullUrl.endsWith(".ogg") || fullUrl.includes("video")) {
+              if (lightboxVideo) {
+                lightboxVideo.src = fullUrl;
+                lightboxVideo.style.display = 'block';
+                lightboxVideo.play().catch(function(e) { console.log(e); });
+              }
+            } else {
+              if (lightboxImg) {
+                lightboxImg.src = img.src || fullUrl;
+                lightboxImg.alt = img.alt || 'ARK Infra Gallery Item';
+                lightboxImg.style.display = 'block';
+              }
+            }
+
             lightbox.classList.add('open');
             document.body.style.overflow = 'hidden';
           };
@@ -1239,7 +1277,12 @@
               }
               const isVideo = (g.media_type === "video" || g.video_url);
               const playOverlay = isVideo ? `<div class="gallery-play-btn">▶</div>` : '';
-              const imgSrc = g.thumbnail_url || g.image_url;
+              
+              let imgSrc = g.thumbnail_url || g.image_url;
+              const ytMatch = (g.video_url || "").match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/);
+              if (ytMatch && ytMatch[1] && (!imgSrc || imgSrc === "images/logo.webp")) {
+                imgSrc = `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+              }
 
               return `
                 <div class="gallery-item" data-gallery="${tag}">
@@ -1276,36 +1319,42 @@
         });
       });
 
-            const lightbox = document.getElementById('lightbox');
-      const lightboxImg = document.getElementById('lightboxImg');
-      document.querySelectorAll('.gallery-item img').forEach(function (img) {
-        img.addEventListener('click', function () {
-          lightboxImg.src = img.dataset.full || img.src;
-          lightboxImg.alt = img.alt;
-          lightbox.classList.add('open');
-          document.body.style.overflow = 'hidden';
-        });
-      });
       function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxIframe = document.getElementById('lightboxIframe');
+        const lightboxVideo = document.getElementById('lightboxVideo');
+
         if (lightbox) {
           lightbox.classList.remove('open');
           document.body.style.overflow = '';
         }
+        if (lightboxIframe) {
+          lightboxIframe.src = '';
+          lightboxIframe.style.display = 'none';
+        }
+        if (lightboxVideo) {
+          lightboxVideo.pause();
+          lightboxVideo.src = '';
+          lightboxVideo.style.display = 'none';
+        }
+        if (lightboxImg) {
+          lightboxImg.src = '';
+          lightboxImg.style.display = 'none';
+        }
       }
+
       if (document.getElementById('lightboxClose')) {
         document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
       }
-      if (lightbox) {
-        lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
+      const lightboxEl = document.getElementById('lightbox');
+      if (lightboxEl) {
+        lightboxEl.addEventListener('click', function (e) { if (e.target === lightboxEl) closeLightbox(); });
       }
 
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           closeLightbox();
-        }
-      });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
           closeModals();
         }
       });

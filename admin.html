@@ -917,15 +917,17 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Video URL (For YouTube / MP4 Videos)</label>
-          <input type="text" id="galleryVideoUrl" class="form-input" placeholder="e.g. https://www.youtube.com/embed/... or video.mp4">
+          <label class="form-label">Video URL (YouTube link or MP4 file with audio)</label>
+          <input type="text" id="galleryVideoUrl" class="form-input" placeholder="e.g. https://www.youtube.com/watch?v=... or https://youtu.be/... or video.mp4" oninput="handleAdminVideoInput(this.value)">
+          <div id="galleryVideoPreview" style="display:none; margin-top:0.5rem; border-radius:8px; overflow:hidden; border:1px solid var(--gold); background:#000;">
+          </div>
         </div>
         
         <!-- Photo / Thumbnail Upload Box -->
         <div class="form-group">
-          <label class="form-label">Photo / Thumbnail Cover Image *</label>
+          <label class="form-label">Photo / Cover Thumbnail Image *</label>
           <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
-            <input type="text" id="galleryPhotoUrl" class="form-input" required placeholder="Image URL or upload below...">
+            <input type="text" id="galleryPhotoUrl" class="form-input" placeholder="Cover image URL or upload below (Auto-filled for YouTube)...">
             <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('galleryFileInput').click()" style="white-space: nowrap;">📁 Upload</button>
           </div>
           <input type="file" id="galleryFileInput" accept="image/*,video/*" style="display: none;" onchange="handleFileUpload(event, 'galleryPhotoUrl', 'galleryPhotoPreview', 'gallery')">
@@ -1927,10 +1929,56 @@
       } catch (e) { console.error(e); }
     }
 
+    function handleAdminVideoInput(val) {
+      const prevContainer = document.getElementById("galleryVideoPreview");
+      if (!val) {
+        if (prevContainer) { prevContainer.style.display = "none"; prevContainer.innerHTML = ""; }
+        return;
+      }
+      val = val.trim();
+      const ytMatch = val.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/);
+      const mediaTypeSelect = document.getElementById("galleryMediaType");
+      const photoUrlInput = document.getElementById("galleryPhotoUrl");
+
+      if (ytMatch && ytMatch[1]) {
+        const videoId = ytMatch[1];
+        const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1`;
+        const thumbUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        
+        if (mediaTypeSelect) mediaTypeSelect.value = "video";
+        if (photoUrlInput && !photoUrlInput.value.trim()) {
+          photoUrlInput.value = thumbUrl;
+          const prevBox = document.getElementById("galleryPhotoPreview");
+          const prevImg = document.getElementById("galleryPreviewImg");
+          if (prevBox && prevImg) {
+            prevImg.src = thumbUrl;
+            prevBox.style.display = "flex";
+          }
+        }
+        if (prevContainer) {
+          prevContainer.style.display = "block";
+          prevContainer.innerHTML = `<iframe src="${embedUrl}" style="width:100%; height:200px; border:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }
+      } else if (val.endsWith(".mp4") || val.endsWith(".webm") || val.includes("video")) {
+        if (mediaTypeSelect) mediaTypeSelect.value = "video";
+        if (prevContainer) {
+          prevContainer.style.display = "block";
+          prevContainer.innerHTML = `<video src="${val}" controls style="width:100%; max-height:200px;"></video>`;
+        }
+      } else if (prevContainer) {
+        prevContainer.style.display = "none";
+        prevContainer.innerHTML = "";
+      }
+    }
+
     function openAddGalleryModal() {
       document.getElementById("galleryForm").reset();
       document.getElementById("galleryPhotoUrl").value = "";
       if (document.getElementById("galleryVideoUrl")) document.getElementById("galleryVideoUrl").value = "";
+      if (document.getElementById("galleryVideoPreview")) {
+        document.getElementById("galleryVideoPreview").style.display = "none";
+        document.getElementById("galleryVideoPreview").innerHTML = "";
+      }
       document.getElementById("galleryPhotoPreview").style.display = "none";
       openModal("galleryModal");
     }
@@ -1943,20 +1991,36 @@
         return;
       }
 
-      const photoUrl = (document.getElementById("galleryPhotoUrl").value || "").trim();
+      const rawVideoUrl = (document.getElementById("galleryVideoUrl") ? document.getElementById("galleryVideoUrl").value : "").trim();
+      let photoUrl = (document.getElementById("galleryPhotoUrl").value || "").trim();
+      let mediaType = document.getElementById("galleryMediaType") ? document.getElementById("galleryMediaType").value : "photo";
 
-      if (!photoUrl) {
+      let videoUrl = rawVideoUrl;
+      if (rawVideoUrl) {
+        const ytMatch = rawVideoUrl.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/);
+        if (ytMatch && ytMatch[1]) {
+          videoUrl = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0&enablejsapi=1`;
+          if (!photoUrl) {
+            photoUrl = `https://img.youtube.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+          }
+          mediaType = "video";
+        }
+      }
+
+      if (!photoUrl && !videoUrl) {
         showArkAlert(
-          "Cover Image Required",
-          "Please select and upload a high-resolution cover photo/thumbnail for the gallery item.",
+          "Media Content Required",
+          "Please select/upload a cover photo or enter a valid YouTube/Video link.",
           "warning"
         );
         return;
       }
 
+      if (!photoUrl && videoUrl) {
+        photoUrl = "images/logo.webp";
+      }
+
       const fullUrl = normalizeImageUrl(photoUrl);
-      const mediaType = document.getElementById("galleryMediaType") ? document.getElementById("galleryMediaType").value : "photo";
-      const videoUrl = document.getElementById("galleryVideoUrl") ? document.getElementById("galleryVideoUrl").value.trim() : "";
 
       const payload = {
         title: document.getElementById("galleryTitle").value.trim(),
