@@ -558,14 +558,24 @@
         <!-- SECTION 5: CUSTOMERS -->
         <section id="tab-customers" style="display: none;">
           <div class="table-container">
-            <div class="table-header-bar">
-              <div style="display: flex; gap: 1rem; align-items: center; flex: 1;">
-                <input type="text" id="customerSearchInput" class="form-input" placeholder="Search customer name or phone..." style="max-width: 280px;" oninput="loadCustomers()">
-                <select id="customerStatusFilter" class="form-select" style="max-width: 220px;" onchange="loadCustomers()">
+            <div class="table-header-bar" style="flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; gap: 0.75rem; align-items: center; flex: 1; flex-wrap: wrap;">
+                <input type="text" id="customerSearchInput" class="form-input" placeholder="Search customer, phone, address, plot..." style="max-width: 250px;" oninput="loadCustomers()">
+                <select id="customerStatusFilter" class="form-select" style="max-width: 180px;" onchange="loadCustomers()">
                   <option value="All">All Statuses</option>
-                  <option value="Pending">Pending</option>
-                  <option value="Site Visit Completed">Site Visit Completed</option>
-                  <option value="Registration Completed">Registration Completed</option>
+                  <option value="Pending">⏳ Pending</option>
+                  <option value="Positive">👍 Positive</option>
+                  <option value="Negative">👎 Negative</option>
+                  <option value="Amount Paid">💰 Amount Paid</option>
+                  <option value="Fail">❌ Fail</option>
+                  <option value="Site Visit Completed">🏗️ Site Visit Completed</option>
+                  <option value="Registration Completed">📜 Registration Completed</option>
+                </select>
+                <select id="customerDirectorFilter" class="form-select" style="max-width: 180px;" onchange="onCustomerDirectorFilterChange()">
+                  <option value="All">All Directors</option>
+                </select>
+                <select id="customerAgentFilter" class="form-select" style="max-width: 180px;" onchange="loadCustomers()">
+                  <option value="All">All Agents</option>
                 </select>
               </div>
               <button class="btn btn-gold btn-sm" onclick="openAddCustomerModal()">+ Add Customer Lead</button>
@@ -573,11 +583,12 @@
             <table class="data-table">
               <thead>
                 <tr>
-                  <th>Customer Name</th>
-                  <th>Contact</th>
-                  <th>Submission Date</th>
-                  <th>Site Visit Status</th>
-                  <th>Interested Venture</th>
+                  <th>Photo</th>
+                  <th>Customer & Contact</th>
+                  <th>Assigned Director & Agent</th>
+                  <th>Status & Date</th>
+                  <th>Venture & Plot Info</th>
+                  <th>Advance Fee & Receipt</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -843,37 +854,124 @@
 
   <!-- Modal: Customer Form -->
   <div id="customerModal" class="modal-overlay">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 680px;">
       <div class="modal-header">
         <h3 class="modal-title" id="customerModalTitle">Add Customer Lead</h3>
         <button class="modal-close" onclick="closeModal('customerModal')">&times;</button>
       </div>
       <form id="customerForm" onsubmit="handleCustomerSubmit(event)">
         <input type="hidden" id="customerEditId">
+
+        <!-- Customer Photo Upload -->
         <div class="form-group">
-          <label class="form-label">Customer Name *</label>
-          <input type="text" id="customerName" class="form-input" required placeholder="e.g. G. Venkata Ramana">
+          <label class="form-label">Customer Photo / ID Avatar</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <input type="text" id="customerPhotoUrl" class="form-input" placeholder="Photo URL or upload file below..." oninput="updateCustomerPhotoPreview(this.value)">
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('customerFileInput').click()" style="white-space: nowrap;">📁 Upload Photo</button>
+          </div>
+          <input type="file" id="customerFileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'customerPhotoUrl', 'customerPhotoPreview', 'customers')">
+          <div id="customerPhotoPreview" class="preview-box" style="display: none;">
+            <img class="preview-thumb" id="customerPreviewImg" src="" alt="Preview" onerror="this.src='images/logo.webp'">
+            <div>
+              <div style="font-size: 0.8rem; color: #fff;" id="customerPhotoName">customer.webp</div>
+              <div style="font-size: 0.7rem; color: #4ade80;">✓ Uploaded and optimized</div>
+            </div>
+          </div>
         </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Customer Name *</label>
+            <input type="text" id="customerName" class="form-input" required placeholder="e.g. G. Venkata Ramana">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input type="text" id="customerPhone" class="form-input" required placeholder="+91 98480 11223" onblur="validateCustomerPhone(this.value)">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="customerEmail" class="form-input" placeholder="ramana@example.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Lead Status *</label>
+            <select id="customerStatusSelect" class="form-select" required>
+              <option value="Pending">⏳ Pending</option>
+              <option value="Positive">👍 Positive</option>
+              <option value="Negative">👎 Negative</option>
+              <option value="Amount Paid">💰 Amount Paid</option>
+              <option value="Fail">❌ Fail</option>
+              <option value="Site Visit Completed">🏗️ Site Visit Completed</option>
+              <option value="Registration Completed">📜 Registration Completed</option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <input type="text" id="customerPhone" class="form-input" placeholder="+91 98480 11223">
+          <label class="form-label">Customer Address</label>
+          <textarea id="customerAddress" class="form-textarea" rows="2" placeholder="Full street address, city, district, pin code..."></textarea>
         </div>
+
+        <!-- Director & Agent Referral Chain -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Assigned Director</label>
+            <select id="customerDirectorSelect" class="form-select" onchange="onModalDirectorChange()">
+              <option value="">Select Director...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Assigned Agent</label>
+            <select id="customerAgentSelect" class="form-select">
+              <option value="">Select Agent...</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Venture & Plot Details -->
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Venture / Project List</label>
+            <select id="customerProjectSelect" class="form-select">
+              <option value="">Select Venture...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plot Number</label>
+            <input type="text" id="customerPlotNumber" class="form-input" placeholder="e.g. Plot #104">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plot Size</label>
+            <input type="text" id="customerPlotSize" class="form-input" placeholder="e.g. 150 Sq. Yds">
+          </div>
+        </div>
+
+        <!-- Advance Fee & Payment Bill / Receipt File Upload -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Advance Fee Paid (₹)</label>
+            <input type="text" id="customerAdvanceAmount" class="form-input" placeholder="e.g. 50,000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Payment Bill / Receipt (PDF or Image)</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="customerReceiptUrl" class="form-input" placeholder="Receipt link or upload below...">
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('customerReceiptFileInput').click()" style="white-space: nowrap;">📄 Upload</button>
+            </div>
+            <input type="file" id="customerReceiptFileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleFileUpload(event, 'customerReceiptUrl', 'customerReceiptPreview', 'receipts')">
+            <div id="customerReceiptPreview" class="preview-box" style="display: none; margin-top: 0.5rem;">
+              <div style="font-size: 0.8rem; color: #4ade80;" id="customerReceiptStatus">✓ Receipt Uploaded Successfully</div>
+            </div>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label class="form-label">Site Visit Status *</label>
-          <select id="customerStatusSelect" class="form-select" required>
-            <option value="Pending">Pending</option>
-            <option value="Site Visit Completed">Site Visit Completed</option>
-            <option value="Registration Completed">Registration Completed</option>
-          </select>
+          <label class="form-label">Operational Notes / Requirements</label>
+          <textarea id="customerNotes" class="form-textarea" rows="2" placeholder="Customer requirements, special discounts, payment terms..."></textarea>
         </div>
-        <div class="form-group">
-          <label class="form-label">Interested Venture / Project</label>
-          <input type="text" id="customerProject" class="form-input" placeholder="e.g. Highway City, Sabbavaram Education City">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Operational Notes</label>
-          <textarea id="customerNotes" class="form-textarea" rows="2" placeholder="Customer requirements, preferred plot sizes..."></textarea>
-        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeModal('customerModal')">Cancel</button>
           <button type="submit" class="btn btn-gold">Save Customer</button>
@@ -1914,10 +2012,108 @@
 
     // --- 4. Customers CRUD ---
     let cachedCustomers = [];
+
+    function updateCustomerPhotoPreview(val) {
+      if (!val) return;
+      val = String(val).trim().replace(/[,]+$/, '');
+      const prevBox = document.getElementById("customerPhotoPreview");
+      const prevImg = document.getElementById("customerPreviewImg");
+      const nameEl = document.getElementById("customerPhotoName");
+      if (prevBox && prevImg) {
+        prevImg.src = normalizeImageUrl(val);
+        if (nameEl) nameEl.textContent = "Customer Avatar";
+        prevBox.style.display = "flex";
+      }
+    }
+
+    function populateCustomerDropdowns() {
+      // 1. Directors Filter & Modal Select
+      const dirFilter = document.getElementById("customerDirectorFilter");
+      const dirSelect = document.getElementById("customerDirectorSelect");
+      if (dirFilter) {
+        const cur = dirFilter.value;
+        dirFilter.innerHTML = '<option value="All">All Directors</option>';
+        (cachedDirectors || []).forEach(d => {
+          dirFilter.innerHTML += `<option value="${d.id}">${d.name || d.full_name}</option>`;
+        });
+        if (cur) dirFilter.value = cur;
+      }
+      if (dirSelect) {
+        const cur = dirSelect.value;
+        dirSelect.innerHTML = '<option value="">Select Director...</option>';
+        (cachedDirectors || []).forEach(d => {
+          dirSelect.innerHTML += `<option value="${d.id}" data-name="${d.name || d.full_name}">${d.name || d.full_name}</option>`;
+        });
+        if (cur) dirSelect.value = cur;
+      }
+
+      // 2. Agents Filter & Modal Select
+      onCustomerDirectorFilterChange(false);
+      onModalDirectorChange(false);
+
+      // 3. Projects Select
+      const projSelect = document.getElementById("customerProjectSelect");
+      if (projSelect) {
+        const cur = projSelect.value;
+        projSelect.innerHTML = '<option value="">Select Venture...</option>';
+        (cachedProjects || []).forEach(p => {
+          projSelect.innerHTML += `<option value="${p.title}">${p.title}</option>`;
+        });
+        if (cur) projSelect.value = cur;
+      }
+    }
+
+    function onCustomerDirectorFilterChange(shouldReload = true) {
+      const dirId = document.getElementById("customerDirectorFilter")?.value || "All";
+      const agentFilter = document.getElementById("customerAgentFilter");
+      if (agentFilter) {
+        const cur = agentFilter.value;
+        agentFilter.innerHTML = '<option value="All">All Agents</option>';
+        (cachedAgents || []).forEach(a => {
+          if (dirId === "All" || a.director_id === dirId) {
+            agentFilter.innerHTML += `<option value="${a.id}">${a.name || a.full_name}</option>`;
+          }
+        });
+        if (cur) agentFilter.value = cur;
+      }
+      if (shouldReload) loadCustomers();
+    }
+
+    function onModalDirectorChange(resetAgent = true) {
+      const dirId = document.getElementById("customerDirectorSelect")?.value || "";
+      const agentSelect = document.getElementById("customerAgentSelect");
+      if (agentSelect) {
+        const cur = agentSelect.value;
+        agentSelect.innerHTML = '<option value="">Select Agent...</option>';
+        (cachedAgents || []).forEach(a => {
+          if (!dirId || a.director_id === dirId) {
+            agentSelect.innerHTML += `<option value="${a.id}" data-name="${a.name || a.full_name}">${a.name || a.full_name} (${a.director_name || 'Independent'})</option>`;
+          }
+        });
+        if (!resetAgent && cur) agentSelect.value = cur;
+      }
+    }
+
+    function validateCustomerPhone(val) {
+      if (!val) return;
+      val = val.trim();
+      const curId = document.getElementById("customerEditId").value;
+      const dup = cachedCustomers.find(c => c.phone && c.phone.trim() === val && c.id !== curId);
+      if (dup) {
+        showToast(`⚠️ Phone '${val}' is already registered to "${dup.customer_name}"!`, true);
+      }
+    }
+
     async function loadCustomers() {
+      populateCustomerDropdowns();
       const status = document.getElementById("customerStatusFilter")?.value || "All";
+      const directorId = document.getElementById("customerDirectorFilter")?.value || "All";
+      const agentId = document.getElementById("customerAgentFilter")?.value || "All";
       const search = document.getElementById("customerSearchInput")?.value || "";
-      let url = `/admin/customers?status=${status}&`;
+
+      let url = `/admin/customers?status=${encodeURIComponent(status)}&`;
+      if (directorId !== "All") url += `director_id=${encodeURIComponent(directorId)}&`;
+      if (agentId !== "All") url += `agent_id=${encodeURIComponent(agentId)}&`;
       if (search) url += `search=${encodeURIComponent(search)}&`;
 
       try {
@@ -1925,23 +2121,58 @@
         if (res.ok) {
           cachedCustomers = await res.json();
           const tbody = document.getElementById("customersTableBody");
+          if (!tbody) return;
           tbody.innerHTML = "";
+
+          if (cachedCustomers.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No customer lead records found. Click "+ Add Customer Lead" to create a record.</td></tr>`;
+            return;
+          }
 
           cachedCustomers.forEach(c => {
             let badgeClass = "badge-pending";
             if (c.site_visit_status === "Site Visit Completed") badgeClass = "badge-visit";
-            if (c.site_visit_status === "Registration Completed") badgeClass = "badge-reg";
+            else if (c.site_visit_status === "Registration Completed" || c.site_visit_status === "Amount Paid" || c.site_visit_status === "Positive") badgeClass = "badge-reg";
+            else if (c.site_visit_status === "Fail" || c.site_visit_status === "Negative") badgeClass = "badge-inactive";
+
+            const photoUrl = normalizeImageUrl(c.photo_or_id || "images/logo.webp");
+
+            const receiptHtml = c.receipt_url ? 
+              `<a href="${normalizeImageUrl(c.receipt_url)}" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.7rem; padding:2px 6px;">📄 View Bill</a>` : 
+              `<span style="color:var(--text-muted); font-size:0.75rem;">None</span>`;
+
+            const plotInfo = (c.plot_number || c.plot_size) ? 
+              `<br/><span style="color:var(--gold); font-size:0.75rem;">Plot: ${c.plot_number || ''} (${c.plot_size || ''})</span>` : '';
+
+            const advInfo = c.advance_amount ? `<br/><span style="color:#4ade80; font-size:0.75rem;">Adv: ₹${c.advance_amount}</span>` : '';
 
             const row = document.createElement("tr");
             row.innerHTML = `
-              <td><b>${c.customer_name}</b></td>
-              <td>${c.phone || '-'}<br><span style="color:var(--text-muted);font-size:0.75rem;">${c.email || ''}</span></td>
-              <td>${c.submission_date}</td>
-              <td><span class="badge ${badgeClass}">${c.site_visit_status}</span></td>
-              <td>${c.project_interested || '-'}</td>
+              <td><img class="cell-avatar" src="${photoUrl}" style="width:42px;height:42px;object-fit:cover;border-radius:50%;border:1px solid var(--gold);" onerror="this.src='images/logo.webp'"></td>
+              <td>
+                <b>${c.customer_name}</b><br/>
+                <span style="color:var(--gold); font-size:0.8rem;">📞 ${c.phone || '-'}</span>
+                ${c.address ? `<br/><span style="color:var(--text-muted); font-size:0.72rem;">📍 ${c.address}</span>` : ''}
+              </td>
+              <td>
+                <span style="font-size:0.82rem; color:#fff;">👔 <b>Dir:</b> ${c.director_name || '-'}</span><br/>
+                <span style="font-size:0.78rem; color:var(--text-muted);">🤝 <b>Agent:</b> ${c.agent_name || '-'}</span>
+              </td>
+              <td>
+                <span class="badge ${badgeClass}">${c.site_visit_status}</span><br/>
+                <span style="color:var(--text-muted); font-size:0.72rem;">📅 ${c.submission_date}</span>
+              </td>
+              <td>
+                <b>${c.project_interested || '-'}</b>
+                ${plotInfo}
+              </td>
+              <td>
+                ${receiptHtml}
+                ${advInfo}
+              </td>
               <td>
                 <button class="btn btn-outline btn-sm" onclick="editCustomer('${c.id}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}', '${c.customer_name}')">Delete</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}', '${(c.customer_name || '').replace(/'/g, "\\'")}')">Delete</button>
               </td>
             `;
             tbody.appendChild(row);
@@ -1951,21 +2182,49 @@
     }
 
     function openAddCustomerModal() {
+      populateCustomerDropdowns();
       document.getElementById("customerModalTitle").textContent = "Add Customer Lead";
       document.getElementById("customerForm").reset();
       document.getElementById("customerEditId").value = "";
+      document.getElementById("customerPhotoUrl").value = "";
+      document.getElementById("customerReceiptUrl").value = "";
+      document.getElementById("customerPhotoPreview").style.display = "none";
+      document.getElementById("customerReceiptPreview").style.display = "none";
       openModal("customerModal");
     }
 
     function editCustomer(id) {
+      populateCustomerDropdowns();
       const c = cachedCustomers.find(x => x.id === id);
       if (!c) return;
+
       document.getElementById("customerModalTitle").textContent = "Edit Customer Lead";
       document.getElementById("customerEditId").value = c.id;
-      document.getElementById("customerName").value = c.customer_name;
+      document.getElementById("customerPhotoUrl").value = c.photo_or_id || "";
+      if (c.photo_or_id) updateCustomerPhotoPreview(c.photo_or_id);
+
+      document.getElementById("customerName").value = c.customer_name || "";
       document.getElementById("customerPhone").value = c.phone || "";
-      document.getElementById("customerStatusSelect").value = c.site_visit_status;
-      document.getElementById("customerProject").value = c.project_interested || "";
+      document.getElementById("customerEmail").value = c.email || "";
+      document.getElementById("customerAddress").value = c.address || "";
+
+      document.getElementById("customerDirectorSelect").value = c.director_id || "";
+      onModalDirectorChange(false);
+      document.getElementById("customerAgentSelect").value = c.agent_id || "";
+
+      document.getElementById("customerStatusSelect").value = c.site_visit_status || "Pending";
+      document.getElementById("customerProjectSelect").value = c.project_interested || "";
+      document.getElementById("customerPlotNumber").value = c.plot_number || "";
+      document.getElementById("customerPlotSize").value = c.plot_size || "";
+      document.getElementById("customerAdvanceAmount").value = c.advance_amount || "";
+
+      document.getElementById("customerReceiptUrl").value = c.receipt_url || "";
+      if (c.receipt_url) {
+        document.getElementById("customerReceiptPreview").style.display = "block";
+      } else {
+        document.getElementById("customerReceiptPreview").style.display = "none";
+      }
+
       document.getElementById("customerNotes").value = c.notes || "";
       openModal("customerModal");
     }
@@ -1973,12 +2232,41 @@
     async function handleCustomerSubmit(e) {
       e.preventDefault();
       const id = document.getElementById("customerEditId").value;
+      const phoneVal = (document.getElementById("customerPhone").value || "").trim();
+
+      if (phoneVal) {
+        const dup = cachedCustomers.find(c => c.phone && c.phone.trim() === phoneVal && c.id !== id);
+        if (dup) {
+          showArkAlert("Duplicate Customer Phone", `Phone number '${phoneVal}' is already registered under customer "${dup.customer_name}".`, "warning");
+          return;
+        }
+      }
+
+      const dirSelect = document.getElementById("customerDirectorSelect");
+      const selectedDirOpt = dirSelect.options[dirSelect.selectedIndex];
+      const dirName = selectedDirOpt ? selectedDirOpt.dataset.name || selectedDirOpt.text : "";
+
+      const agentSelect = document.getElementById("customerAgentSelect");
+      const selectedAgentOpt = agentSelect.options[agentSelect.selectedIndex];
+      const agentName = selectedAgentOpt ? selectedAgentOpt.dataset.name || selectedAgentOpt.text : "";
+
       const payload = {
-        customer_name: document.getElementById("customerName").value,
-        phone: document.getElementById("customerPhone").value,
+        customer_name: document.getElementById("customerName").value.trim(),
+        phone: phoneVal,
+        email: (document.getElementById("customerEmail").value || "").trim(),
+        address: (document.getElementById("customerAddress").value || "").trim(),
+        photo_or_id: (document.getElementById("customerPhotoUrl").value || "").trim(),
+        director_id: dirSelect.value || null,
+        director_name: dirSelect.value ? dirName : null,
+        agent_id: agentSelect.value || null,
+        agent_name: agentSelect.value ? agentName : null,
         site_visit_status: document.getElementById("customerStatusSelect").value,
-        project_interested: document.getElementById("customerProject").value,
-        notes: document.getElementById("customerNotes").value
+        project_interested: document.getElementById("customerProjectSelect").value || "",
+        plot_number: (document.getElementById("customerPlotNumber").value || "").trim(),
+        plot_size: (document.getElementById("customerPlotSize").value || "").trim(),
+        advance_amount: (document.getElementById("customerAdvanceAmount").value || "").trim(),
+        receipt_url: (document.getElementById("customerReceiptUrl").value || "").trim(),
+        notes: (document.getElementById("customerNotes").value || "").trim()
       };
 
       const endpoint = id ? `/admin/customers/${id}` : "/admin/customers";
@@ -1987,9 +2275,12 @@
       const res = await apiRequest(endpoint, { method, body: JSON.stringify(payload) });
       if (res.ok) {
         closeModal("customerModal");
-        showToast("Customer record saved!");
+        showToast("Customer lead record saved to MongoDB successfully!");
         loadCustomers();
         loadDashboardStats();
+      } else {
+        const errData = await res.json().catch(() => ({}));
+        showToast(formatErrorMessage(errData.detail || errData.message || "Failed to save customer record."), true);
       }
     }
 
@@ -2000,7 +2291,7 @@
         async () => {
           const res = await apiRequest(`/admin/customers/${id}`, { method: "DELETE" });
           if (res.ok) {
-            showToast("Customer record deleted.");
+            showToast("Customer record deleted from MongoDB.");
             loadCustomers();
             loadDashboardStats();
           }

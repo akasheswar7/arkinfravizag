@@ -567,37 +567,61 @@ def generate_customers_pdf(customers: List[Dict[str, Any]], filter_status: str =
         rows = [
             [
                 Paragraph("<b>#</b>", styles['ArkMuted']),
-                Paragraph("<b>Customer Name</b>", styles['ArkMuted']),
-                Paragraph("<b>Phone / Contact</b>", styles['ArkMuted']),
-                Paragraph("<b>Submission Date</b>", styles['ArkMuted']),
-                Paragraph("<b>Site Visit Status</b>", styles['ArkMuted']),
-                Paragraph("<b>Project / Notes</b>", styles['ArkMuted'])
+                Paragraph("<b>Customer Name & Contact</b>", styles['ArkMuted']),
+                Paragraph("<b>Director & Agent</b>", styles['ArkMuted']),
+                Paragraph("<b>Status & Date</b>", styles['ArkMuted']),
+                Paragraph("<b>Venture & Plot Details</b>", styles['ArkMuted']),
+                Paragraph("<b>Advance Paid & Notes</b>", styles['ArkMuted'])
             ]
         ]
 
         for idx, cust in enumerate(customers, start=1):
             c_name = _clean_text(cust.get("customer_name", "Customer"))
             c_phone = _clean_text(cust.get("phone") or "N/A")
+            c_addr = _clean_text(cust.get("address") or "")
+            c_contact_str = f"<b>{c_name}</b><br/>{c_phone}" + (f"<br/><font color='#64748b'>{c_addr}</font>" if c_addr else "")
+            
+            c_dir = _clean_text(cust.get("director_name") or "-")
+            c_agent = _clean_text(cust.get("agent_name") or "-")
+            c_team_str = f"<b>Dir:</b> {c_dir}<br/><b>Agent:</b> {c_agent}"
+
             c_date = _clean_text(cust.get("submission_date") or "-")
             c_status = _clean_text(cust.get("site_visit_status") or "Pending")
-            c_notes = _clean_text(cust.get("notes") or cust.get("project_interested") or "-")
 
             status_color = "#eab308"
-            if c_status == "Site Visit Completed":
-                status_color = "#3b82f6"
-            elif c_status == "Registration Completed":
+            if c_status in ["Registration Completed", "Amount Paid", "Positive"]:
                 status_color = "#22c55e"
+            elif c_status in ["Site Visit Completed"]:
+                status_color = "#3b82f6"
+            elif c_status in ["Fail", "Negative"]:
+                status_color = "#ef4444"
+
+            c_status_str = f"<font color='{status_color}'><b>{c_status}</b></font><br/><font color='#64748b'>{c_date}</font>"
+
+            c_proj = _clean_text(cust.get("project_interested") or "-")
+            c_plot_no = _clean_text(cust.get("plot_number") or "")
+            c_plot_size = _clean_text(cust.get("plot_size") or "")
+            c_plot_str = f"<b>{c_proj}</b>"
+            if c_plot_no or c_plot_size:
+                c_plot_str += f"<br/>Plot #{c_plot_no}" if c_plot_no else ""
+                c_plot_str += f" ({c_plot_size})" if c_plot_size else ""
+
+            c_adv = _clean_text(cust.get("advance_amount") or "")
+            c_notes = _clean_text(cust.get("notes") or "")
+            c_adv_str = f"<b>Adv:</b> {c_adv}" if c_adv else "<b>Adv:</b> None"
+            if c_notes:
+                c_adv_str += f"<br/><font color='#64748b'>{c_notes[:50]}</font>"
 
             rows.append([
                 Paragraph(str(idx), styles['ArkMuted']),
-                Paragraph(f"<b>{c_name}</b>", styles['ArkBody']),
-                Paragraph(c_phone, styles['ArkBody']),
-                Paragraph(c_date, styles['ArkBody']),
-                Paragraph(f"<font color='{status_color}'><b>{c_status}</b></font>", styles['ArkBody']),
-                Paragraph(c_notes[:80] + ("..." if len(c_notes) > 80 else ""), styles['ArkMuted'])
+                Paragraph(c_contact_str, styles['ArkBody']),
+                Paragraph(c_team_str, styles['ArkBody']),
+                Paragraph(c_status_str, styles['ArkBody']),
+                Paragraph(c_plot_str, styles['ArkBody']),
+                Paragraph(c_adv_str, styles['ArkBody'])
             ])
 
-        cust_table = Table(rows, colWidths=[25, 125, 95, 80, 105, 100])
+        cust_table = Table(rows, colWidths=[25, 115, 105, 95, 105, 85])
         cust_table.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (-1,0), colors.HexColor("#e2e8f0")),
             ('GRID', (0,0), (-1,-1), 0.5, colors.HexColor("#cbd5e1")),
