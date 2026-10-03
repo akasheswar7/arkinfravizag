@@ -941,6 +941,7 @@
         <button class="gallery-filter active" data-gallery="all">All</button>
         <button class="gallery-filter" data-gallery="site">Site Visits</button>
         <button class="gallery-filter" data-gallery="event">Events</button>
+        <button class="gallery-filter" data-gallery="video">Videos</button>
       </div>
 
       <div class="gallery-grid" id="galleryGrid">
@@ -1129,13 +1130,17 @@
             const grid = document.getElementById('galleryGrid');
               const dynamicHtml = items.map((g, idx) => {
                 let tag = "event";
-                if (g.category && (g.category.toLowerCase().includes("site") || g.category.toLowerCase().includes("project"))) {
+                if (g.media_type === "video" || (g.category && g.category.toLowerCase().includes("video"))) {
+                  tag = "video";
+                } else if (g.media_type === "site_visit" || (g.category && (g.category.toLowerCase().includes("site") || g.category.toLowerCase().includes("project")))) {
                   tag = "site";
                 }
                 const isTall = idx % 4 === 0 ? " tall" : (idx % 4 === 3 ? " wide" : "");
+                const playOverlay = (g.media_type === "video" || g.video_url) ? `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;background:rgba(5,13,26,0.4);color:var(--gold);z-index:2;pointer-events:none;">▶</div>` : '';
                 return `
-                  <div class="gallery-item dynamic-item${isTall}" data-gallery="${tag}">
-                    <img src="${g.thumbnail_url || g.image_url}" alt="${g.title}" loading="lazy" data-full="${g.image_url}">
+                  <div class="gallery-item dynamic-item${isTall}" data-gallery="${tag}" style="position:relative;">
+                    ${playOverlay}
+                    <img src="${g.thumbnail_url || g.image_url}" alt="${g.title}" loading="lazy" data-full="${g.video_url || g.image_url}">
                   </div>
                 `;
               }).join('');

@@ -886,33 +886,49 @@
   <div id="galleryModal" class="modal-overlay">
     <div class="modal-box">
       <div class="modal-header">
-        <h3 class="modal-title">Upload Gallery Photo</h3>
+        <h3 class="modal-title">Upload Gallery Media</h3>
         <button class="modal-close" onclick="closeModal('galleryModal')">&times;</button>
       </div>
       <form id="galleryForm" onsubmit="handleGallerySubmit(event)">
         <div class="form-group">
-          <label class="form-label">Photo Title *</label>
-          <input type="text" id="galleryTitle" class="form-input" required placeholder="e.g. Layout Blacktop Road Construction">
+          <label class="form-label">Media Title *</label>
+          <input type="text" id="galleryTitle" class="form-input" required placeholder="e.g. Alakananda Site Visit & Customer Inspection">
         </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Media Type *</label>
+            <select id="galleryMediaType" class="form-select" required>
+              <option value="photo">📷 Photo</option>
+              <option value="site_visit">🏗️ Site Visit</option>
+              <option value="video">🎥 Video</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="galleryCategory" class="form-select" required>
+              <option value="Site Visits">Site Visits</option>
+              <option value="Events">Events</option>
+              <option value="Videos">Videos</option>
+              <option value="Milestones">Milestones</option>
+              <option value="Achievements">Achievements</option>
+              <option value="Projects">Projects</option>
+            </select>
+          </div>
+        </div>
+
         <div class="form-group">
-          <label class="form-label">Category *</label>
-          <select id="galleryCategory" class="form-select" required>
-            <option value="Site Visits">Site Visits</option>
-            <option value="Events">Events</option>
-            <option value="Milestones">Milestones</option>
-            <option value="Achievements">Achievements</option>
-            <option value="Projects">Projects</option>
-          </select>
+          <label class="form-label">Video URL (For YouTube / MP4 Videos)</label>
+          <input type="text" id="galleryVideoUrl" class="form-input" placeholder="e.g. https://www.youtube.com/embed/... or video.mp4">
         </div>
         
-        <!-- Photo Upload Box -->
+        <!-- Photo / Thumbnail Upload Box -->
         <div class="form-group">
-          <label class="form-label">Select Photo *</label>
-          <div class="upload-zone" onclick="document.getElementById('galleryFileInput').click()">
-            <span style="font-size: 0.85rem; color: var(--gold);">📁 Click or Drop High-Res Photo</span>
+          <label class="form-label">Photo / Thumbnail Cover Image *</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <input type="text" id="galleryPhotoUrl" class="form-input" required placeholder="Image URL or upload below...">
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('galleryFileInput').click()" style="white-space: nowrap;">📁 Upload</button>
           </div>
-          <input type="file" id="galleryFileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'galleryPhotoUrl', 'galleryPhotoPreview', 'gallery')">
-          <input type="hidden" id="galleryPhotoUrl" required>
+          <input type="file" id="galleryFileInput" accept="image/*,video/*" style="display: none;" onchange="handleFileUpload(event, 'galleryPhotoUrl', 'galleryPhotoPreview', 'gallery')">
           <div id="galleryPhotoPreview" class="preview-box" style="display: none;">
             <img class="preview-thumb" id="galleryPreviewImg" src="" alt="Preview">
             <div>
@@ -924,12 +940,14 @@
 
         <div class="form-group">
           <label class="form-label">Description / Caption</label>
-          <textarea id="galleryDesc" class="form-textarea" rows="2" placeholder="Brief note about the celebration or project inspection..."></textarea>
+          <textarea id="galleryDesc" class="form-textarea" rows="2" placeholder="Brief note about the site visit, event, or video clip..."></textarea>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeModal('galleryModal')">Cancel</button>
           <button type="submit" class="btn btn-gold">Publish to Gallery</button>
         </div>
+      </form>
+    </div>
   </div>
 
   <!-- Modal: Project Form -->
@@ -1864,15 +1882,12 @@
       try {
         const res = await apiRequest(url);
         if (res.ok) {
-          cachedGallery = await res.json();
-          const tbody = document.getElementById("galleryTableBody");
-          tbody.innerHTML = "";
-
           cachedGallery.forEach(g => {
             const row = document.createElement("tr");
+            const mediaBadge = g.media_type === "video" ? "🎥 Video" : (g.media_type === "site_visit" ? "🏗️ Site Visit" : "📷 Photo");
             row.innerHTML = `
               <td><img class="cell-avatar" src="${normalizeImageUrl(g.thumbnail_url || g.image_url)}" style="width:50px;height:50px;" onerror="this.src='images/logo.webp'"></td>
-              <td><b>${g.title}</b><br><span style="color:var(--text-muted);font-size:0.75rem;">${g.description || ''}</span></td>
+              <td><b>${g.title}</b><br><span style="color:var(--text-muted);font-size:0.75rem;">${mediaBadge} &bull; ${g.description || ''}</span></td>
               <td><span class="badge badge-visit">${g.category}</span></td>
               <td><span class="badge ${g.is_published ? 'badge-reg' : 'badge-inactive'}">${g.is_published ? 'Published' : 'Hidden'}</span></td>
               <td>
@@ -1889,6 +1904,7 @@
     function openAddGalleryModal() {
       document.getElementById("galleryForm").reset();
       document.getElementById("galleryPhotoUrl").value = "";
+      if (document.getElementById("galleryVideoUrl")) document.getElementById("galleryVideoUrl").value = "";
       document.getElementById("galleryPhotoPreview").style.display = "none";
       openModal("galleryModal");
     }
@@ -1897,7 +1913,7 @@
       e.preventDefault();
 
       if (activeUploadsCount > 0) {
-        showToast("⏳ Please wait! Photo is still uploading & optimizing...", true);
+        showToast("⏳ Please wait! Media is still uploading & optimizing...", true);
         return;
       }
 
@@ -1905,17 +1921,22 @@
 
       if (!photoUrl) {
         showArkAlert(
-          "Photo Required",
-          "Please select and upload a high-resolution photo for the gallery.",
+          "Cover Image Required",
+          "Please select and upload a high-resolution cover photo/thumbnail for the gallery item.",
           "warning"
         );
         return;
       }
 
       const fullUrl = normalizeImageUrl(photoUrl);
+      const mediaType = document.getElementById("galleryMediaType") ? document.getElementById("galleryMediaType").value : "photo";
+      const videoUrl = document.getElementById("galleryVideoUrl") ? document.getElementById("galleryVideoUrl").value.trim() : "";
+
       const payload = {
         title: document.getElementById("galleryTitle").value.trim(),
         category: document.getElementById("galleryCategory").value,
+        media_type: mediaType,
+        video_url: videoUrl,
         image_url: fullUrl,
         thumbnail_url: fullUrl,
         description: document.getElementById("galleryDesc").value.trim(),
@@ -1935,12 +1956,12 @@
         });
         if (res.ok) {
           closeModal("galleryModal");
-          showToast("Photo added to gallery showcase!");
+          showToast("Media published to gallery showcase!");
           loadGallery();
           loadDashboardStats();
         } else {
           const data = await res.json().catch(() => ({}));
-          const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Failed to publish photo.");
+          const errMsg = formatErrorMessage(data.detail || data.error || data.message || "Failed to publish media.");
           showToast(errMsg, true);
         }
       } finally {
