@@ -924,7 +924,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">Assigned Agent</label>
-            <select id="customerAgentSelect" class="form-select">
+            <select id="customerAgentSelect" class="form-select" onchange="onModalAgentChange()">
               <option value="">Select Agent...</option>
             </select>
           </div>
@@ -3898,7 +3898,7 @@ const DEFAULT_PROJECTS = [
         const cur = projSelect.value;
         let html = '<option value="">Select Venture...</option>';
         projs.forEach(p => {
-          const title = p.title || p.name || "Venture";
+          const title = (typeof p === 'string') ? p : (p.title || p.name || "Venture");
           html += `<option value="${title}">${title}</option>`;
         });
         projSelect.innerHTML = html;
@@ -3939,6 +3939,33 @@ const DEFAULT_PROJECTS = [
       return norm.split(/\s+/).filter(t => t.length > 1);
     }
 
+    function onModalAgentChange() {
+      const agentSelect = document.getElementById("customerAgentSelect");
+      const dirSelect = document.getElementById("customerDirectorSelect");
+      if (!agentSelect || !dirSelect) return;
+
+      const selectedAgentId = agentSelect.value;
+      if (!selectedAgentId) return;
+
+      const ags = (Array.isArray(allAgentsList) && allAgentsList.length > 0) ? allAgentsList : (Array.isArray(cachedAgents) ? cachedAgents : []);
+      const agentObj = ags.find(a => String(a.id || a._id || a.name) === String(selectedAgentId));
+      if (agentObj) {
+        const targetDirName = (typeof agentObj === 'object') ? (agentObj.team_head_name || agentObj.director_name || "") : "";
+        if (targetDirName && (!dirSelect.value || dirSelect.options[dirSelect.selectedIndex]?.text?.toLowerCase().includes("select director"))) {
+          const normTarget = normalizeDirectorName(targetDirName);
+          for (let i = 0; i < dirSelect.options.length; i++) {
+            const opt = dirSelect.options[i];
+            const optName = normalizeDirectorName(opt.getAttribute("data-name") || opt.text || "");
+            if (optName && normTarget && (optName.includes(normTarget) || normTarget.includes(optName))) {
+              dirSelect.selectedIndex = i;
+              onModalDirectorChange(false);
+              break;
+            }
+          }
+        }
+      }
+    }
+
     async function onModalDirectorChange(resetAgent = true) {
       const dirSelect = document.getElementById("customerDirectorSelect");
       const agentSelect = document.getElementById("customerAgentSelect");
@@ -3955,8 +3982,18 @@ const DEFAULT_PROJECTS = [
 
       const curAgentVal = agentSelect.value;
 
+      // 1. If NO director is selected yet, populate ALL agents so user sees available list instead of an empty dropdown!
       if (!dirId && (!rawDirName || rawDirName.toLowerCase().includes("select director"))) {
-        agentSelect.innerHTML = '<option value="">Select Director First...</option>';
+        let optionsHtml = `<option value="">Select Agent (${ags.length} Agents Available)...</option>`;
+        ags.forEach(a => {
+          const aName = (typeof a === 'string') ? a : (a.full_name || a.name || "Agent");
+          const aId = (typeof a === 'string') ? a : (a.id || a._id || a.name || "");
+          const teamHead = (typeof a === 'object') ? (a.team_head_name || a.director_name || "") : "";
+          const teamStr = teamHead ? ` (${teamHead})` : "";
+          optionsHtml += `<option value="${aId}" data-name="${aName}">${aName}${teamStr}</option>`;
+        });
+        agentSelect.innerHTML = optionsHtml;
+        if (!resetAgent && curAgentVal) agentSelect.value = curAgentVal;
         return;
       }
 
@@ -3996,15 +4033,17 @@ const DEFAULT_PROJECTS = [
         return;
       }
 
-      let optionsHtml = '<option value="">Select Agent...</option>';
+      let optionsHtml = `<option value="">Select Agent for ${rawDirName} (${matchingAgents.length} Available)...</option>`;
       if (isFallback) {
+        optionsHtml = `<option value="">Select Agent (${matchingAgents.length} Available)...</option>`;
         optionsHtml += `<optgroup label="All Agents (No direct team assigned to ${rawDirName})">`;
       }
 
       matchingAgents.forEach(a => {
-        const aName = a.full_name || a.name || "Agent";
-        const aId = a.id || a._id || "";
-        const teamStr = (a.team_head_name || a.director_name) ? ` (${a.team_head_name || a.director_name})` : "";
+        const aName = (typeof a === 'string') ? a : (a.full_name || a.name || "Agent");
+        const aId = (typeof a === 'string') ? a : (a.id || a._id || a.name || "");
+        const teamHead = (typeof a === 'object') ? (a.team_head_name || a.director_name || "") : "";
+        const teamStr = teamHead ? ` (${teamHead})` : "";
         optionsHtml += `<option value="${aId}" data-name="${aName}">${aName}${teamStr}</option>`;
       });
 
@@ -4015,7 +4054,7 @@ const DEFAULT_PROJECTS = [
       agentSelect.innerHTML = optionsHtml;
 
       if (!resetAgent && curAgentVal) {
-        const exists = matchingAgents.some(a => String(a.id || a._id) === String(curAgentVal));
+        const exists = matchingAgents.some(a => String(a.id || a._id || a.name) === String(curAgentVal));
         if (exists) agentSelect.value = curAgentVal;
       }
     }
