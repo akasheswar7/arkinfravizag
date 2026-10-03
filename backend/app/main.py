@@ -19,6 +19,7 @@ from app.routers import (
     customers,
     gallery,
     announcements,
+    projects,
     reports,
     stats,
     whatsapp
@@ -108,6 +109,7 @@ all_routers = [
     customers.router,
     gallery.router,
     announcements.router,
+    projects.router,
     reports.router,
     stats.router,
     whatsapp.router

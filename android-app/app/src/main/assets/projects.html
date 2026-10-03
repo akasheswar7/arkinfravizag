@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="chatbot.css">
+  <script src="js/api.js"></script>
   <style>
     :root {
       --navy-deep: #050d1a;
@@ -1785,16 +1786,43 @@
         }
       ];
 
-      const projectsGrid = document.getElementById('projectsGrid');
-      if (projectsGrid) {
-        projectsData.forEach(function (project, index) {
+      async function initProjectsGrid() {
+        const projectsGrid = document.getElementById('projectsGrid');
+        if (!projectsGrid) return;
+
+        let allProjects = [...projectsData];
+
+        if (window.ArkApi) {
+          try {
+            const dynamicProjects = await window.ArkApi.getProjects('all');
+            if (dynamicProjects && dynamicProjects.length > 0) {
+              const formattedDynamic = dynamicProjects.map(p => ({
+                title: p.title,
+                desc: p.description || `${p.tag || 'Venture'} located at ${p.location}`,
+                image: p.image_url,
+                status: p.status || "Ongoing",
+                category: `residential ${(p.status || 'ongoing').toLowerCase()}`,
+                meta: [p.tag || "Plots", p.location || "Vizag"].filter(Boolean),
+                layoutFeatures: p.layout_features || [],
+                projectHighlights: p.project_highlights || [],
+                locationHighlights: p.location_highlights || []
+              }));
+              allProjects = [...formattedDynamic, ...projectsData];
+            }
+          } catch (e) {
+            console.warn("Could not load dynamic projects, using static fallback.");
+          }
+        }
+
+        projectsGrid.innerHTML = '';
+        allProjects.forEach(function (project, index) {
           const card = document.createElement('article');
           const delayClass = 'reveal-delay-' + (index % 3 + 1);
           card.className = 'project-card reveal ' + delayClass;
           card.dataset.category = project.category;
           
           let metaSpans = '';
-          project.meta.forEach(function (m) {
+          (project.meta || []).forEach(function (m) {
             metaSpans += '<span>' + m + '</span>';
           });
 
@@ -1814,6 +1842,8 @@
           revealObserver.observe(card);
         });
       }
+
+      initProjectsGrid();
 
       document.querySelectorAll('.project-tab').forEach(function (tab) {
         tab.addEventListener('click', function () {

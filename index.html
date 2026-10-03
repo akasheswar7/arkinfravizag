@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="js/api.js"></script>
   <style>
     :root {
       --navy-deep: #050d1a;
@@ -1299,7 +1300,7 @@
           <div id="ceoUpdateBanner" class="ceo-update-card" style="display: none;">
             <div class="ceo-update-badge">
               <span class="ceo-update-pulse"></span>
-              <span>CEO Announcement</span>
+              <span id="ceoUpdateTitle">CEO Announcement</span>
             </div>
             <span id="ceoUpdateText" class="ceo-update-text"></span>
           </div>
@@ -1706,6 +1707,10 @@
           if (window.ArkApi) {
             const dynamicAnn = await window.ArkApi.getActiveAnnouncement();
             if (dynamicAnn && dynamicAnn.message && dynamicAnn.message.trim()) {
+              if (dynamicAnn.title && dynamicAnn.title.trim()) {
+                const titleEl = document.getElementById('ceoUpdateTitle');
+                if (titleEl) titleEl.textContent = dynamicAnn.title.trim();
+              }
               document.getElementById('ceoUpdateText').textContent = dynamicAnn.message.trim();
               document.getElementById('ceoUpdateBanner').style.display = 'flex';
               return;

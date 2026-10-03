@@ -398,6 +398,7 @@
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('directors')">👔 Directors (CRUD)</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('agents')">🤝 Agents Roster</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('customers')">👥 Customer Leads</div></li>
+        <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('projects')">🏗️ Featured Projects</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('gallery')">🖼️ Gallery Items</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('reports')">📄 PDF Reports</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('whatsapp')">💬 WhatsApp Broadcast</div></li>
@@ -431,6 +432,7 @@
         <button class="nav-pill" onclick="switchTab('directors')">👔 Directors</button>
         <button class="nav-pill" onclick="switchTab('agents')">🤝 Agents</button>
         <button class="nav-pill" onclick="switchTab('customers')">👥 Leads</button>
+        <button class="nav-pill" onclick="switchTab('projects')">🏗️ Projects</button>
         <button class="nav-pill" onclick="switchTab('gallery')">🖼️ Gallery</button>
         <button class="nav-pill" onclick="switchTab('reports')">📄 Reports</button>
         <button class="nav-pill" onclick="switchTab('whatsapp')">💬 WhatsApp</button>
@@ -608,6 +610,38 @@
                 </tr>
               </thead>
               <tbody id="galleryTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION: FEATURED PROJECTS -->
+        <section id="tab-projects" style="display: none;">
+          <div class="table-container">
+            <div class="table-header-bar">
+              <div style="display: flex; gap: 1rem; align-items: center;">
+                <select id="projectStatusFilter" class="form-select" style="max-width: 220px;" onchange="loadProjects()">
+                  <option value="all">All Statuses</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Upcoming">Upcoming</option>
+                  <option value="Proposed">Proposed</option>
+                </select>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="openAddProjectModal()">+ Add New Project</button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Banner</th>
+                  <th>Project Title</th>
+                  <th>Location</th>
+                  <th>Tag / Type</th>
+                  <th>Status</th>
+                  <th>Published</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="projectsTableBody"></tbody>
             </table>
           </div>
         </section>
@@ -892,6 +926,70 @@
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeModal('galleryModal')">Cancel</button>
           <button type="submit" class="btn btn-gold">Publish to Gallery</button>
+        </div>
+  </div>
+
+  <!-- Modal: Project Form -->
+  <div id="projectModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="projectModalTitle">Add New Venture / Project</h3>
+        <button class="modal-close" onclick="closeModal('projectModal')">&times;</button>
+      </div>
+      <form id="projectForm" onsubmit="handleProjectSubmit(event)">
+        <input type="hidden" id="projectEditId">
+        <div class="form-group">
+          <label class="form-label">Project / Venture Name *</label>
+          <input type="text" id="projectTitle" class="form-input" required placeholder="e.g. Gokulavanam, Alakananda - Highway City">
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Location Corridor *</label>
+            <input type="text" id="projectLocation" class="form-input" required placeholder="e.g. Anakapalle, Tagarapuvalasa">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tag / Type</label>
+            <input type="text" id="projectTag" class="form-input" placeholder="e.g. PLOTS, TLP APPROVED">
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Status *</label>
+            <select id="projectStatusSelect" class="form-select" required>
+              <option value="Ongoing">Ongoing</option>
+              <option value="Completed">Completed</option>
+              <option value="Upcoming">Upcoming</option>
+              <option value="Proposed">Proposed</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price Info</label>
+            <input type="text" id="projectPrice" class="form-input" placeholder="e.g. ₹12,500 / sq.yard">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Project Description</label>
+          <textarea id="projectDesc" class="form-textarea" rows="2" placeholder="Brief summary of layout, location advantages, or amenities..."></textarea>
+        </div>
+        <!-- Project Photo Upload / URL -->
+        <div class="form-group">
+          <label class="form-label">Project Banner / Layout Photo *</label>
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <input type="text" id="projectPhotoUrl" class="form-input" required placeholder="Image URL or upload below...">
+            <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('projectFileInput').click()" style="white-space: nowrap;">📁 Upload</button>
+          </div>
+          <input type="file" id="projectFileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'projectPhotoUrl', 'projectPhotoPreview')">
+          <div id="projectPhotoPreview" class="preview-box" style="display: none;">
+            <img class="preview-thumb" id="projectPreviewImg" src="" alt="Preview">
+            <div>
+              <div style="font-size: 0.8rem; color: #fff;" id="projectPhotoName">project.webp</div>
+              <div style="font-size: 0.7rem; color: #4ade80;">✓ Uploaded and optimized</div>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('projectModal')">Cancel</button>
+          <button type="submit" class="btn btn-gold">Save Project</button>
         </div>
       </form>
     </div>
@@ -1205,6 +1303,7 @@
         directors: "Executive Directors Management",
         agents: "Field Agents Roster",
         customers: "Customer Leads & Site Visits",
+        projects: "Featured Projects Management",
         gallery: "Visual Showcase Gallery",
         reports: "Official PDF Reports",
         whatsapp: "WhatsApp Broadcast Dispatch"
@@ -1217,6 +1316,7 @@
       if (tabId === "directors") loadDirectors();
       if (tabId === "agents") loadAgents();
       if (tabId === "customers") loadCustomers();
+      if (tabId === "projects") loadProjects();
       if (tabId === "gallery") loadGallery();
       if (tabId === "reports") populateReportsDropdowns();
       if (tabId === "whatsapp") populateWhatsAppTeams();
@@ -1869,6 +1969,169 @@
             showToast("Photo removed.");
             loadGallery();
             loadDashboardStats();
+          }
+        }
+      );
+    }
+
+    // --- Featured Projects CRUD ---
+    let cachedProjects = [];
+    async function loadProjects() {
+      try {
+        const filterSelect = document.getElementById("projectStatusFilter");
+        const filter = filterSelect ? filterSelect.value : "all";
+        const res = await apiRequest("/admin/projects");
+        if (res.ok) {
+          cachedProjects = await res.json();
+          renderProjectsTable(filter);
+        }
+      } catch (err) {
+        showToast("Failed to load projects.", true);
+      }
+    }
+
+    function renderProjectsTable(filter = "all") {
+      const tbody = document.getElementById("projectsTableBody");
+      if (!tbody) return;
+
+      let list = cachedProjects;
+      if (filter && filter !== "all") {
+        list = list.filter(p => (p.status || "").toLowerCase() === filter.toLowerCase());
+      }
+
+      if (list.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No projects found in this category. Click "+ Add New Project" to create one.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = list.map(p => {
+        const thumbUrl = normalizeImageUrl(p.image_url);
+        return `
+          <tr>
+            <td><img src="${thumbUrl}" style="width: 48px; height: 36px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold);" alt="${p.title}"></td>
+            <td style="font-weight: 600; color: #fff;">${p.title}</td>
+            <td>${p.location || '—'}</td>
+            <td><span class="badge" style="background: rgba(201,169,98,0.15); color: var(--gold); border: 1px solid var(--gold);">${p.tag || 'PLOTS'}</span></td>
+            <td><span class="badge" style="background: rgba(59,130,246,0.15); color: #60a5fa;">${p.status || 'Ongoing'}</span></td>
+            <td>
+              <span class="badge ${p.is_published ? 'badge-success' : 'badge-inactive'}" onclick="toggleProjectPublished('${p.id}')" style="cursor: pointer;" title="Click to toggle publish status">
+                ${p.is_published ? 'LIVE ON SITE' : 'DRAFT / HIDDEN'}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-outline btn-xs" onclick="openEditProjectModal('${p.id}')">Edit</button>
+                <button class="btn btn-danger btn-xs" onclick="deleteProject('${p.id}', '${(p.title || '').replace(/'/g, "\\'")}')">Delete</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function openAddProjectModal() {
+      document.getElementById("projectModalTitle").textContent = "Add New Venture / Project";
+      document.getElementById("projectEditId").value = "";
+      document.getElementById("projectTitle").value = "";
+      document.getElementById("projectLocation").value = "";
+      document.getElementById("projectTag").value = "PLOTS";
+      document.getElementById("projectStatusSelect").value = "Ongoing";
+      document.getElementById("projectPrice").value = "";
+      document.getElementById("projectDesc").value = "";
+      document.getElementById("projectPhotoUrl").value = "";
+      document.getElementById("projectPhotoPreview").style.display = "none";
+      openModal("projectModal");
+    }
+
+    function openEditProjectModal(id) {
+      const p = cachedProjects.find(item => item.id === id);
+      if (!p) return;
+      document.getElementById("projectModalTitle").textContent = "Edit Venture / Project";
+      document.getElementById("projectEditId").value = p.id;
+      document.getElementById("projectTitle").value = p.title || "";
+      document.getElementById("projectLocation").value = p.location || "";
+      document.getElementById("projectTag").value = p.tag || "PLOTS";
+      document.getElementById("projectStatusSelect").value = p.status || "Ongoing";
+      document.getElementById("projectPrice").value = p.price || "";
+      document.getElementById("projectDesc").value = p.description || "";
+      document.getElementById("projectPhotoUrl").value = p.image_url || "";
+      if (p.image_url) {
+        document.getElementById("projectPreviewImg").src = normalizeImageUrl(p.image_url);
+        document.getElementById("projectPhotoPreview").style.display = "flex";
+      } else {
+        document.getElementById("projectPhotoPreview").style.display = "none";
+      }
+      openModal("projectModal");
+    }
+
+    async function handleProjectSubmit(e) {
+      e.preventDefault();
+      const editId = document.getElementById("projectEditId").value;
+      const photoUrl = (document.getElementById("projectPhotoUrl").value || "").trim();
+
+      if (!photoUrl) {
+        showArkAlert("Photo Required", "Please provide a layout photo URL or upload an image.", "warning");
+        return;
+      }
+
+      const fullUrl = normalizeImageUrl(photoUrl);
+      const payload = {
+        title: document.getElementById("projectTitle").value.trim(),
+        location: document.getElementById("projectLocation").value.trim(),
+        tag: document.getElementById("projectTag").value.trim() || "PLOTS",
+        status: document.getElementById("projectStatusSelect").value,
+        price: document.getElementById("projectPrice").value.trim(),
+        description: document.getElementById("projectDesc").value.trim(),
+        image_url: fullUrl,
+        is_published: true
+      };
+
+      const submitBtn = e.target.querySelector("button[type='submit']");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "Saving Project...";
+      }
+
+      try {
+        const method = editId ? "PUT" : "POST";
+        const endpoint = editId ? `/admin/projects/${editId}` : "/admin/projects";
+        const res = await apiRequest(endpoint, {
+          method,
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          closeModal("projectModal");
+          showToast(editId ? "Project updated!" : "New project added live!");
+          loadProjects();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          showToast(formatErrorMessage(data.detail || "Failed to save project."), true);
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "Save Project";
+        }
+      }
+    }
+
+    async function toggleProjectPublished(id) {
+      const res = await apiRequest(`/admin/projects/${id}/toggle-published`, { method: "PATCH" });
+      if (res.ok) {
+        showToast("Project publish status updated.");
+        loadProjects();
+      }
+    }
+
+    async function deleteProject(id, title) {
+      showArkConfirm(
+        "Delete Venture / Project",
+        `Are you sure you want to remove project <b>"${title}"</b>?`,
+        async () => {
+          const res = await apiRequest(`/admin/projects/${id}`, { method: "DELETE" });
+          if (res.ok) {
+            showToast("Project deleted.");
+            loadProjects();
           }
         }
       );

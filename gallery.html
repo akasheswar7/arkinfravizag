@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="chatbot.css">
+  <script src="js/api.js"></script>
   <style>
     :root {
       --navy-deep: #050d1a;
@@ -1126,21 +1127,20 @@
           const items = await window.ArkApi.getGallery('all');
           if (items && items.length > 0) {
             const grid = document.getElementById('galleryGrid');
-            if (grid) {
-              grid.innerHTML = items.map((g, idx) => {
+              const dynamicHtml = items.map((g, idx) => {
                 let tag = "event";
                 if (g.category && (g.category.toLowerCase().includes("site") || g.category.toLowerCase().includes("project"))) {
                   tag = "site";
                 }
                 const isTall = idx % 4 === 0 ? " tall" : (idx % 4 === 3 ? " wide" : "");
                 return `
-                  <div class="gallery-item${isTall}" data-gallery="${tag}">
+                  <div class="gallery-item dynamic-item${isTall}" data-gallery="${tag}">
                     <img src="${g.thumbnail_url || g.image_url}" alt="${g.title}" loading="lazy" data-full="${g.image_url}">
                   </div>
                 `;
               }).join('');
+              grid.insertAdjacentHTML('afterbegin', dynamicHtml);
               bindGalleryLightbox();
-            }
           }
         } catch (e) {
           console.warn("Could not load dynamic gallery, using static fallback.");

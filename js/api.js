@@ -73,17 +73,42 @@ const ArkApi = {
       console.warn("ARK API: Gallery unreachable, displaying static gallery.");
     }
     return [];
+  },
+
+  /**
+   * Fetches published projects for public display.
+   */
+  async getProjects(statusFilter = "all") {
+    try {
+      let url = `${ARK_API_BASE}/public/projects`;
+      const params = new URLSearchParams();
+      if (statusFilter && statusFilter !== "all") {
+        params.append("status_filter", statusFilter);
+      }
+      params.append("t", Date.now().toString());
+      const res = await fetch(`${url}?${params.toString()}`);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch (e) {
+      console.warn("ARK API: Projects unreachable, using static fallback.");
+    }
+    return [];
   }
 };
 
-// Automatic hydration helper for the Homepage
+// Automatic hydration helper for the Homepage Announcement Banner
 async function hydrateHomepageAnnouncement() {
   const banner = document.getElementById("ceoUpdateBanner");
   const textEl = document.getElementById("ceoUpdateText");
+  const badgeEl = document.getElementById("ceoUpdateBadge") || document.querySelector(".ceo-badge");
   if (!banner || !textEl) return;
 
   const ann = await ArkApi.getActiveAnnouncement();
   if (ann && ann.message && ann.message.trim()) {
+    if (badgeEl && ann.title && ann.title.trim()) {
+      badgeEl.textContent = ann.title.trim();
+    }
     textEl.textContent = ann.message.trim();
     banner.style.display = "flex";
   }
@@ -91,3 +116,4 @@ async function hydrateHomepageAnnouncement() {
 
 // Export ArkApi globally
 window.ArkApi = ArkApi;
+
