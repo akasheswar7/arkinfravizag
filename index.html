@@ -1708,19 +1708,7 @@
         }
 
         try {
-          // Check dynamic FastAPI announcement first
-          if (window.ArkApi) {
-            const dynamicAnn = await window.ArkApi.getActiveAnnouncement();
-            if (dynamicAnn && dynamicAnn.message && dynamicAnn.message.trim()) {
-              if (dynamicAnn.title && dynamicAnn.title.trim()) {
-                const titleEl = document.getElementById('ceoUpdateTitle');
-                if (titleEl) titleEl.textContent = dynamicAnn.title.trim();
-              }
-              document.getElementById('ceoUpdateText').textContent = dynamicAnn.message.trim();
-              document.getElementById('ceoUpdateBanner').style.display = 'flex';
-              return;
-            }
-          }
+          // 1. Check CEO Portal Announcement from KeyVal first
           const response = await fetch('https://keyvalue.immanuel.co/api/KeyVal/GetValue/owsihrx6/arkinfra_active_update?t=' + Date.now());
           if (response.ok) {
             let encodedText = await response.text();
@@ -1733,12 +1721,29 @@
             if (encodedText && encodedText !== 'null' && encodedText !== '-') {
               const text = decodeValue(encodedText);
               if (text && text.trim() && text !== '-') {
+                const titleEl = document.getElementById('ceoUpdateTitle');
+                if (titleEl) titleEl.textContent = '📢 CEO ANNOUNCEMENT';
                 document.getElementById('ceoUpdateText').textContent = text.trim();
                 document.getElementById('ceoUpdateBanner').style.display = 'flex';
                 return;
               }
             }
           }
+
+          // 2. Fallback to dynamic FastAPI announcement if no CEO Portal update is active
+          if (window.ArkApi) {
+            const dynamicAnn = await window.ArkApi.getActiveAnnouncement();
+            if (dynamicAnn && dynamicAnn.message && dynamicAnn.message.trim()) {
+              const titleEl = document.getElementById('ceoUpdateTitle');
+              if (titleEl) {
+                titleEl.textContent = (dynamicAnn.title && dynamicAnn.title.trim()) ? `📢 ${dynamicAnn.title.trim().toUpperCase()}` : '📢 CEO ANNOUNCEMENT';
+              }
+              document.getElementById('ceoUpdateText').textContent = dynamicAnn.message.trim();
+              document.getElementById('ceoUpdateBanner').style.display = 'flex';
+              return;
+            }
+          }
+
           document.getElementById('ceoUpdateBanner').style.display = 'none';
         } catch (err) {
           console.error("Failed to check live updates:", err);
