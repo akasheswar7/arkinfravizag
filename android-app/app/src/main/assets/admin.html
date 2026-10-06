@@ -350,6 +350,28 @@
       .stats-grid { grid-template-columns: 1fr; }
       .admin-topbar .btn { font-size: 0.7rem; padding: 0.35rem 0.55rem; }
     }
+
+    /* Printable Application Certificate Styling */
+    @media print {
+      body * { visibility: hidden !important; }
+      #applicationCertificateContent, #applicationCertificateContent * {
+        visibility: visible !important;
+      }
+      #applicationCertificateContent {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 1.5cm !important;
+        box-shadow: none !important;
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .admin-sidebar, .admin-topbar, .mobile-nav-pills, .modal-overlay, .modal-header, .btn {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -401,6 +423,7 @@
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('directors')">👔 Directors (CRUD)</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('agents')">🤝 Agents Roster</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('customers')">👥 Customer Leads</div></li>
+        <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('site-applications')">💳 Advanced Customer Payment List</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('projects')">🏗️ Featured Projects</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('gallery')">🖼️ Gallery Items</div></li>
         <li class="sidebar-item"><div class="sidebar-link" onclick="switchTab('reports')">📄 PDF Reports</div></li>
@@ -435,6 +458,7 @@
         <button class="nav-pill" onclick="switchTab('directors')">👔 Directors</button>
         <button class="nav-pill" onclick="switchTab('agents')">🤝 Agents</button>
         <button class="nav-pill" onclick="switchTab('customers')">👥 Leads</button>
+        <button class="nav-pill" onclick="switchTab('site-applications')">💳 Advance Payments</button>
         <button class="nav-pill" onclick="switchTab('projects')">🏗️ Projects</button>
         <button class="nav-pill" onclick="switchTab('gallery')">🖼️ Gallery</button>
         <button class="nav-pill" onclick="switchTab('reports')">📄 Reports</button>
@@ -465,6 +489,11 @@
               <div class="stat-label">Registrations</div>
               <div class="stat-value" id="statRegistrations">0</div>
               <div class="stat-sub">Completed Land Allotments</div>
+            </div>
+            <div class="stat-card" style="cursor: pointer;" onclick="switchTab('site-applications')">
+              <div class="stat-label">Advance Payments</div>
+              <div class="stat-value" id="statAdvanceBookings">0</div>
+              <div class="stat-sub">Site Bookings &amp; Applications</div>
             </div>
             <div class="stat-card">
               <div class="stat-label">Gallery Showcase</div>
@@ -585,7 +614,7 @@
                 <tr>
                   <th>Photo</th>
                   <th>Customer & Contact</th>
-                  <th>Assigned Director & Agent</th>
+                  <th>Referred / Supported By</th>
                   <th>Status & Date</th>
                   <th>Venture & Plot Info</th>
                   <th>Advance Fee & Receipt</th>
@@ -593,6 +622,50 @@
                 </tr>
               </thead>
               <tbody id="customersTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SECTION 5B: ADVANCED CUSTOMER PAYMENT LIST -->
+        <section id="tab-site-applications" style="display: none;">
+          <div class="table-container">
+            <div class="table-header-bar" style="flex-wrap: wrap; gap: 0.75rem;">
+              <div style="display: flex; gap: 0.75rem; align-items: center; flex: 1; flex-wrap: wrap;">
+                <input type="text" id="appSearchInput" class="form-input" placeholder="Search customer, phone, plot, app no..." style="max-width: 250px;" oninput="loadSiteApplications()">
+                <select id="appVentureFilter" class="form-select" style="max-width: 210px;" onchange="loadSiteApplications()">
+                  <option value="all">All Ventures</option>
+                  <option value="Gokulavanam">Gokulavanam</option>
+                  <option value="Alakananda - Highway City">Alakananda - Highway City</option>
+                  <option value="Education City - Phase 1">Education City - Phase 1</option>
+                  <option value="Sandal Valley">Sandal Valley</option>
+                  <option value="Vaibhav Classic">Vaibhav Classic</option>
+                  <option value="Belmonk Layout Premium">Belmonk Layout Premium</option>
+                  <option value="Sri Sampath Ganesh Nagar">Sri Sampath Ganesh Nagar</option>
+                  <option value="Kodduru Venture - Anakapalli">Kodduru Venture - Anakapalli</option>
+                  <option value="RTC Depot Backside Venture">RTC Depot Backside Venture</option>
+                  <option value="Kokkirapalli Venture (Phase 1)">Kokkirapalli Venture (Phase 1)</option>
+                  <option value="Golden Acres - Bhogapuram">Golden Acres - Bhogapuram</option>
+                  <option value="Sri Muktha Gardens">Sri Muktha Gardens</option>
+                  <option value="Kokkirapalli Venture (Phase 2)">Kokkirapalli Venture (Phase 2)</option>
+                </select>
+              </div>
+              <button class="btn btn-gold btn-sm" onclick="openAddApplicationModal()">+ New Customer Site Application</button>
+            </div>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>App No &amp; Date</th>
+                  <th>Customer &amp; Contact</th>
+                  <th>Venture &amp; Plot Details</th>
+                  <th>Advance Paid</th>
+                  <th>Supported By</th>
+                  <th>Receipt / Bill</th>
+                  <th>Verification</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="siteApplicationsTableBody"></tbody>
             </table>
           </div>
         </section>
@@ -914,6 +987,19 @@
           <textarea id="customerAddress" class="form-textarea" rows="2" placeholder="Full street address, city, district, pin code..."></textarea>
         </div>
 
+        <!-- Supported By (Optional) Field -->
+        <div class="form-group">
+          <label class="form-label">Supported By (Optional) <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal;">— If customer came by own / walk-in without director or agent</span></label>
+          <input type="text" id="customerSupportedBy" class="form-input" list="supportedBySuggestions" placeholder="e.g. Direct / Walk-in (Company Own) or Staff Name">
+          <datalist id="supportedBySuggestions">
+            <option value="Direct / Walk-in (Company Own)">
+            <option value="Company Direct (No Agent)">
+            <option value="Self / Came on Own">
+            <option value="Online / Website Inquiry">
+            <option value="Office Walk-in">
+          </datalist>
+        </div>
+
         <!-- Director & Agent Referral Chain -->
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
           <div class="form-group">
@@ -1137,6 +1223,330 @@
           <button type="submit" class="btn btn-gold">Save Customer</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal: Customer Site Application & Advance Payment Form -->
+  <div id="applicationModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 820px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="applicationModalTitle" style="display:flex; align-items:center; gap:0.5rem;">
+            <span>🏛️</span> ARK Infra — Customer Site Application &amp; Advance Payment
+          </h3>
+          <div style="font-size:0.75rem; color:var(--gold);">Official Authorized Allotment &amp; Financial Receipt Form &bull; Permanent MongoDB Storage</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('applicationModal')">&times;</button>
+      </div>
+      <form id="applicationForm" onsubmit="handleApplicationSubmit(event)">
+        <input type="hidden" id="appEditId">
+        <input type="hidden" id="appCustomerId">
+
+        <!-- Banner & Metadata -->
+        <div style="background:rgba(201,169,98,0.08); border:1px solid rgba(201,169,98,0.25); border-radius:6px; padding:0.75rem 1rem; margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">
+          <div>
+            <div style="font-size:0.85rem; font-weight:700; color:#fff;">ARK INFRA AND DEVELOPERS</div>
+            <div style="font-size:0.72rem; color:var(--text-muted);">Corporate Regd. No. 132/2020 &bull; ISO 9001:2015 Certified &bull; Visakhapatnam</div>
+          </div>
+          <div style="display:flex; gap:0.75rem; align-items:center;">
+            <div>
+              <label class="form-label" style="margin-bottom:2px; font-size:0.7rem;">Application No</label>
+              <input type="text" id="appNumber" class="form-input" style="font-weight:700; color:var(--gold); width:160px; font-size:0.8rem; padding:4px 8px;" placeholder="ARK-APP-2026-0001">
+            </div>
+            <div>
+              <label class="form-label" style="margin-bottom:2px; font-size:0.7rem;">Application Date</label>
+              <input type="date" id="appDate" class="form-input" style="width:140px; font-size:0.8rem; padding:4px 8px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Customer Personal Particulars -->
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size:0.9rem; color:var(--gold); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.35rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+            👤 1. Customer Personal Particulars (Confidential)
+          </h4>
+
+          <!-- Photo Upload -->
+          <div class="form-group">
+            <label class="form-label">Customer Passport Photograph *</label>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+              <input type="text" id="appPhotoUrl" class="form-input" placeholder="Photo URL or upload below..." oninput="updateAppPhotoPreview(this.value)">
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('appPhotoFileInput').click()" style="white-space: nowrap;">📁 Upload Photo</button>
+            </div>
+            <input type="file" id="appPhotoFileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'appPhotoUrl', 'appPhotoPreview', 'customers')">
+            <div id="appPhotoPreview" class="preview-box" style="display: none; align-items: center; gap: 1rem;">
+              <img class="preview-thumb" id="appPreviewImg" src="" alt="Preview" style="width:55px;height:65px;object-fit:cover;border:1px solid var(--gold);border-radius:4px;" onerror="this.src='images/logo.webp'">
+              <div>
+                <div style="font-size: 0.8rem; color: #fff;" id="appPhotoName">customer-photo.webp</div>
+                <div style="font-size: 0.7rem; color: #4ade80;">✓ Customer Photograph Verified</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Customer Full Name *</label>
+              <input type="text" id="appName" class="form-input" required placeholder="Full Name as per Aadhaar/PAN">
+            </div>
+            <div class="form-group">
+              <label class="form-label">S/o, W/o, D/o (Father / Spouse Name)</label>
+              <input type="text" id="appFatherName" class="form-input" placeholder="Father's or Husband's Name">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Primary Mobile Number *</label>
+              <input type="text" id="appPhone" class="form-input" required placeholder="+91 98480 11223" onblur="validateAppPhone(this.value)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Alternate Phone / WhatsApp</label>
+              <input type="text" id="appAltPhone" class="form-input" placeholder="Optional Alternate No.">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address</label>
+              <input type="email" id="appEmail" class="form-input" placeholder="customer@example.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Permanent Residential Address *</label>
+            <textarea id="appAddress" class="form-textarea" rows="2" required placeholder="Door No, Street, Landmark, Village/Town, Mandal, District, PIN Code"></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Aadhaar / ID Card No</label>
+              <input type="text" id="appAadhaar" class="form-input" placeholder="e.g. 1234 5678 9012">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nominee Name</label>
+              <input type="text" id="appNomineeName" class="form-input" placeholder="Nominee Full Name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Nominee Relationship</label>
+              <input type="text" id="appNomineeRelation" class="form-input" placeholder="e.g. Spouse / Son / Daughter">
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Site Visit & Property Allocation -->
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size:0.9rem; color:var(--gold); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.35rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+            🏗️ 2. Site Visit Form &amp; Venture Allotment
+          </h4>
+
+          <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Venture / Project Name *</label>
+              <select id="appVentureSelect" class="form-select" required>
+                <option value="">Select Venture...</option>
+                <option value="Gokulavanam">Gokulavanam</option>
+                <option value="Alakananda - Highway City">Alakananda - Highway City</option>
+                <option value="Education City - Phase 1">Education City - Phase 1</option>
+                <option value="Sandal Valley">Sandal Valley</option>
+                <option value="Vaibhav Classic">Vaibhav Classic</option>
+                <option value="Belmonk Layout Premium">Belmonk Layout Premium</option>
+                <option value="Sri Sampath Ganesh Nagar">Sri Sampath Ganesh Nagar</option>
+                <option value="Kodduru Venture - Anakapalli">Kodduru Venture - Anakapalli</option>
+                <option value="RTC Depot Backside Venture">RTC Depot Backside Venture</option>
+                <option value="Kokkirapalli Venture (Phase 1)">Kokkirapalli Venture (Phase 1)</option>
+                <option value="Golden Acres - Bhogapuram">Golden Acres - Bhogapuram</option>
+                <option value="Sri Muktha Gardens">Sri Muktha Gardens</option>
+                <option value="Kokkirapalli Venture (Phase 2)">Kokkirapalli Venture (Phase 2)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Plot Number *</label>
+              <input type="text" id="appPlotNumber" class="form-input" required placeholder="e.g. Plot #104">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Plot Facing</label>
+              <select id="appPlotFacing" class="form-select">
+                <option value="East">East Facing</option>
+                <option value="West">West Facing</option>
+                <option value="North">North Facing</option>
+                <option value="South">South Facing</option>
+                <option value="North-East Corner">North-East Corner</option>
+                <option value="South-East Corner">South-East Corner</option>
+                <option value="Corner Plot">Corner Plot</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Plot Extent / Size</label>
+              <input type="text" id="appPlotSize" class="form-input" placeholder="e.g. 150 Sq. Yds / 200 Sq. Yds">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rate per Sq. Yard (₹)</label>
+              <input type="text" id="appRatePerSqYd" class="form-input" placeholder="e.g. 8,500">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Total Site Consideration (₹)</label>
+              <input type="text" id="appTotalValue" class="form-input" placeholder="e.g. 12,75,000">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Site Visit Inspection Date</label>
+              <input type="date" id="appSiteVisitDate" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Site Visit Remarks / Inspection Notes</label>
+              <input type="text" id="appSiteVisitNotes" class="form-input" placeholder="Customer visited venture with family, satisfied with layout location">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Referral & Supported By -->
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size:0.9rem; color:var(--gold); border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:0.35rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+            🌟 3. Referral &amp; Supported By (Optional)
+          </h4>
+
+          <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Supported By (Optional)</label>
+              <input type="text" id="appSupportedBy" class="form-input" list="appSupportedByList" placeholder="e.g. Direct / Walk-in (Company Own) or Staff">
+              <datalist id="appSupportedByList">
+                <option value="Direct / Walk-in (Company Own)">
+                <option value="Company Direct (No Agent)">
+                <option value="Self / Came on Own">
+                <option value="Online / Website Inquiry">
+                <option value="Office Walk-in">
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned Director (If any)</label>
+              <input type="text" id="appDirectorName" class="form-input" placeholder="e.g. KONATHALA ARUN">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Assigned Agent (If any)</label>
+              <input type="text" id="appAgentName" class="form-input" placeholder="e.g. DODDI ESWAR AKASH">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Advance Payment & Bill / Receipt Upload -->
+        <div style="margin-bottom: 1.25rem; background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.25); border-radius:6px; padding:0.75rem 1rem;">
+          <h4 style="font-size:0.9rem; color:#4ade80; border-bottom:1px solid rgba(34,197,94,0.2); padding-bottom:0.35rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:0.4rem;">
+            💰 4. Advance Payment Particulars &amp; Official Receipt
+          </h4>
+
+          <div style="display: grid; grid-template-columns: 1fr 1.5fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" style="color:#4ade80; font-weight:700;">Advance Amount Paid (₹) *</label>
+              <input type="text" id="appAdvanceAmount" class="form-input" required placeholder="e.g. 50,000" style="font-weight:700; color:#4ade80;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Advance Amount in Words</label>
+              <input type="text" id="appAdvanceWords" class="form-input" placeholder="e.g. Fifty Thousand Rupees Only">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Mode</label>
+              <select id="appPaymentMode" class="form-select">
+                <option value="UPI / Online Transfer">UPI / Google Pay / PhonePe</option>
+                <option value="Bank NEFT / RTGS / IMPS">Bank NEFT / RTGS / IMPS</option>
+                <option value="Cheque / DD">Cheque / Demand Draft</option>
+                <option value="Cash Counter">Cash Counter</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Transaction ID / Cheque / UTR Ref No</label>
+              <input type="text" id="appTxnId" class="form-input" placeholder="e.g. UPI-98481234 or Cheque #442109">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Payment Date</label>
+              <input type="date" id="appPaymentDate" class="form-input">
+            </div>
+          </div>
+
+          <!-- Receipt Upload (Permanent MongoDB Storage) -->
+          <div class="form-group">
+            <label class="form-label">Payment Bill / Receipt File (PDF or Image) <span style="font-size:0.75rem; color:#4ade80;">— Permanent MongoDB Archive</span></label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="appReceiptUrl" class="form-input" placeholder="Uploaded receipt link...">
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('appReceiptFileInput').click()" style="white-space: nowrap;">📄 Upload Receipt</button>
+            </div>
+            <input type="file" id="appReceiptFileInput" accept="image/*,application/pdf" style="display: none;" onchange="handleFileUpload(event, 'appReceiptUrl', 'appReceiptPreview', 'receipts')">
+            <div id="appReceiptPreview" class="preview-box" style="display: none; margin-top: 0.5rem;">
+              <div style="font-size: 0.8rem; color: #4ade80;" id="appReceiptStatus">✓ Receipt Uploaded &amp; Verified (Saved permanently to MongoDB)</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label">Balance Amount Payable (₹)</label>
+              <input type="text" id="appBalanceAmount" class="form-input" placeholder="e.g. 12,25,000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Balance Payment Terms / Due Date</label>
+              <input type="text" id="appBalanceDue" class="form-input" placeholder="e.g. Within 30 days of allotment agreement">
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Verification & Company Authorization Preview -->
+        <div style="background:rgba(201,169,98,0.06); border:1px solid rgba(201,169,98,0.3); border-radius:6px; padding:0.75rem 1rem; margin-bottom:1rem;">
+          <h4 style="font-size:0.9rem; color:var(--gold); margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
+            🛡️ 5. Official Verification &amp; Authorization (ARK Infra Management)
+          </h4>
+          <p style="font-size:0.74rem; color:var(--text-muted); line-height:1.4; margin-bottom:0.75rem;">
+            This application is verified by the executive desk of ARK Infra and Developers. Upon saving, the document is officially sealed with the corporate stamp and signed by the Managing Director and Chief Executive Officer.
+          </p>
+
+          <div style="display: flex; justify-content: space-around; align-items: center; background: rgba(5,13,26,0.6); border: 1px dashed rgba(201,169,98,0.4); padding: 0.75rem; border-radius: 6px;">
+            <div style="text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">OFFICIAL STAMP</div>
+              <img src="images/ark-stamp.png" style="width: 60px; height: 60px; object-fit: contain;" alt="ARK Infra Stamp">
+              <div style="font-size: 0.65rem; color: #4ade80;">✓ Verified Seal</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">MANAGING DIRECTOR</div>
+              <img src="images/signature-md.png" style="width: 85px; height: 30px; object-fit: contain;" alt="MD Signature">
+              <div style="font-size: 0.65rem; color: #fff;">Adari Ramakrishna</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 4px;">CHIEF EXECUTIVE OFFICER</div>
+              <img src="images/signature-ceo.png" style="width: 85px; height: 30px; object-fit: contain;" alt="CEO Signature">
+              <div style="font-size: 0.65rem; color: #fff;">Konathala Arun</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1rem;">
+          <button type="button" class="btn btn-outline" onclick="closeModal('applicationModal')">Cancel</button>
+          <button type="submit" class="btn btn-gold" id="appSubmitBtn">💾 Save Application &amp; Advance Payment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Official Certified Customer Application Viewer & Printable Certificate -->
+  <div id="applicationViewModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 860px; max-height: 94vh; overflow-y: auto; background: #0c182c; border: 2px solid var(--gold);">
+      <div class="modal-header" style="border-bottom: 1px solid rgba(201,169,98,0.3); padding-bottom: 0.75rem;">
+        <div>
+          <h3 class="modal-title" style="color:var(--gold);">📜 Official Certified Customer Application</h3>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Confidential Legal Record &bull; ARK INFRA AND DEVELOPERS</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button class="btn btn-gold btn-sm" id="viewModalDownloadPdfBtn" onclick="downloadCurrentViewPdf()">⬇️ Download Official PDF</button>
+          <button class="btn btn-outline btn-sm" onclick="printApplicationCertificate()">🖨️ Print Form</button>
+          <button class="modal-close" onclick="closeModal('applicationViewModal')">&times;</button>
+        </div>
+      </div>
+
+      <!-- Printable Certificate Container -->
+      <div id="applicationCertificateContent" style="padding: 1.5rem; background: #fff; color: #1e293b; border-radius: 6px; margin-top: 1rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+        <!-- Injected via JavaScript -->
+      </div>
     </div>
   </div>
 
@@ -1597,6 +2007,7 @@
         directors: "Executive Directors Management",
         agents: "Field Agents Roster",
         customers: "Customer Leads & Site Visits",
+        "site-applications": "Advanced Customer Payment List",
         projects: "Featured Projects Management",
         gallery: "Visual Showcase Gallery",
         reports: "Official PDF Reports",
@@ -1610,6 +2021,7 @@
       if (tabId === "directors") loadDirectors();
       if (tabId === "agents") loadAgents();
       if (tabId === "customers") loadCustomers();
+      if (tabId === "site-applications") loadSiteApplications();
       if (tabId === "projects") loadProjects();
       if (tabId === "gallery") loadGallery();
       if (tabId === "reports") populateReportsDropdowns();
@@ -1872,6 +2284,8 @@
           document.getElementById("statRegistrations").textContent = stats.registrations;
           document.getElementById("statGallery").textContent = stats.gallery_items;
           document.getElementById("statVisitsBreakdown").textContent = `${stats.pending_site_visits} Pending Visits (${stats.completed_site_visits} Completed)`;
+          const advEl = document.getElementById("statAdvanceBookings");
+          if (advEl) advEl.textContent = stats.total_applications || 0;
         }
 
         const annRes = await fetch(`${API_BASE}/public/announcements/active`);
@@ -4259,10 +4673,19 @@ const DEFAULT_PROJECTS = [
           }
 
           cachedCustomers.forEach(c => {
-            let badgeClass = "badge-pending";
-            if (c.site_visit_status === "Site Visit Completed") badgeClass = "badge-visit";
-            else if (c.site_visit_status === "Registration Completed" || c.site_visit_status === "Amount Paid" || c.site_visit_status === "Positive") badgeClass = "badge-reg";
-            else if (c.site_visit_status === "Fail" || c.site_visit_status === "Negative") badgeClass = "badge-inactive";
+            // Requirement 3: Clean, legible text ONLY (No box, no button-look)
+            let statusColor = "#facc15"; // gold/yellow for pending
+            let statusIcon = "⏳";
+            if (c.site_visit_status === "Site Visit Completed") {
+              statusColor = "#60a5fa"; // light blue
+              statusIcon = "🏗️";
+            } else if (c.site_visit_status === "Registration Completed" || c.site_visit_status === "Amount Paid" || c.site_visit_status === "Positive") {
+              statusColor = "#4ade80"; // soft green
+              statusIcon = c.site_visit_status === "Amount Paid" ? "💰" : (c.site_visit_status === "Registration Completed" ? "📜" : "👍");
+            } else if (c.site_visit_status === "Fail" || c.site_visit_status === "Negative") {
+              statusColor = "#f87171"; // soft red
+              statusIcon = "❌";
+            }
 
             const photoUrl = normalizeImageUrl(c.photo_or_id || "images/logo.webp");
 
@@ -4273,7 +4696,24 @@ const DEFAULT_PROJECTS = [
             const plotInfo = (c.plot_number || c.plot_size) ? 
               `<br/><span style="color:var(--gold); font-size:0.75rem;">Plot: ${c.plot_number || ''} (${c.plot_size || ''})</span>` : '';
 
-            const advInfo = c.advance_amount ? `<br/><span style="color:#4ade80; font-size:0.75rem;">Adv: ₹${c.advance_amount}</span>` : '';
+            const advInfo = c.advance_amount ? `<br/><span style="color:#4ade80; font-size:0.75rem; font-weight:600;">Adv: ₹${c.advance_amount}</span>` : '';
+
+            // Requirement 1: Supported By display
+            let referralHtml = "";
+            if (c.supported_by && c.supported_by.trim()) {
+              referralHtml += `<div style="font-size:0.8rem; color:var(--gold); margin-bottom:2px;">🌟 <b>Supported By:</b> ${c.supported_by}</div>`;
+            } else if (!c.director_name && !c.agent_name) {
+              referralHtml += `<div style="font-size:0.8rem; color:var(--gold); margin-bottom:2px;">🌟 <b>Supported By:</b> Direct / Company Own</div>`;
+            }
+            if (c.director_name) {
+              referralHtml += `<span style="font-size:0.8rem; color:#fff;">👔 <b>Dir:</b> ${c.director_name}</span><br/>`;
+            }
+            if (c.agent_name) {
+              referralHtml += `<span style="font-size:0.76rem; color:var(--text-muted);">🤝 <b>Agent:</b> ${c.agent_name}</span>`;
+            }
+            if (!referralHtml) {
+              referralHtml = `<span style="font-size:0.75rem; color:var(--text-muted);">Direct Walk-in</span>`;
+            }
 
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -4284,12 +4724,14 @@ const DEFAULT_PROJECTS = [
                 ${c.address ? `<br/><span style="color:var(--text-muted); font-size:0.72rem;">📍 ${c.address}</span>` : ''}
               </td>
               <td>
-                <span style="font-size:0.82rem; color:#fff;">👔 <b>Dir:</b> ${c.director_name || '-'}</span><br/>
-                <span style="font-size:0.78rem; color:var(--text-muted);">🤝 <b>Agent:</b> ${c.agent_name || '-'}</span>
+                ${referralHtml}
               </td>
               <td>
-                <span class="badge ${badgeClass}">${c.site_visit_status}</span><br/>
-                <span style="color:var(--text-muted); font-size:0.72rem;">📅 ${c.submission_date}</span>
+                <!-- Requirement 3: Clean, legible text ONLY (No box, no button-look) -->
+                <div style="font-size:0.85rem; font-weight:600; color:${statusColor}; margin-bottom:2px;">
+                  ${statusIcon} ${c.site_visit_status}
+                </div>
+                <span style="color:var(--text-muted); font-size:0.72rem;">📅 ${c.submission_date || '-'}</span>
               </td>
               <td>
                 <b>${c.project_interested || '-'}</b>
@@ -4300,8 +4742,13 @@ const DEFAULT_PROJECTS = [
                 ${advInfo}
               </td>
               <td>
-                <button class="btn btn-outline btn-sm" onclick="editCustomer('${c.id}')">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}', '${(c.customer_name || '').replace(/'/g, "\\'")}')">Delete</button>
+                <div style="display:flex; flex-direction:column; gap:4px;">
+                  <button class="btn btn-gold btn-sm" onclick="openApplicationFromLead('${c.id}')" title="Fill Official Site Application & Advance Booking Form" style="font-size:0.73rem; padding:3px 7px;">📝 Book Site / Form</button>
+                  <div style="display:flex; gap:4px;">
+                    <button class="btn btn-outline btn-sm" onclick="editCustomer('${c.id}')" style="font-size:0.75rem; padding:2px 6px;">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteCustomer('${c.id}')" style="font-size:0.75rem; padding:2px 6px;">Delete</button>
+                  </div>
+                </div>
               </td>
             `;
             tbody.appendChild(row);
@@ -4317,6 +4764,8 @@ const DEFAULT_PROJECTS = [
       document.getElementById("customerReceiptUrl").value = "";
       document.getElementById("customerPhotoPreview").style.display = "none";
       document.getElementById("customerReceiptPreview").style.display = "none";
+      const suppEl = document.getElementById("customerSupportedBy");
+      if (suppEl) suppEl.value = "";
       await syncAllCustomerMetadata(true);
       document.getElementById("customerModalTitle").textContent = "Add Customer Lead";
       await onModalDirectorChange(true);
@@ -4337,6 +4786,8 @@ const DEFAULT_PROJECTS = [
       document.getElementById("customerPhone").value = c.phone || "";
       document.getElementById("customerEmail").value = c.email || "";
       document.getElementById("customerAddress").value = c.address || "";
+      const suppElEdit = document.getElementById("customerSupportedBy");
+      if (suppElEdit) suppElEdit.value = c.supported_by || "";
 
       document.getElementById("customerDirectorSelect").value = c.director_id || "";
       await onModalDirectorChange(false);
@@ -4386,6 +4837,7 @@ const DEFAULT_PROJECTS = [
         email: (document.getElementById("customerEmail").value || "").trim(),
         address: (document.getElementById("customerAddress").value || "").trim(),
         photo_or_id: (document.getElementById("customerPhotoUrl").value || "").trim(),
+        supported_by: (document.getElementById("customerSupportedBy") ? document.getElementById("customerSupportedBy").value.trim() : "") || null,
         director_id: dirSelect.value || null,
         director_name: dirSelect.value ? dirName : null,
         agent_id: agentSelect.value || null,
@@ -4415,6 +4867,10 @@ const DEFAULT_PROJECTS = [
     }
 
     async function deleteCustomer(id, name) {
+      if (!name) {
+        const c = cachedCustomers.find(x => x.id === id);
+        name = c ? c.customer_name : "Customer";
+      }
       showArkConfirm(
         "Delete Customer Lead",
         `Are you sure you want to delete the lead record for <b>"${name}"</b>?`,
@@ -4424,6 +4880,508 @@ const DEFAULT_PROJECTS = [
             showToast("Customer record deleted from MongoDB.");
             loadCustomers();
             loadDashboardStats();
+          }
+        }
+      );
+    }
+
+    // --- 4B. Advanced Customer Payment List & Site Applications ---
+    let cachedSiteApplications = [];
+    let currentViewingApp = null;
+
+    function updateAppPhotoPreview(url) {
+      const container = document.getElementById("appPhotoPreview");
+      const img = document.getElementById("appPreviewImg");
+      const name = document.getElementById("appPhotoName");
+      if (!url) {
+        if (container) container.style.display = "none";
+        return;
+      }
+      if (img) img.src = normalizeImageUrl(url);
+      if (name) name.textContent = url.split("/").pop() || "customer-photo.webp";
+      if (container) container.style.display = "flex";
+    }
+
+    function validateAppPhone(val) {
+      if (!val) return;
+      val = val.trim();
+      const curId = document.getElementById("appEditId")?.value;
+      const dup = cachedSiteApplications.find(a => a.phone && a.phone.trim() === val && a.id !== curId);
+      if (dup) {
+        showToast(`⚠️ Phone '${val}' is already registered under application ${dup.application_no} (${dup.customer_name})`, true);
+      }
+    }
+
+    async function loadSiteApplications() {
+      const venture = document.getElementById("appVentureFilter")?.value || "all";
+      const search = document.getElementById("appSearchInput")?.value || "";
+
+      let url = "/admin/site-applications?";
+      if (venture && venture !== "all") url += `venture=${encodeURIComponent(venture)}&`;
+      if (search) url += `search=${encodeURIComponent(search)}&`;
+
+      try {
+        const res = await apiRequest(url);
+        if (res.ok) {
+          cachedSiteApplications = await res.json();
+          const tbody = document.getElementById("siteApplicationsTableBody");
+          if (!tbody) return;
+          tbody.innerHTML = "";
+
+          if (cachedSiteApplications.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">No site booking applications found. Click "+ New Customer Site Application" or click "📝 Book Site / Form" on any Customer Lead.</td></tr>`;
+            return;
+          }
+
+          cachedSiteApplications.forEach(a => {
+            const photoUrl = normalizeImageUrl(a.photo_url || "images/logo.webp");
+            const receiptHtml = a.receipt_url ? 
+              `<a href="${normalizeImageUrl(a.receipt_url)}" target="_blank" class="btn btn-outline btn-sm" style="font-size:0.7rem; padding:2px 6px;">📄 View Bill</a>` : 
+              `<span style="color:var(--text-muted); font-size:0.75rem;">Office Counter</span>`;
+
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td><img class="cell-avatar" src="${photoUrl}" style="width:42px;height:48px;object-fit:cover;border-radius:4px;border:1px solid var(--gold);" onerror="this.src='images/logo.webp'"></td>
+              <td>
+                <b style="color:var(--gold); font-size:0.85rem;">${a.application_no || 'ARK-APP'}</b><br/>
+                <span style="color:var(--text-muted); font-size:0.75rem;">📅 ${a.payment_date || (a.created_at ? a.created_at.substring(0, 10) : '-')}</span>
+              </td>
+              <td>
+                <b>${a.customer_name}</b><br/>
+                <span style="color:var(--gold); font-size:0.8rem;">📞 ${a.phone}</span>
+                ${a.address ? `<br/><span style="color:var(--text-muted); font-size:0.72rem;">📍 ${a.address.substring(0, 35)}...</span>` : ''}
+              </td>
+              <td>
+                <b>${a.venture_name}</b><br/>
+                <span style="color:var(--gold); font-size:0.78rem;">Plot #${a.plot_number} (${a.plot_size || 'Std'})</span>
+                ${a.plot_facing ? `<br/><span style="color:var(--text-muted); font-size:0.72rem;">Facing: ${a.plot_facing}</span>` : ''}
+              </td>
+              <td>
+                <span style="color:#4ade80; font-weight:700; font-size:0.95rem;">₹${a.advance_amount}</span><br/>
+                <span style="color:var(--text-muted); font-size:0.72rem;">${a.payment_mode || 'Online Transfer'}</span>
+              </td>
+              <td>
+                <span style="font-size:0.8rem; color:#fff;">🌟 ${a.supported_by || (a.director_name ? 'Dir: ' + a.director_name : 'Direct / Company Own')}</span>
+              </td>
+              <td>
+                ${receiptHtml}
+              </td>
+              <td>
+                <div style="font-size:0.75rem; color:#4ade80; font-weight:600;">✓ Verified &amp; Sealed</div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">ARK Infra Authorized</div>
+              </td>
+              <td>
+                <div style="display:flex; flex-direction:column; gap:4px;">
+                  <button class="btn btn-gold btn-sm" onclick="viewSiteApplication('${a.id}')" style="font-size:0.72rem; padding:2px 6px;">📄 View Form</button>
+                  <button class="btn btn-outline btn-sm" onclick="downloadApplicationPdf('${a.id}')" style="font-size:0.72rem; padding:2px 6px;">⬇️ Download PDF</button>
+                  <div style="display:flex; gap:4px;">
+                    <button class="btn btn-outline btn-sm" onclick="editSiteApplication('${a.id}')" style="font-size:0.72rem; padding:2px 6px;">Edit</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteSiteApplication('${a.id}')" style="font-size:0.72rem; padding:2px 6px;">Delete</button>
+                  </div>
+                </div>
+              </td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+      } catch (e) {
+        console.error("Failed to load site applications:", e);
+      }
+    }
+
+    function openAddApplicationModal() {
+      document.getElementById("applicationForm").reset();
+      document.getElementById("appEditId").value = "";
+      document.getElementById("appCustomerId").value = "";
+      document.getElementById("appPhotoUrl").value = "";
+      document.getElementById("appReceiptUrl").value = "";
+      document.getElementById("appPhotoPreview").style.display = "none";
+      document.getElementById("appReceiptPreview").style.display = "none";
+
+      const today = new Date().toISOString().substring(0, 10);
+      document.getElementById("appDate").value = today;
+      document.getElementById("appPaymentDate").value = today;
+      document.getElementById("appSiteVisitDate").value = today;
+      document.getElementById("appNumber").value = `ARK-APP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      document.getElementById("applicationModalTitle").innerHTML = "<span>🏛️</span> ARK Infra — Add Customer Site Application";
+      openModal("applicationModal");
+    }
+
+    function openApplicationFromLead(leadId) {
+      const c = cachedCustomers.find(x => x.id === leadId);
+      if (!c) {
+        showToast("Customer lead not found.", true);
+        return;
+      }
+
+      document.getElementById("applicationForm").reset();
+      document.getElementById("appEditId").value = "";
+      document.getElementById("appCustomerId").value = c.id;
+
+      const today = new Date().toISOString().substring(0, 10);
+      document.getElementById("appDate").value = today;
+      document.getElementById("appPaymentDate").value = c.submission_date || today;
+      document.getElementById("appSiteVisitDate").value = c.submission_date || today;
+      document.getElementById("appNumber").value = `ARK-APP-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      document.getElementById("appName").value = c.customer_name || "";
+      document.getElementById("appPhone").value = c.phone || "";
+      document.getElementById("appEmail").value = c.email || "";
+      document.getElementById("appAddress").value = c.address || "";
+      document.getElementById("appPhotoUrl").value = c.photo_or_id || "";
+      if (c.photo_or_id) updateAppPhotoPreview(c.photo_or_id);
+
+      document.getElementById("appVentureSelect").value = c.project_interested || "";
+      document.getElementById("appPlotNumber").value = c.plot_number || "";
+      document.getElementById("appPlotSize").value = c.plot_size || "";
+      document.getElementById("appAdvanceAmount").value = c.advance_amount || "10,000";
+
+      document.getElementById("appSupportedBy").value = c.supported_by || (c.director_name ? "Director: " + c.director_name : "Direct / Walk-in (Company Own)");
+      document.getElementById("appDirectorName").value = c.director_name || "";
+      document.getElementById("appAgentName").value = c.agent_name || "";
+
+      document.getElementById("appReceiptUrl").value = c.receipt_url || "";
+      if (c.receipt_url) {
+        document.getElementById("appReceiptPreview").style.display = "block";
+      } else {
+        document.getElementById("appReceiptPreview").style.display = "none";
+      }
+
+      document.getElementById("applicationModalTitle").innerHTML = `<span>🏛️</span> Official Site Application for "${c.customer_name}"`;
+      openModal("applicationModal");
+    }
+
+    function editSiteApplication(id) {
+      const a = cachedSiteApplications.find(x => x.id === id);
+      if (!a) return;
+
+      document.getElementById("applicationModalTitle").innerHTML = "<span>🏛️</span> Edit Customer Site Application";
+      document.getElementById("appEditId").value = a.id;
+      document.getElementById("appCustomerId").value = a.customer_id || "";
+      document.getElementById("appNumber").value = a.application_no || "";
+      document.getElementById("appDate").value = a.created_at ? a.created_at.substring(0, 10) : "";
+
+      document.getElementById("appName").value = a.customer_name || "";
+      document.getElementById("appFatherName").value = a.father_or_spouse_name || "";
+      document.getElementById("appPhone").value = a.phone || "";
+      document.getElementById("appAltPhone").value = a.alt_phone || "";
+      document.getElementById("appEmail").value = a.email || "";
+      document.getElementById("appAddress").value = a.address || "";
+      document.getElementById("appAadhaar").value = a.aadhaar_or_id || "";
+      document.getElementById("appNomineeName").value = a.nominee_name || "";
+      document.getElementById("appNomineeRelation").value = a.nominee_relation || "";
+
+      document.getElementById("appPhotoUrl").value = a.photo_url || "";
+      if (a.photo_url) updateAppPhotoPreview(a.photo_url);
+
+      document.getElementById("appVentureSelect").value = a.venture_name || "";
+      document.getElementById("appPlotNumber").value = a.plot_number || "";
+      document.getElementById("appPlotFacing").value = a.plot_facing || "East";
+      document.getElementById("appPlotSize").value = a.plot_size || "";
+      document.getElementById("appRatePerSqYd").value = a.rate_per_sq_yd || "";
+      document.getElementById("appTotalValue").value = a.total_site_value || "";
+      document.getElementById("appSiteVisitDate").value = a.site_visit_date || "";
+      document.getElementById("appSiteVisitNotes").value = a.site_visit_notes || "";
+
+      document.getElementById("appSupportedBy").value = a.supported_by || "";
+      document.getElementById("appDirectorName").value = a.director_name || "";
+      document.getElementById("appAgentName").value = a.agent_name || "";
+
+      document.getElementById("appAdvanceAmount").value = a.advance_amount || "";
+      document.getElementById("appAdvanceWords").value = a.advance_amount_words || "";
+      document.getElementById("appPaymentMode").value = a.payment_mode || "UPI / Online Transfer";
+      document.getElementById("appTxnId").value = a.transaction_id || "";
+      document.getElementById("appPaymentDate").value = a.payment_date || "";
+      document.getElementById("appBalanceAmount").value = a.balance_amount || "";
+      document.getElementById("appBalanceDue").value = a.balance_due_date || "";
+
+      document.getElementById("appReceiptUrl").value = a.receipt_url || "";
+      if (a.receipt_url) {
+        document.getElementById("appReceiptPreview").style.display = "block";
+      } else {
+        document.getElementById("appReceiptPreview").style.display = "none";
+      }
+
+      openModal("applicationModal");
+    }
+
+    async function handleApplicationSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById("appEditId").value;
+      const phoneVal = (document.getElementById("appPhone").value || "").trim();
+
+      const payload = {
+        application_no: (document.getElementById("appNumber").value || "").trim(),
+        customer_id: document.getElementById("appCustomerId").value || null,
+        customer_name: (document.getElementById("appName").value || "").trim(),
+        father_or_spouse_name: (document.getElementById("appFatherName").value || "").trim() || null,
+        phone: phoneVal,
+        alt_phone: (document.getElementById("appAltPhone").value || "").trim() || null,
+        email: (document.getElementById("appEmail").value || "").trim() || null,
+        address: (document.getElementById("appAddress").value || "").trim(),
+        aadhaar_or_id: (document.getElementById("appAadhaar").value || "").trim() || null,
+        photo_url: (document.getElementById("appPhotoUrl").value || "").trim() || null,
+        nominee_name: (document.getElementById("appNomineeName").value || "").trim() || null,
+        nominee_relation: (document.getElementById("appNomineeRelation").value || "").trim() || null,
+
+        site_visit_date: document.getElementById("appSiteVisitDate").value || null,
+        site_visit_verified: true,
+        site_visit_notes: (document.getElementById("appSiteVisitNotes").value || "").trim() || null,
+
+        venture_name: document.getElementById("appVentureSelect").value,
+        plot_number: (document.getElementById("appPlotNumber").value || "").trim(),
+        plot_facing: document.getElementById("appPlotFacing").value,
+        plot_size: (document.getElementById("appPlotSize").value || "").trim() || null,
+        rate_per_sq_yd: (document.getElementById("appRatePerSqYd").value || "").trim() || null,
+        total_site_value: (document.getElementById("appTotalValue").value || "").trim() || null,
+
+        supported_by: (document.getElementById("appSupportedBy").value || "").trim() || null,
+        director_name: (document.getElementById("appDirectorName").value || "").trim() || null,
+        agent_name: (document.getElementById("appAgentName").value || "").trim() || null,
+
+        advance_amount: (document.getElementById("appAdvanceAmount").value || "").trim(),
+        advance_amount_words: (document.getElementById("appAdvanceWords").value || "").trim() || null,
+        payment_mode: document.getElementById("appPaymentMode").value,
+        transaction_id: (document.getElementById("appTxnId").value || "").trim() || null,
+        payment_date: document.getElementById("appPaymentDate").value || null,
+        receipt_url: (document.getElementById("appReceiptUrl").value || "").trim() || null,
+        balance_amount: (document.getElementById("appBalanceAmount").value || "").trim() || null,
+        balance_due_date: (document.getElementById("appBalanceDue").value || "").trim() || null,
+        verification_status: "Verified & Approved by ARK Infra"
+      };
+
+      const submitBtn = document.getElementById("appSubmitBtn");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = "⏳ Saving Application to MongoDB...";
+      }
+
+      try {
+        const endpoint = id ? `/admin/site-applications/${id}` : "/admin/site-applications";
+        const method = id ? "PUT" : "POST";
+
+        const res = await apiRequest(endpoint, { method, body: JSON.stringify(payload) });
+        if (res.ok) {
+          const savedData = await res.json();
+          closeModal("applicationModal");
+          showToast("✅ Application & Advance Payment saved permanently to MongoDB!");
+          loadSiteApplications();
+          loadCustomers();
+          loadDashboardStats();
+
+          // Offer immediate download of official PDF
+          showArkConfirm(
+            "Application Saved Successfully!",
+            `Official Application <b>${savedData.application_no}</b> for <b>${savedData.customer_name}</b> has been saved permanently to MongoDB with verified ARK Infra Stamp and Signatures.<br/><br/>Would you like to <b>Download the Official Authorized PDF</b> now?`,
+            () => {
+              downloadApplicationPdf(savedData.id);
+            }
+          );
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          showToast(formatErrorMessage(errData.detail || errData.message || "Failed to save application."), true);
+        }
+      } catch (err) {
+        console.error(err);
+        showToast("Error communicating with server: " + err.message, true);
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = "💾 Save Application & Advance Payment";
+        }
+      }
+    }
+
+    function viewSiteApplication(id) {
+      const a = cachedSiteApplications.find(x => x.id === id);
+      if (!a) {
+        showToast("Application not found.", true);
+        return;
+      }
+      currentViewingApp = a;
+
+      const photoUrl = normalizeImageUrl(a.photo_url || "images/logo.webp");
+      const receiptStatus = a.receipt_url ? 
+        `Original Payment Bill / Receipt Uploaded to MongoDB Records (<a href="${normalizeImageUrl(a.receipt_url)}" target="_blank" style="color:#1d4ed8; font-weight:600; text-decoration:underline;">View Bill</a>)` : 
+        `Payment Acknowledged by Company Office Counter`;
+
+      const html = `
+        <!-- Certificate Header -->
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #c9a962; padding-bottom:12px; margin-bottom:14px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <img src="images/logo.webp" style="width:60px; height:60px; object-fit:contain; border:1px solid #c9a962; padding:2px; background:#fff;" onerror="this.src='images/logo.webp'">
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#050d1a; letter-spacing:0.02em;">ARK INFRA AND DEVELOPERS</div>
+              <div style="font-size:10px; font-weight:700; color:#9a7b3a; letter-spacing:0.05em;">AUTHORISED REAL ESTATE &amp; TOWNSHIP PROMOTERS</div>
+              <div style="font-size:9px; color:#64748b; margin-top:2px;">Regd. No. 132/2020 &bull; ISO 9001:2015 Certified &bull; Visakhapatnam, Andhra Pradesh<br/>Phone: +91 98480 11223 &bull; Website: arkinfravizag.com</div>
+            </div>
+          </div>
+          <div style="text-align:right; border:1px solid #cbd5e1; background:#f8fafc; padding:6px 12px; border-radius:4px;">
+            <div style="font-size:10px; color:#64748b;">APPLICATION NO</div>
+            <div style="font-size:13px; font-weight:800; color:#0f172a;">${a.application_no || 'ARK-APP'}</div>
+            <div style="font-size:10px; color:#16a34a; font-weight:700; margin-top:2px;">&#10004; VERIFIED &amp; AUTHORIZED</div>
+          </div>
+        </div>
+
+        <!-- Document Title Banner -->
+        <div style="background:#050d1a; color:#fff; padding:6px 14px; display:flex; justify-content:space-between; align-items:center; border-radius:3px; margin-bottom:12px;">
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.04em;">CUSTOMER SITE APPLICATION &amp; ADVANCE BOOKING RECEIPT</div>
+          <div style="font-size:10px; color:#e4d4a8;">CONFIDENTIAL / OFFICIAL RECORD</div>
+        </div>
+
+        <!-- 1. Customer Particulars & Passport Photo -->
+        <div style="display:grid; grid-template-columns: 1fr 100px; gap:12px; margin-bottom:12px; background:#f8fafc; border:1px solid #e2e8f0; padding:10px; border-radius:4px;">
+          <div style="font-size:11px; line-height:1.6; color:#1e293b;">
+            <div><b>Customer Full Name:</b> <span style="font-size:12px; color:#0f172a; font-weight:700;">${a.customer_name}</span></div>
+            <div><b>S/o, W/o, D/o:</b> ${a.father_or_spouse_name || '-'}</div>
+            <div><b>Primary Mobile:</b> <b>${a.phone}</b> ${a.alt_phone ? '(Alt: ' + a.alt_phone + ')' : ''} &bull; <b>Email:</b> ${a.email || '-'}</div>
+            <div><b>Permanent Address:</b> ${a.address || '-'}</div>
+            <div><b>Aadhaar / ID Card No:</b> ${a.aadhaar_or_id || 'Confidential'} &bull; <b>Nominee:</b> ${a.nominee_name || '-'} (${a.nominee_relation || '-'})</div>
+          </div>
+          <div style="text-align:center;">
+            <img src="${photoUrl}" style="width:85px; height:95px; object-fit:cover; border:1px solid #c9a962; border-radius:4px; box-shadow:0 2px 6px rgba(0,0,0,0.1);" onerror="this.src='images/logo.webp'">
+            <div style="font-size:8px; color:#64748b; margin-top:2px; font-weight:600;">CUSTOMER PHOTO</div>
+          </div>
+        </div>
+
+        <!-- 2. Property & Site Visit Details -->
+        <div style="margin-bottom:12px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:4px; overflow:hidden;">
+          <div style="background:#f1f5f9; padding:5px 10px; font-size:10px; font-weight:700; color:#1e293b; display:flex; justify-content:space-between;">
+            <span>PROPERTY, VENTURE &amp; SITE VISIT DETAILS</span>
+            <span style="color:#b45309;">Supported By: <b>${a.supported_by || (a.director_name ? 'Dir: ' + a.director_name : 'Direct / Company Own')}</b></span>
+          </div>
+          <div style="padding:10px; font-size:11px; display:grid; grid-template-columns:1fr 1fr; gap:8px; color:#1e293b;">
+            <div><b>Venture / Layout:</b> <span style="font-weight:700; color:#0f172a;">${a.venture_name}</span></div>
+            <div><b>Plot Number:</b> <span style="font-weight:700; color:#0f172a;">Plot #${a.plot_number}</span></div>
+            <div><b>Plot Extent / Size:</b> ${a.plot_size || 'As per Layout'} &bull; <b>Facing:</b> ${a.plot_facing || 'Standard'}</div>
+            <div><b>Rate per Sq. Yard:</b> ₹${a.rate_per_sq_yd || '-'} &bull; <b>Total Value:</b> <b>₹${a.total_site_value || '-'}</b></div>
+            <div><b>Site Visit Status:</b> <span style="color:#16a34a; font-weight:600;">&#10004; Site Visit Completed &amp; Inspected</span> (${a.site_visit_date || 'Verified'})</div>
+            <div><b>Assigned Referral:</b> Dir: ${a.director_name || '-'} &bull; Agent: ${a.agent_name || '-'}</div>
+          </div>
+        </div>
+
+        <!-- 3. Advance Payment Particulars & Financial Receipt -->
+        <div style="margin-bottom:12px; background:#f0fdf4; border:1px solid #86efac; border-radius:4px; overflow:hidden;">
+          <div style="background:#dcfce7; padding:5px 10px; font-size:10px; font-weight:700; color:#166534; display:flex; justify-content:space-between;">
+            <span>ADVANCE PAYMENT PARTICULARS &amp; FINANCIAL RECEIPT</span>
+            <span>Date: ${a.payment_date || (a.created_at ? a.created_at.substring(0, 10) : '-')}</span>
+          </div>
+          <div style="padding:10px; font-size:11px; display:grid; grid-template-columns:1.2fr 1fr; gap:8px; color:#1e293b;">
+            <div><b>Advance Amount Paid:</b> <span style="font-size:13px; font-weight:800; color:#166534;">₹${a.advance_amount}</span> ${a.advance_amount_words ? '(' + a.advance_amount_words + ')' : ''}</div>
+            <div><b>Payment Mode:</b> ${a.payment_mode || 'UPI / Online'} &bull; <b>Txn Ref:</b> ${a.transaction_id || 'Token Advance Verified'}</div>
+            <div><b>Balance Payable:</b> ₹${a.balance_amount || '-'} (Due: ${a.balance_due_date || 'As per payment schedule'})</div>
+            <div><b>Official Receipt Status:</b> <span style="color:#166534; font-weight:600;">&#10004; ${receiptStatus}</span></div>
+          </div>
+        </div>
+
+        <!-- 4. Terms & Declarations -->
+        <div style="font-size:9px; color:#64748b; line-height:1.4; border:1px solid #e2e8f0; background:#f8fafc; padding:8px 10px; border-radius:4px; margin-bottom:14px;">
+          <b>TERMS &amp; DECLARATION:</b> 1. This Application &amp; Advance Booking Form confirms provisional allotment of cited plot subject to clearance of payment. 2. The applicant confirms having inspected the site, layout approval status, and agreed to the pricing structure of ARK Infra. 3. Remaining balance shall be disbursed as per the agreed schedule prior to registered sale deed execution. 4. This application is sensitive and confidential, securely verified under ARK Infra corporate bylaws. Legal jurisdiction: Visakhapatnam.
+        </div>
+
+        <!-- 5. Official Seals & Authorized Signatures -->
+        <div style="display:grid; grid-template-columns:1fr 1fr 1.2fr; gap:12px; align-items:flex-end; padding-top:10px; border-top:1px dashed #cbd5e1;">
+          <div style="text-align:left;">
+            <div style="font-size:11px; font-weight:700; color:#0f172a; margin-top:35px; border-top:1px solid #64748b; padding-top:4px;">APPLICANT SIGNATURE</div>
+            <div style="font-size:9px; color:#64748b;">(${a.customer_name})</div>
+          </div>
+
+          <div style="text-align:center;">
+            <img src="images/ark-stamp.png" style="width:75px; height:75px; object-fit:contain; margin-bottom:2px;" alt="Official ARK Infra Stamp">
+            <div style="font-size:9px; font-weight:700; color:#1e3d66;">OFFICIAL CORPORATE SEAL</div>
+            <div style="font-size:8px; color:#16a34a;">VERIFIED &amp; APPROVED</div>
+          </div>
+
+          <div style="text-align:right;">
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-bottom:2px;">
+              <img src="images/signature-md.png" style="width:80px; height:28px; object-fit:contain;" alt="MD Signature">
+              <img src="images/signature-ceo.png" style="width:80px; height:28px; object-fit:contain;" alt="CEO Signature">
+            </div>
+            <div style="font-size:10px; font-weight:700; color:#050d1a;">Adari Ramakrishna (MD) &bull; Konathala Arun (CEO)</div>
+            <div style="font-size:9px; font-weight:600; color:#9a7b3a;">FOR ARK INFRA AND DEVELOPERS</div>
+            <div style="font-size:8px; color:#64748b;">Authorized Signatories</div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("applicationCertificateContent").innerHTML = html;
+      openModal("applicationViewModal");
+    }
+
+    function downloadCurrentViewPdf() {
+      if (!currentViewingApp) return;
+      downloadApplicationPdf(currentViewingApp.id);
+    }
+
+    async function downloadApplicationPdf(id) {
+      const btn = document.getElementById("viewModalDownloadPdfBtn");
+      const origText = btn ? btn.innerHTML : "";
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = "⏳ Generating Official PDF...";
+      }
+      showToast("Generating official signed & stamped application PDF...");
+
+      try {
+        const token = getToken();
+        const headers = {};
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+
+        const res = await fetch(`${API_BASE}/admin/site-applications/${id}/pdf`, { headers });
+        if (res.ok) {
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = url;
+          a.download = `ARK_Infra_Application_${id.substring(0, 8)}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          a.remove();
+          showToast("✅ Application PDF downloaded successfully!");
+        } else {
+          // If serverless endpoint fails or local, fallback to printing
+          showToast("PDF server notice: Falling back to browser Print to PDF.", true);
+          viewSiteApplication(id);
+          setTimeout(() => { window.print(); }, 400);
+        }
+      } catch (err) {
+        console.error(err);
+        showToast("Notice: Opening printable view for instant PDF saving.");
+        viewSiteApplication(id);
+        setTimeout(() => { window.print(); }, 400);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = origText;
+        }
+      }
+    }
+
+    function printApplicationCertificate() {
+      window.print();
+    }
+
+    async function deleteSiteApplication(id, name) {
+      if (!name) {
+        const item = cachedSiteApplications.find(a => (a.id || a._id) === id);
+        name = item ? item.customer_name : "this applicant";
+      }
+      showArkConfirm(
+        "Delete Site Application",
+        `Are you sure you want to delete the official booking application for <b>"${name}"</b> permanently from MongoDB?`,
+        async () => {
+          const res = await apiRequest(`/admin/site-applications/${id}`, { method: "DELETE" });
+          if (res.ok) {
+            showToast("Application record deleted permanently from MongoDB.");
+            loadSiteApplications();
+            loadCustomers();
+            loadDashboardStats();
+          } else {
+            const data = await res.json().catch(() => ({}));
+            showToast(formatErrorMessage(data.detail || "Failed to delete application."), true);
           }
         }
       );
