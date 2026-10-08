@@ -1,6 +1,7 @@
 import logging
 import urllib.parse
 from typing import List, Optional
+import httpx
 from bson import ObjectId
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, HTTPException, Depends
@@ -12,14 +13,54 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/admin/whatsapp", tags=["WhatsApp Announcements"])
 
 class WhatsAppBroadcastRequest(BaseModel):
-    director_id: Optional[str] = None  # None for all agents
+    director_id: Optional[str] = None  # None / "all" for all agents, or "customers_all", "customers_pending", etc.
     message: str = Field(..., min_length=1, max_length=2000)
+
+class WhatsAppConfigUpdate(BaseModel):
+    api_token: str = Field(..., description="Meta WhatsApp Cloud API Access Token")
+    phone_number_id: str = Field(..., description="Meta WhatsApp Phone Number ID")
+
+async def get_effective_whatsapp_creds():
+    """Retrieves WhatsApp credentials from MongoDB system_settings, falling back to .env settings."""
+    settings_col = get_collection("system_settings")
+    doc = await settings_col.find_one({"key": "whatsapp_config"})
+    if doc and doc.get("api_token") and doc.get("phone_number_id"):
+        return doc.get("api_token").strip(), doc.get("phone_number_id").strip()
+    return (settings.WHATSAPP_API_TOKEN or "").strip(), (settings.WHATSAPP_PHONE_NUMBER_ID or "").strip()
+
+@router.get("/config")
+async def get_whatsapp_config(current_admin: dict = Depends(get_current_admin)):
+    """Returns whether WhatsApp Cloud API is configured (hiding token secret)."""
+    token, phone_id = await get_effective_whatsapp_creds()
+    is_configured = bool(token and phone_id)
+    masked_token = (token[:6] + "..." + token[-4:]) if (token and len(token) > 10) else ("Configured" if token else "")
+    return {
+        "configured": is_configured,
+        "phone_number_id": phone_id,
+        "token_preview": masked_token
+    }
+
+@router.post("/config")
+async def save_whatsapp_config(payload: WhatsAppConfigUpdate, current_admin: dict = Depends(get_current_admin)):
+    """Saves Meta WhatsApp Cloud API credentials directly to database settings."""
+    settings_col = get_collection("system_settings")
+    await settings_col.update_one(
+        {"key": "whatsapp_config"},
+        {"$set": {
+            "key": "whatsapp_config",
+            "api_token": payload.api_token.strip(),
+            "phone_number_id": payload.phone_number_id.strip()
+        }},
+        upsert=True
+    )
+    return {"success": True, "message": "WhatsApp Cloud API credentials saved successfully!"}
 
 @router.get("/teams")
 async def get_whatsapp_teams(current_admin: dict = Depends(get_current_admin)):
-    """Returns available directors and their agent count for team messaging."""
+    """Returns available directors and customer segments for WhatsApp dispatch."""
     directors_col = get_collection("directors")
     agents_col = get_collection("agents")
+    customers_col = get_collection("customers")
 
     directors = await directors_col.find().sort("name", 1).to_list(length=100)
     teams = []
@@ -31,45 +72,94 @@ async def get_whatsapp_teams(current_admin: dict = Depends(get_current_admin)):
             "director_name": d.get("name"),
             "agent_count": count
         })
-    return teams
+
+    # Counts for customer segments
+    total_customers = await customers_col.count_documents({})
+    pending_customers = await customers_col.count_documents({"site_visit_status": "Pending"})
+    completed_customers = await customers_col.count_documents({"site_visit_status": "Site Visit Completed"})
+
+    return {
+        "teams": teams,
+        "customer_segments": {
+            "total_customers": total_customers,
+            "pending_customers": pending_customers,
+            "completed_customers": completed_customers
+        }
+    }
+
+async def _fetch_recipients(director_id: Optional[str]) -> list:
+    """Helper to fetch recipient contacts based on selector."""
+    recipients = []
+    
+    if director_id and director_id.startswith("customers_"):
+        customers_col = get_collection("customers")
+        c_query = {}
+        if director_id == "customers_pending":
+            c_query = {"site_visit_status": "Pending"}
+        elif director_id == "customers_completed":
+            c_query = {"site_visit_status": "Site Visit Completed"}
+        elif director_id == "customers_positive":
+            c_query = {"site_visit_status": {"$in": ["Positive", "Registration Completed", "Amount Paid"]}}
+            
+        customers = await customers_col.find(c_query).to_list(length=1000)
+        for c in customers:
+            raw_phone = (c.get("phone") or "").replace(" ", "").replace("-", "").replace("+", "")
+            clean_phone = raw_phone
+            if len(clean_phone) == 10:
+                clean_phone = "91" + clean_phone
+            recipients.append({
+                "name": c.get("customer_name") or "Customer",
+                "phone": c.get("phone") or "",
+                "clean_phone": clean_phone,
+                "type": "customer",
+                "extra": c.get("project_interested") or ""
+            })
+    else:
+        agents_col = get_collection("agents")
+        query = {}
+        if director_id and director_id != "all":
+            query["director_id"] = director_id
+            
+        agents = await agents_col.find(query).to_list(length=500)
+        for a in agents:
+            raw_phone = (a.get("phone") or "").replace(" ", "").replace("-", "").replace("+", "")
+            clean_phone = raw_phone
+            if len(clean_phone) == 10:
+                clean_phone = "91" + clean_phone
+            recipients.append({
+                "name": a.get("full_name") or "Agent",
+                "phone": a.get("phone") or "",
+                "clean_phone": clean_phone,
+                "type": "agent",
+                "extra": a.get("designation") or "Real Estate Agent"
+            })
+            
+    return recipients
 
 @router.post("/prepare-broadcast")
 async def prepare_whatsapp_broadcast(
     payload: WhatsAppBroadcastRequest,
     current_admin: dict = Depends(get_current_admin)
 ):
-    """
-    Prepares a team broadcast message:
-    - If official WhatsApp API token is configured, can send via Meta Graph API.
-    - Otherwise, generates direct click-to-chat WhatsApp URLs for each agent.
-    """
-    agents_col = get_collection("agents")
-    query = {}
-    if payload.director_id and payload.director_id != "all":
-        query["director_id"] = payload.director_id
-
-    agents = await agents_col.find(query).to_list(length=500)
-    
+    """Prepares formatted direct dispatch WhatsApp links for all matching recipients."""
+    recipients_raw = await _fetch_recipients(payload.director_id)
     encoded_msg = urllib.parse.quote(payload.message)
     recipients = []
 
-    for a in agents:
-        raw_phone = a.get("phone", "").replace(" ", "").replace("-", "").replace("+", "")
-        # Normalize Indian numbers if needed
-        clean_phone = raw_phone
-        if len(clean_phone) == 10:
-            clean_phone = "91" + clean_phone
-
+    for r in recipients_raw:
+        clean_phone = r["clean_phone"]
         wa_url = f"https://wa.me/{clean_phone}?text={encoded_msg}" if clean_phone else None
-
         recipients.append({
-            "agent_name": a.get("full_name"),
-            "phone": a.get("phone"),
+            "agent_name": r["name"],
+            "phone": r["phone"],
             "clean_phone": clean_phone,
+            "extra": r["extra"],
+            "type": r["type"],
             "whatsapp_link": wa_url
         })
 
-    api_configured = bool(settings.WHATSAPP_API_TOKEN and settings.WHATSAPP_PHONE_NUMBER_ID)
+    token, phone_id = await get_effective_whatsapp_creds()
+    api_configured = bool(token and phone_id)
 
     return {
         "success": True,
@@ -77,5 +167,74 @@ async def prepare_whatsapp_broadcast(
         "total_recipients": len(recipients),
         "recipients": recipients,
         "sample_link": recipients[0]["whatsapp_link"] if recipients else None,
-        "message": "Broadcast prepared. Direct WhatsApp dispatch links generated."
+        "group_share_link": f"https://api.whatsapp.com/send?text={encoded_msg}",
+        "message": f"Broadcast prepared for {len(recipients)} recipients."
+    }
+
+@router.post("/send-cloud-broadcast")
+async def send_meta_cloud_broadcast(
+    payload: WhatsAppBroadcastRequest,
+    current_admin: dict = Depends(get_current_admin)
+):
+    """
+    Sends automated 1-click bulk WhatsApp messages via Official Meta WhatsApp Cloud API.
+    """
+    token, phone_id = await get_effective_whatsapp_creds()
+    if not token or not phone_id:
+        raise HTTPException(
+            status_code=400,
+            detail="Meta WhatsApp Cloud API is not configured yet. Please configure your Access Token and Phone Number ID."
+        )
+
+    recipients = await _fetch_recipients(payload.director_id)
+    if not recipients:
+        return {"success": True, "total": 0, "sent": 0, "failed": 0, "message": "No recipients found for selection."}
+
+    meta_url = f"https://graph.facebook.com/v19.0/{phone_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+
+    sent_count = 0
+    failed_count = 0
+    errors = []
+
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        for r in recipients:
+            target_number = r["clean_phone"]
+            if not target_number:
+                failed_count += 1
+                continue
+
+            body = {
+                "messaging_product": "whatsapp",
+                "recipient_type": "individual",
+                "to": target_number,
+                "type": "text",
+                "text": {
+                    "preview_url": True,
+                    "body": payload.message
+                }
+            }
+
+            try:
+                resp = await client.post(meta_url, headers=headers, json=body)
+                if resp.status_code in [200, 201]:
+                    sent_count += 1
+                else:
+                    failed_count += 1
+                    err_json = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else resp.text
+                    errors.append(f"{r['name']} ({target_number}): {err_json}")
+            except Exception as e:
+                failed_count += 1
+                errors.append(f"{r['name']} ({target_number}): {str(e)}")
+
+    return {
+        "success": True,
+        "total": len(recipients),
+        "sent": sent_count,
+        "failed": failed_count,
+        "sample_errors": errors[:5],
+        "message": f"Cloud broadcast finished: {sent_count} sent successfully, {failed_count} failed."
     }
