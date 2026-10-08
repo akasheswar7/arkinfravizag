@@ -1764,14 +1764,56 @@
 
   <!-- ==================== JAVASCRIPT LOGIC ==================== -->
   <script>
-    const API_BASE = (
-      window.location.hostname === "localhost" ||
-      window.location.hostname === "127.0.0.1" ||
-      window.location.protocol === "file:" ||
-      !window.location.hostname
-    )
-      ? "http://localhost:8000/api"
-      : window.location.origin + "/api";
+    // ========================================================
+    // BULLETPROOF UNIVERSAL CLOUD & LOCAL API RESOLVER
+    // Guarantees admin portal works everywhere:
+    // www.arkinfravizag.com, mobile browsers, Vercel, localhost, file://
+    // ========================================================
+    const CLOUD_API_BASE = "https://arkinfravizagadminportal.vercel.app/api";
+    let API_BASE = CLOUD_API_BASE;
+
+    const isLocalDevHost = (
+      (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") &&
+      window.location.port !== "" &&
+      window.location.protocol.startsWith("http")
+    );
+
+    if (isLocalDevHost) {
+      API_BASE = "http://localhost:8000/api";
+    } else if (window.location.hostname.includes("vercel.app")) {
+      API_BASE = window.location.origin + "/api";
+    } else {
+      API_BASE = CLOUD_API_BASE;
+    }
+
+    // High-reliability fetch engine with automatic localhost-to-cloud failover & cold-start auto-retry
+    async function safeFetchWithFailover(endpoint, options = {}, retries = 2) {
+      const url = endpoint.startsWith("http") ? endpoint : `${API_BASE}${endpoint}`;
+      try {
+        const response = await fetch(url, options);
+        if (!response.ok && response.status === 404 && API_BASE !== CLOUD_API_BASE) {
+          console.warn("Local API 404, auto-switching to live Cloud API:", CLOUD_API_BASE);
+          API_BASE = CLOUD_API_BASE;
+          const cloudUrl = endpoint.startsWith("http") ? endpoint : `${API_BASE}${endpoint}`;
+          return await fetch(cloudUrl, options);
+        }
+        return response;
+      } catch (err) {
+        if (API_BASE !== CLOUD_API_BASE) {
+          console.warn("Local API offline, auto-switching to live Cloud API:", CLOUD_API_BASE);
+          API_BASE = CLOUD_API_BASE;
+          const cloudUrl = endpoint.startsWith("http") ? endpoint : `${API_BASE}${endpoint}`;
+          return await fetch(cloudUrl, options);
+        }
+        if (retries > 0) {
+          console.log(`Cloud server waking up, retrying request to ${endpoint}...`);
+          await new Promise(r => setTimeout(r, 1200));
+          return await safeFetchWithFailover(endpoint, options, retries - 1);
+        }
+        throw err;
+      }
+    }
+
     // --- Custom Luxury ARK Alert & Confirm Dialogs (Replaces native browser popups) ---
     function showArkAlert(title, message, iconType = "warning") {
       document.getElementById("arkAlertTitle").textContent = title;
@@ -1838,7 +1880,7 @@
         headers["Content-Type"] = "application/json";
       }
 
-      const response = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
+      const response = await safeFetchWithFailover(endpoint, { ...options, headers });
       if (response.status === 401) {
         clearToken();
         showLoginOverlay();
@@ -1923,7 +1965,7 @@
       btn.disabled = true;
 
       try {
-        const res = await fetch(`${API_BASE}/admin/login`, {
+        const res = await safeFetchWithFailover("/admin/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -2304,8 +2346,8 @@
           if (advEl) advEl.textContent = stats.total_applications || 0;
         }
 
-        const annRes = await fetch(`${API_BASE}/public/announcements/active`);
-        if (annRes.ok) {
+        const annRes = await safeFetchWithFailover("/public/announcements/active").catch(() => null);
+        if (annRes && annRes.ok) {
           const ann = await annRes.json();
           document.getElementById("activeAnnMessage").textContent = ann ? `"${ann.message}"` : "No active banner running on homepage.";
         }
@@ -4340,7 +4382,7 @@ const DEFAULT_PROJECTS = [
       try {
         let res = await apiRequest("/admin/directors").catch(() => null);
         if (!res || !res.ok) {
-          res = await fetch(`${API_BASE}/public/directors`).catch(() => null);
+          res = await safeFetchWithFailover("/public/directors").catch(() => null);
         }
         if (res && res.ok) {
           const data = await res.json().catch(() => []);
@@ -4361,7 +4403,7 @@ const DEFAULT_PROJECTS = [
       try {
         let res = await apiRequest("/admin/agents").catch(() => null);
         if (!res || !res.ok) {
-          res = await fetch(`${API_BASE}/public/agents`).catch(() => null);
+          res = await safeFetchWithFailover("/public/agents").catch(() => null);
         }
         if (res && res.ok) {
           const data = await res.json().catch(() => []);
@@ -4382,7 +4424,7 @@ const DEFAULT_PROJECTS = [
       try {
         let res = await apiRequest("/admin/projects").catch(() => null);
         if (!res || !res.ok) {
-          res = await fetch(`${API_BASE}/public/projects`).catch(() => null);
+          res = await safeFetchWithFailover("/public/projects").catch(() => null);
         }
         if (res && res.ok) {
           const data = await res.json().catch(() => []);
@@ -5647,7 +5689,7 @@ const DEFAULT_PROJECTS = [
         const headers = {};
         if (token) headers["Authorization"] = `Bearer ${token}`;
 
-        const res = await fetch(`${API_BASE}/admin/site-applications/${id}/pdf`, { headers });
+        const res = await safeFetchWithFailover(`/admin/site-applications/${id}/pdf`, { headers });
         if (res.ok) {
           const blob = await res.blob();
           const url = window.URL.createObjectURL(blob);
