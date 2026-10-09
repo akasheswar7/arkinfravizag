@@ -24,6 +24,7 @@ def _format_customer(doc: dict) -> dict:
         "advance_amount": doc.get("advance_amount"),
         "receipt_url": doc.get("receipt_url"),
         "supported_by": doc.get("supported_by"),
+        "vehicle_mode": doc.get("vehicle_mode"),
         "director_id": doc.get("director_id"),
         "director_name": doc.get("director_name"),
         "agent_id": doc.get("agent_id"),
@@ -36,16 +37,19 @@ def _format_customer(doc: dict) -> dict:
 @router.get("", response_model=List[CustomerResponse])
 async def list_customers(
     status_filter: Optional[str] = Query(None, alias="status", description="Filter by status"),
+    vehicle_filter: Optional[str] = Query(None, alias="vehicle_mode", description="Filter by Vehicle Mode ('Own Vehicle', 'Office Vehicle')"),
     director_filter: Optional[str] = Query(None, alias="director_id", description="Filter by Director ID"),
     agent_filter: Optional[str] = Query(None, alias="agent_id", description="Filter by Agent ID"),
     search: Optional[str] = Query(None, description="Search by customer name, phone, address, plot number, agent or director"),
     current_admin: dict = Depends(get_current_admin)
 ):
-    """Admin: Lists all customer records with status, director, agent filters and search."""
+    """Admin: Lists all customer records with status, vehicle mode, director, agent filters and search."""
     customers_col = get_collection("customers")
     query = {}
     if status_filter and status_filter.lower() != "all":
         query["site_visit_status"] = status_filter
+    if vehicle_filter and vehicle_filter.lower() != "all":
+        query["vehicle_mode"] = vehicle_filter
     if director_filter and director_filter.lower() != "all":
         query["director_id"] = director_filter
     if agent_filter and agent_filter.lower() != "all":
@@ -58,6 +62,7 @@ async def list_customers(
             {"address": {"$regex": search, "$options": "i"}},
             {"plot_number": {"$regex": search, "$options": "i"}},
             {"supported_by": {"$regex": search, "$options": "i"}},
+            {"vehicle_mode": {"$regex": search, "$options": "i"}},
             {"agent_name": {"$regex": search, "$options": "i"}},
             {"director_name": {"$regex": search, "$options": "i"}}
         ]

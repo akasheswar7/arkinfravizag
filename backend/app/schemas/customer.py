@@ -19,6 +19,7 @@ class CustomerBase(BaseModel):
     advance_amount: Optional[str] = None
     receipt_url: Optional[str] = None
     supported_by: Optional[str] = None
+    vehicle_mode: Optional[str] = None  # 'Own Vehicle' or 'Office Vehicle'
     director_id: Optional[str] = None
     director_name: Optional[str] = None
     agent_id: Optional[str] = None
@@ -42,6 +43,7 @@ class CustomerUpdate(BaseModel):
     advance_amount: Optional[str] = None
     receipt_url: Optional[str] = None
     supported_by: Optional[str] = None
+    vehicle_mode: Optional[str] = None
     director_id: Optional[str] = None
     director_name: Optional[str] = None
     agent_id: Optional[str] = None
