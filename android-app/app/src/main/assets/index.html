@@ -42,7 +42,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; height: 100%; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -50,7 +50,6 @@
       line-height: 1.7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      height: 100%;
     }
     img { max-width: 100%; height: auto; display: block; }
     a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
@@ -100,7 +99,7 @@
       padding: 2px;
       border-radius: 2px;
     }
-    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop { display: flex; align-items: center; gap: 0.85rem; }
     .nav-desktop a {
       font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
       text-transform: uppercase; color: var(--text-body);
@@ -929,6 +928,264 @@
       .footer-bottom { flex-direction: column; text-align: center; }
     }
 
+    
+    /* CEO Announcement Card Enhancement */
+    .ceo-update-card {
+      background: rgba(201, 169, 98, 0.08);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+      border-radius: 6px;
+      padding: 0.85rem 1.15rem;
+      margin-top: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+      text-align: left;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      animation: updateSlideIn 0.5s ease-out;
+    }
+    @media (max-width: 640px) {
+      .ceo-update-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+    }
+
+    /* Ultra-Premium Glassmorphism Project Modal */
+    .ark-popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(3, 8, 18, 0.85);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.25rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+    }
+    .ark-popup-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .ark-popup-card {
+      background: linear-gradient(145deg, #071326 0%, #0c1c36 100%);
+      border: 1.5px solid #c9a962;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 50px rgba(201, 169, 98, 0.25);
+      border-radius: 14px;
+      max-width: 620px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+      transform: scale(0.92) translateY(20px);
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ark-popup-overlay.show .ark-popup-card {
+      transform: scale(1) translateY(0);
+    }
+    .ark-popup-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      background: rgba(5, 13, 26, 0.85);
+      color: #c9a962;
+      font-size: 1.5rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+    .ark-popup-close:hover {
+      background: #c9a962;
+      color: #050d1a;
+      transform: rotate(90deg);
+    }
+    .ark-popup-header {
+      padding: 1.75rem 2rem 0.75rem;
+      text-align: left;
+    }
+    .ark-popup-badge {
+      display: inline-block;
+      background: rgba(201, 169, 98, 0.15);
+      border: 1px solid #c9a962;
+      color: #c9a962;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+    .ark-popup-title {
+      font-family: var(--font-display, "Cormorant Garamond", serif);
+      font-size: 1.75rem;
+      color: #ffffff;
+      margin: 0 0 0.25rem 0;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .ark-popup-subtitle {
+      color: #94a3b8;
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    .ark-popup-body {
+      padding: 0 2rem 1.25rem;
+    }
+    .ark-popup-media {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      height: 220px;
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      margin-bottom: 0.9rem;
+    }
+    .ark-popup-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+    .ark-popup-card:hover .ark-popup-media img {
+      transform: scale(1.03);
+    }
+    .ark-popup-status-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(5, 13, 26, 0.85);
+      border: 1px solid #4ade80;
+      color: #4ade80;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 4px;
+      backdrop-filter: blur(4px);
+    }
+    .ark-popup-desc {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+      margin-bottom: 0.85rem;
+      text-align: left;
+    }
+    .ark-popup-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      background: rgba(5, 13, 26, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 6px;
+      padding: 0.65rem 1rem;
+    }
+    .ark-popup-meta-item {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+    .meta-label {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .meta-val {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #c9a962;
+    }
+    .ark-popup-footer {
+      padding: 1rem 2rem 1.5rem;
+      background: rgba(5, 13, 26, 0.4);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .ark-popup-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .popup-nav-btn {
+      background: rgba(201, 169, 98, 0.12);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      color: #c9a962;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.75rem;
+      transition: all 0.2s;
+    }
+    .popup-nav-btn:hover {
+      background: #c9a962;
+      color: #050d1a;
+    }
+    .popup-dots {
+      display: flex;
+      gap: 5px;
+    }
+    .popup-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(201, 169, 98, 0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .popup-dot.active {
+      width: 18px;
+      border-radius: 4px;
+      background: #c9a962;
+    }
+    .ark-popup-actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .btn-wa-popup {
+      background: #25D366;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.78rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-primary-popup {
+      background: linear-gradient(135deg, #c9a962, #9a7b3a);
+      color: #050d1a;
+      font-weight: 700;
+      font-size: 0.78rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
     /* CEO Update Card inside Hero */
     .ceo-update-card {
       background: rgba(201, 169, 98, 0.08);
@@ -989,8 +1246,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -1208,8 +1465,17 @@
   <!-- Inline script to check visited state immediately before rendering body to prevent flicker -->
   <script>
     (function () {
-      // Always play preloader animation on load in the app
-      document.documentElement.classList.add('preloader-active-lock');
+      let visited = false;
+      try {
+        visited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+      } catch (e) {
+        console.warn("sessionStorage not available:", e);
+      }
+      if (visited) {
+        document.documentElement.classList.add('preloader-skipped');
+      } else {
+        document.documentElement.classList.add('preloader-active-lock');
+      }
     })();
   </script>
 
@@ -1245,18 +1511,19 @@
 
   <header class="site-header" id="header">
     <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+      <a href="/" class="logo" aria-label="ARK Infra Home">
         <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
         ARK <span>Infra</span>
       </a>
-                    <nav class="nav-desktop" aria-label="Main navigation">
-          <a href="about.html">About</a>
+                            <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="index.html">Home</a>
           <a href="projects.html">Projects</a>
-          <a href="insights.html">Insights</a>
-          <a href="why.html">Why Us</a>
-          <a href="achievements.html">Achievements</a>
-          <a href="testimonials.html">Testimonials</a>
           <a href="gallery.html">Gallery</a>
+          <a href="emi-calculator.html">EMI Calculator</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="about.html">About Company</a>
+          <a href="testimonials.html">Reviews</a>
+          <a href="why.html">Why Us</a>
           <a href="growth-map.html">Growth Map</a>
           <a href="contact.html" class="nav-cta">Contact</a>
         </nav>
@@ -1266,17 +1533,18 @@
     </div>
   </header>
 
-        <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
-      <a href="about.html">About</a>
-      <a href="projects.html">Projects</a>
-      <a href="insights.html">Insights</a>
-      <a href="why.html">Why Us</a>
-      <a href="achievements.html">Achievements</a>
-      <a href="testimonials.html">Testimonials</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="growth-map.html">Growth Map</a>
-      <a href="contact.html">Contact</a>
-    </nav>
+          <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
+    <a href="projects.html">Projects</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="emi-calculator.html">EMI Calculator</a>
+    <a href="achievements.html">Achievements</a>
+    <a href="about.html">About Company</a>
+    <a href="testimonials.html">Reviews</a>
+    <a href="why.html">Why Us</a>
+    <a href="growth-map.html">Growth Map</a>
+    <a href="contact.html">Contact</a>
+  </nav>
 
   <main id="main">
     <!-- Hero -->
@@ -1418,7 +1686,7 @@
     <footer class="site-footer">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">
+        <a href="/" class="logo">
           <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
           ARK <span>Infra</span>
         </a>
@@ -1748,11 +2016,29 @@
       function initPreloaderTransition() {
         const preloader = document.getElementById('logoPreloader');
         if (!preloader) return;
+        
+        let isVisited = false;
+        try {
+          isVisited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
+        } catch (e) {
+          console.warn("sessionStorage not available:", e);
+        }
+
+        if (isVisited) {
+          preloader.style.display = 'none';
+          document.documentElement.classList.remove('preloader-active-lock');
+          return;
+        }
 
         // Wait 3.0 seconds (giving time for the logo swing, progress bar, and sweep animation) then trigger slide gates
         setTimeout(() => {
           preloader.classList.add('fade-out');
           document.documentElement.classList.remove('preloader-active-lock');
+          try {
+            sessionStorage.setItem('arkinfra_preloader_shown', 'true');
+          } catch (e) {
+            console.warn("sessionStorage setItem failed:", e);
+          }
           
           // Remove preloader from DOM after split gate slide transitions complete (1.8 seconds duration)
           setTimeout(() => {
@@ -1763,7 +2049,222 @@
       initPreloaderTransition();
     })();
   </script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js"></script>
   <script src="chatbot.js"></script>
+
+  <!-- Ultra-Luxury Featured Projects Showcase Modal -->
+  <div id="premiumProjectPopup" class="ark-popup-overlay" style="display: none;">
+    <div class="ark-popup-card">
+      <button class="ark-popup-close" id="closeProjectPopupBtn" aria-label="Close Project Showcase">&times;</button>
+      
+      <div class="ark-popup-header">
+        <span class="ark-popup-badge">✨ EXCLUSIVE FEATURED VENTURES · ARK INFRA</span>
+        <h3 class="ark-popup-title" id="popupProjectTitle">Sandal Valley — Gated Venture</h3>
+        <p class="ark-popup-subtitle" id="popupProjectLocation">📍 Near Thattabanda Village · Visakhapatnam Corridor</p>
+      </div>
+
+      <div class="ark-popup-body">
+        <div class="ark-popup-media">
+          <img id="popupProjectImg" src="images/sandal-valley.webp" alt="Featured Venture" onerror="this.src='images/building.webp'">
+          <div class="ark-popup-status-tag" id="popupProjectStatus">🟢 Spot Registration Available</div>
+        </div>
+
+        <div class="ark-popup-details">
+          <p class="ark-popup-desc" id="popupProjectDesc">
+            Premium gated layout with 40-foot blacktop roads, clear titles, spot registration, and high appreciation investment potential.
+          </p>
+          <div class="ark-popup-meta-grid">
+            <div class="ark-popup-meta-item">
+              <span class="meta-label">Plot Rate</span>
+              <span class="meta-val" id="popupProjectPrice">₹3,500 / Sq. Yd</span>
+            </div>
+            <div class="ark-popup-meta-item">
+              <span class="meta-label">Layout Status</span>
+              <span class="meta-val" id="popupProjectAppr">Clear Title / Gated Layout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ark-popup-footer">
+        <div class="ark-popup-controls">
+          <button class="popup-nav-btn" id="popupPrevBtn" aria-label="Previous Project">&#10094;</button>
+          <div class="popup-dots" id="popupDots"></div>
+          <button class="popup-nav-btn" id="popupNextBtn" aria-label="Next Project">&#10095;</button>
+        </div>
+        <div class="ark-popup-actions">
+          <a id="popupWaBtn" href="https://wa.me/918125547801?text=Hello%20ARK%20Infra%2C%20I%20am%20interested%20in%20your%20featured%20venture." target="_blank" rel="noopener noreferrer" class="btn btn-wa-popup">💬 Inquire on WhatsApp</a>
+          <a href="projects.html" class="btn btn-primary-popup">View All Projects ➔</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // 5-Second Luxury Project Popup Controller
+  (function initPremiumProjectPopup() {
+    // Check if user already dismissed in this session
+    if (sessionStorage.getItem('ark_project_popup_closed') === 'true') {
+      return;
+    }
+
+    let popupProjects = [
+      {
+        title: "Sandal Valley — Gated Venture",
+        location: "📍 Near Thattabanda Village · Visakhapatnam",
+        image: "images/sandal-valley.webp",
+        status: "🟢 Spot Registration Available",
+        price: "₹3,500 / Sq. Yd",
+        approval: "Clear Title / Gated Layout",
+        desc: "Exclusive sandalwood plantation gated venture close to Thattabanda village with 40-foot wide blacktop roads, round-the-clock water & spot registration."
+      },
+      {
+        title: "Alakananda — Highway City",
+        location: "📍 NH-16 Highway Corridor · Anandapuram",
+        image: "images/highway-city-layout.webp",
+        status: "⚡ High Appreciation Corridor",
+        price: "₹8,500 / Sq. Yd",
+        approval: "VMRDA Approved",
+        desc: "Prime 6-lane National Highway gated development with direct connectivity to Vizag IT SEZs, international schools, and rapid transport."
+      },
+      {
+        title: "Golden Acres — Bhogapuram",
+        location: "📍 10 Mins to International Airport",
+        image: "images/golden-acres.webp",
+        status: "✈️ Airport Proximity Zone",
+        price: "₹7,200 / Sq. Yd",
+        approval: "Clear Title / RERA Regd",
+        desc: "Strategically located close to the upcoming Bhogapuram Greenfield International Airport and coastal highway corridor."
+      },
+      {
+        title: "Gokulavanam — Premium Layout",
+        location: "📍 Anakapalli Growth Corridor",
+        image: "images/gokulavanam.webp",
+        status: "🏡 Fast Developing Hub",
+        price: "₹4,800 / Sq. Yd",
+        approval: "Spot Registration",
+        desc: "Peaceful residential township with modern amenities, round-the-clock water facility, electricity, and avenue plantation."
+      }
+    ];
+
+    let currentIdx = 0;
+    let cycleTimer = null;
+
+    // Load dynamic projects from API if available so Admin additions appear automatically!
+    if (window.ArkApi && window.ArkApi.getProjects) {
+      window.ArkApi.getProjects('ongoing').then(apiProjects => {
+        if (apiProjects && apiProjects.length > 0) {
+          popupProjects = apiProjects.map(p => ({
+            title: p.title || p.name || "Featured Venture",
+            location: p.location ? ('📍 ' + p.location) : "📍 Visakhapatnam Corridor",
+            image: p.image_url || p.cover_image || "images/sandal-valley.webp",
+            status: p.status === "completed" ? "✅ Completed Layout" : "🟢 Spot Registration Available",
+            price: p.price_per_sq_yd ? ('₹' + p.price_per_sq_yd + ' / Sq. Yd') : "Best Price Guarantee",
+            approval: p.approval_type || "VMRDA / Approved",
+            desc: p.description || p.short_description || "Premium plotted venture with clear title, wide roads, and high investment return."
+          }));
+          renderSlide(currentIdx);
+        }
+      }).catch(() => {});
+    }
+
+    function renderSlide(idx) {
+      if (!popupProjects || popupProjects.length === 0) return;
+      currentIdx = (idx + popupProjects.length) % popupProjects.length;
+      const p = popupProjects[currentIdx];
+
+      const tEl = document.getElementById('popupProjectTitle');
+      const lEl = document.getElementById('popupProjectLocation');
+      const imgEl = document.getElementById('popupProjectImg');
+      const stEl = document.getElementById('popupProjectStatus');
+      const prEl = document.getElementById('popupProjectPrice');
+      const apEl = document.getElementById('popupProjectAppr');
+      const dEl = document.getElementById('popupProjectDesc');
+      const waBtn = document.getElementById('popupWaBtn');
+
+      if (tEl) tEl.textContent = p.title;
+      if (lEl) lEl.textContent = p.location;
+      if (imgEl) imgEl.src = p.image;
+      if (stEl) stEl.textContent = p.status;
+      if (prEl) prEl.textContent = p.price;
+      if (apEl) apEl.textContent = p.approval;
+      if (dEl) dEl.textContent = p.desc;
+      if (waBtn) {
+        waBtn.href = 'https://wa.me/918125547801?text=' + encodeURIComponent('Hello ARK Infra, I am interested in details regarding ' + p.title + ' (' + p.location + '). Please share plot availability & pricing.');
+      }
+
+      // Render dots
+      const dotsContainer = document.getElementById('popupDots');
+      if (dotsContainer) {
+        dotsContainer.innerHTML = popupProjects.map((_, i) => 
+          '<span class="popup-dot ' + (i === currentIdx ? 'active' : '') + '" onclick="window._setPopupSlide(' + i + ')"></span>'
+        ).join('');
+      }
+    }
+
+    window._setPopupSlide = function(i) {
+      renderSlide(i);
+      resetAutoCycle();
+    };
+
+    function nextSlide() {
+      renderSlide(currentIdx + 1);
+    }
+    function prevSlide() {
+      renderSlide(currentIdx - 1);
+    }
+
+    function startAutoCycle() {
+      cycleTimer = setInterval(nextSlide, 5500); // Smooth slow cycle every 5.5s
+    }
+    function resetAutoCycle() {
+      clearInterval(cycleTimer);
+      startAutoCycle();
+    }
+
+    // Launch exactly after 5 seconds
+    setTimeout(() => {
+      // Re-verify if not dismissed in the meantime
+      if (sessionStorage.getItem('ark_project_popup_closed') === 'true') return;
+      const modal = document.getElementById('premiumProjectPopup');
+      if (!modal) return;
+
+      renderSlide(0);
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 50);
+      startAutoCycle();
+    }, 5000);
+
+    // Close logic
+    function closePopup() {
+      const modal = document.getElementById('premiumProjectPopup');
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => modal.style.display = 'none', 600);
+      }
+      clearInterval(cycleTimer);
+      sessionStorage.setItem('ark_project_popup_closed', 'true');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const closeBtn = document.getElementById('closeProjectPopupBtn');
+      if (closeBtn) closeBtn.addEventListener('click', closePopup);
+
+      const nextBtn = document.getElementById('popupNextBtn');
+      if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); resetAutoCycle(); });
+
+      const prevBtn = document.getElementById('popupPrevBtn');
+      if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); resetAutoCycle(); });
+
+      const modal = document.getElementById('premiumProjectPopup');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closePopup();
+        });
+      }
+    });
+  })();
+  </script>
+
 </body>
 </html>

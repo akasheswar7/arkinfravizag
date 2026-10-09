@@ -81,7 +81,7 @@
       padding: 2px;
       border-radius: 2px;
     }
-    .nav-desktop { display: flex; align-items: center; gap: 1.15rem; }
+    .nav-desktop { display: flex; align-items: center; gap: 0.85rem; }
     .nav-desktop a {
       font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
       text-transform: uppercase; color: var(--text-body);
@@ -780,42 +780,48 @@
       background-color: var(--navy-mid) !important;
       color: var(--white) !important;
     }
+  
+    .osm-dark-tiles {
+      filter: brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7) !important;
+    }
   </style>
 </head>
 <body>
 
   <header class="site-header" id="header">
     <div class="header-inner">
-      <a href="index.html" class="logo" aria-label="ARK Infra Home">
+      <a href="/" class="logo" aria-label="ARK Infra Home">
         <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
         ARK <span>Infra</span>
       </a>
-      <nav class="nav-desktop" aria-label="Main navigation">
-        <a href="about.html">About</a>
-        <a href="projects.html">Projects</a>
-        <a href="insights.html">Insights</a>
-        <a href="why.html">Why Us</a>
-        <a href="achievements.html">Achievements</a>
-        <a href="testimonials.html">Testimonials</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="growth-map.html" class="active">Growth Map</a>
-        <a href="contact.html" class="nav-cta">Contact</a>
-      </nav>
+              <nav class="nav-desktop" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="projects.html">Projects</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="emi-calculator.html">EMI Calculator</a>
+          <a href="achievements.html">Achievements</a>
+          <a href="about.html">About Company</a>
+          <a href="testimonials.html">Reviews</a>
+          <a href="why.html">Why Us</a>
+          <a href="growth-map.html">Growth Map</a>
+          <a href="contact.html" class="nav-cta">Contact</a>
+        </nav>
       <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
   </header>
 
-  <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
-    <a href="about.html">About</a>
+    <nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+    <a href="index.html">Home</a>
     <a href="projects.html">Projects</a>
-    <a href="insights.html">Insights</a>
-    <a href="why.html">Why Us</a>
-    <a href="achievements.html">Achievements</a>
-    <a href="testimonials.html">Testimonials</a>
     <a href="gallery.html">Gallery</a>
-    <a href="growth-map.html" class="active">Growth Map</a>
+    <a href="emi-calculator.html">EMI Calculator</a>
+    <a href="achievements.html">Achievements</a>
+    <a href="about.html">About Company</a>
+    <a href="testimonials.html">Reviews</a>
+    <a href="why.html">Why Us</a>
+    <a href="growth-map.html">Growth Map</a>
     <a href="contact.html">Contact</a>
   </nav>
 
@@ -942,7 +948,7 @@
   <footer class="site-footer">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="index.html" class="logo">
+        <a href="/" class="logo">
           <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
           ARK <span>Infra</span>
         </a>
@@ -1066,10 +1072,23 @@
         attributionControl: false
       });
 
-      // CartoDB Dark Matter tile layer
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 20
-      }).addTo(map);
+            // Esri World Dark Gray Base (Clean, premium dark map, zero API key required)
+      const baseTile = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16,
+        attribution: 'Esri, HERE, Garmin, © OpenStreetMap contributors'
+      });
+      baseTile.addTo(map);
+
+      // Automatic fallback to Dark OpenStreetMap if Esri tile load fails
+      baseTile.on('tileerror', function() {
+        if (!map._osmFallback) {
+          map._osmFallback = true;
+          L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            className: 'osm-dark-tiles'
+          }).addTo(map);
+        }
+      });
 
       // Data definitions for map points with geo-coordinates
       const mapData = {
