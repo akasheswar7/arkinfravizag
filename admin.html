@@ -6872,10 +6872,42 @@ const DEFAULT_PROJECTS = [
       });
     }
 
-    // --- 100% Free WhatsApp Gateway Engine ---
+    // --- 100% Free WhatsApp Gateway Engine (Direct Local + Cloud Bridge Failover) ---
     let waGatewayPollTimer = null;
     let isWaGatewayConnected = false;
     let connectedGatewayPhone = null;
+
+    async function fetchGatewayStatusAny() {
+      const localUrls = ["http://localhost:3300/status", "http://127.0.0.1:3300/status"];
+      for (const url of localUrls) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 1800);
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if (res.ok) {
+            const data = await res.json();
+            return { online: true, mode: "local", baseUrl: url.replace("/status", ""), data };
+          }
+        } catch (_) {}
+      }
+
+      // Fallback to Cloud Bridge (works even when HTTPS browser blocks HTTP localhost)
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(`${API_BASE}/admin/whatsapp/bridge-status`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.online) {
+            return { online: true, mode: "bridge", baseUrl: `${API_BASE}/admin/whatsapp`, data };
+          }
+        }
+      } catch (_) {}
+
+      return { online: false };
+    }
 
     async function checkLocalGatewayLive() {
       const statusText = document.getElementById("waGatewayStatusText");
@@ -6887,62 +6919,59 @@ const DEFAULT_PROJECTS = [
       const qrImg = document.getElementById("modalQrImg");
       const offlineNotice = document.getElementById("modalEngineOfflineNotice");
 
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000);
-        const res = await fetch("http://localhost:3300/status", { signal: controller.signal });
-        clearTimeout(timeoutId);
+      const statusRes = await fetchGatewayStatusAny();
 
-        if (res.ok) {
-          const data = await res.json();
-          if (offlineNotice) offlineNotice.style.display = "none";
+      if (statusRes.online && statusRes.data) {
+        const data = statusRes.data;
+        if (offlineNotice) offlineNotice.style.display = "none";
 
-          if (data.connected && data.phone) {
-            isWaGatewayConnected = true;
-            connectedGatewayPhone = data.phone;
+        if (data.connected && data.phone) {
+          isWaGatewayConnected = true;
+          connectedGatewayPhone = data.phone;
 
-            if (statusText) statusText.textContent = `🟢 WhatsApp Linked (+${data.phone})`;
-            if (statusBtn) {
-              statusBtn.style.borderColor = "rgba(74, 222, 128, 0.4)";
-              statusBtn.style.color = "#4ade80";
-              statusBtn.style.background = "rgba(74, 222, 128, 0.08)";
-            }
-            if (connectedBox) connectedBox.style.display = "block";
-            if (unlinkedBox) unlinkedBox.style.display = "none";
-            if (phoneEl) phoneEl.textContent = `+${data.phone}`;
-            return true;
-          } else if (data.qr) {
-            isWaGatewayConnected = false;
-            connectedGatewayPhone = null;
+          if (statusText) statusText.textContent = `🟢 WhatsApp Linked (+${data.phone})`;
+          if (statusBtn) {
+            statusBtn.style.borderColor = "rgba(74, 222, 128, 0.4)";
+            statusBtn.style.color = "#4ade80";
+            statusBtn.style.background = "rgba(74, 222, 128, 0.08)";
+          }
+          if (connectedBox) connectedBox.style.display = "block";
+          if (unlinkedBox) unlinkedBox.style.display = "none";
+          if (phoneEl) phoneEl.textContent = `+${data.phone}`;
+          return true;
+        } else {
+          isWaGatewayConnected = false;
+          connectedGatewayPhone = null;
 
-            if (statusText) statusText.textContent = "⚪ WhatsApp Not Linked (Click to Link)";
-            if (statusBtn) {
-              statusBtn.style.borderColor = "rgba(234, 179, 8, 0.4)";
-              statusBtn.style.color = "#facc15";
-              statusBtn.style.background = "transparent";
-            }
-            if (connectedBox) connectedBox.style.display = "none";
-            if (unlinkedBox) unlinkedBox.style.display = "block";
+          if (statusText) statusText.textContent = "⚪ WhatsApp Not Linked (Click to Link)";
+          if (statusBtn) {
+            statusBtn.style.borderColor = "rgba(234, 179, 8, 0.4)";
+            statusBtn.style.color = "#facc15";
+            statusBtn.style.background = "transparent";
+          }
+          if (connectedBox) connectedBox.style.display = "none";
+          if (unlinkedBox) unlinkedBox.style.display = "block";
+          if (data.qr) {
             if (qrHolder) qrHolder.style.display = "inline-block";
             if (qrImg) qrImg.src = data.qr;
-            return false;
           }
+          return false;
         }
-      } catch (_) {
-        isWaGatewayConnected = false;
-        connectedGatewayPhone = null;
-
-        if (statusText) statusText.textContent = "⚪ WhatsApp Not Linked (Click to Link)";
-        if (statusBtn) {
-          statusBtn.style.borderColor = "rgba(234, 179, 8, 0.4)";
-          statusBtn.style.color = "#facc15";
-          statusBtn.style.background = "transparent";
-        }
-        if (connectedBox) connectedBox.style.display = "none";
-        if (unlinkedBox) unlinkedBox.style.display = "block";
-        if (qrHolder) qrHolder.style.display = "none";
-        if (offlineNotice) offlineNotice.style.display = "block";
       }
+
+      isWaGatewayConnected = false;
+      connectedGatewayPhone = null;
+
+      if (statusText) statusText.textContent = "⚪ WhatsApp Not Linked (Click to Link)";
+      if (statusBtn) {
+        statusBtn.style.borderColor = "rgba(234, 179, 8, 0.4)";
+        statusBtn.style.color = "#facc15";
+        statusBtn.style.background = "transparent";
+      }
+      if (connectedBox) connectedBox.style.display = "none";
+      if (unlinkedBox) unlinkedBox.style.display = "block";
+      if (qrHolder) qrHolder.style.display = "none";
+      if (offlineNotice) offlineNotice.style.display = "block";
       return false;
     }
 
@@ -6961,9 +6990,22 @@ const DEFAULT_PROJECTS = [
     async function unlinkLocalWhatsApp() {
       if (!confirm("Are you sure you want to unlink this WhatsApp number?")) return;
       try {
-        await fetch("http://localhost:3300/logout", { method: "POST" });
+        let unlinked = false;
+        for (const base of ["http://localhost:3300", "http://127.0.0.1:3300"]) {
+          try {
+            const r = await fetch(`${base}/logout`, { method: "POST" });
+            if (r.ok) { unlinked = true; break; }
+          } catch (_) {}
+        }
+        if (!unlinked) {
+          await fetch(`${API_BASE}/admin/whatsapp/bridge-command`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "logout" })
+          });
+        }
         showToast("Unlinked! Generating new QR code...");
-        setTimeout(checkLocalGatewayLive, 1000);
+        setTimeout(checkLocalGatewayLive, 2000);
       } catch (e) {
         showToast("Error unlinking: " + e.message, true);
       }
@@ -7007,18 +7049,51 @@ const DEFAULT_PROJECTS = [
           showToast(`🚀 Delivering WhatsApp announcements to ${selected.length} members in background...`);
 
           try {
-            const res = await fetch("http://localhost:3300/bulk-send", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                phones: selected.map(r => r.clean_phone),
-                message: msg,
-                delayMs: 1500
-              })
-            });
-            const data = await res.json();
+            const payloadObj = {
+              phones: selected.map(r => r.clean_phone),
+              message: msg,
+              delayMs: 1500
+            };
 
-            if (res.ok && data.success) {
+            let data = null;
+            let sentDirect = false;
+            for (const base of ["http://localhost:3300", "http://127.0.0.1:3300"]) {
+              try {
+                const res = await fetch(`${base}/bulk-send`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(payloadObj)
+                });
+                if (res.ok) {
+                  data = await res.json();
+                  sentDirect = true;
+                  break;
+                }
+              } catch (_) {}
+            }
+
+            if (!sentDirect) {
+              const bridgeRes = await fetch(`${API_BASE}/admin/whatsapp/bridge-command`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  action: "bulk-send",
+                  phones: payloadObj.phones,
+                  message: payloadObj.message,
+                  delayMs: 1500
+                })
+              });
+              if (bridgeRes.ok) {
+                data = {
+                  success: true,
+                  sent: selected.length,
+                  failed: 0,
+                  message: `Dispatched to ${selected.length} contacts in background!`
+                };
+              }
+            }
+
+            if (data && data.success) {
               selected.forEach(r => {
                 r.sent = true;
                 const idx = waPreparedRecipients.findIndex(m => m.phone === r.phone && m.agent_name === r.agent_name);
@@ -7033,7 +7108,7 @@ const DEFAULT_PROJECTS = [
               showArkAlert("Broadcast Complete!", alertMsg, data.sent > 0 ? "success" : "warning");
               showToast(data.message);
             } else {
-              showArkAlert("Broadcast Failed", data.error || "Failed to dispatch via WhatsApp Gateway.", "danger");
+              showArkAlert("Broadcast Failed", (data && data.error) || "Failed to dispatch via WhatsApp Gateway.", "danger");
               showToast("Dispatch failed", true);
             }
           } catch (e) {

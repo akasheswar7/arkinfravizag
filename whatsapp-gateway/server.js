@@ -12,17 +12,21 @@ const {
 const pino = require('pino');
 
 const app = express();
-app.use(cors());
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const origin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Private-Network', 'true');
+  res.setHeader('Access-Control-Allow-Local-Network', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', '*');
+  res.setHeader('Access-Control-Allow-Headers', req.headers['access-control-request-headers'] || 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.setHeader('Access-Control-Max-Age', '86400');
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
+    return res.status(204).end();
   }
   next();
 });
+app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
 const PORT = 3300;
@@ -288,23 +292,15 @@ app.post('/send', async (req, res) => {
   }
 });
 
-// 4. Bulk Send Endpoint (With Anti-Ban Smart Pacing)
-app.post('/bulk-send', async (req, res) => {
-  const { phones, message, delayMs = 1500 } = req.body;
+// Helper to execute bulk send (used by both direct HTTP and Cloud Bridge)
+let lastBridgeResult = null;
 
-  if (!isConnected || !sock) {
-    return res.status(400).json({ success: false, error: 'WhatsApp is not connected. Please scan the QR code first.' });
-  }
-  if (!Array.isArray(phones) || phones.length === 0 || !message) {
-    return res.status(400).json({ success: false, error: 'List of phones and message are required.' });
-  }
-
+async function executeBulkBroadcast(phones, message, delayMs = 1500) {
   let sent = 0;
   let failed = 0;
   const errors = [];
 
   activeSendJob = { total: phones.length, sent: 0, failed: 0 };
-
   console.log(`[WhatsApp Gateway] 🚀 Starting bulk broadcast to ${phones.length} recipients...`);
 
   for (let i = 0; i < phones.length; i++) {
@@ -323,27 +319,27 @@ app.post('/bulk-send', async (req, res) => {
       console.error(`[WhatsApp Gateway] Failed to send to ${p}:`, err.message);
     }
 
-    // Anti-ban delay between messages (default 1.5 seconds)
     if (i < phones.length - 1) {
       await new Promise(r => setTimeout(r, delayMs));
     }
   }
 
   activeSendJob = null;
-  console.log(`[WhatsApp Gateway] 🎉 Broadcast complete! Sent: ${sent}, Failed: ${failed}`);
-
-  return res.json({
+  const summary = {
     success: true,
     total: phones.length,
     sent,
     failed,
     errors: errors.slice(0, 10),
-    message: `Delivered to ${sent} contacts (${failed} failed)`
-  });
-});
+    message: `Delivered to ${sent} contacts (${failed} failed)`,
+    completedAt: Date.now()
+  };
+  lastBridgeResult = summary;
+  console.log(`[WhatsApp Gateway] 🎉 Broadcast complete! Sent: ${sent}, Failed: ${failed}`);
+  return summary;
+}
 
-// 5. Logout / Reset Endpoint
-app.post('/logout', async (req, res) => {
+async function executeLogout() {
   try {
     if (sock) {
       await sock.logout().catch(() => {});
@@ -359,13 +355,93 @@ app.post('/logout', async (req, res) => {
   userPhone = null;
 
   setTimeout(initWhatsApp, 1000);
+}
+
+// 4. Bulk Send Endpoint (With Anti-Ban Smart Pacing)
+app.post('/bulk-send', async (req, res) => {
+  const { phones, message, delayMs = 1500 } = req.body;
+
+  if (!isConnected || !sock) {
+    return res.status(400).json({ success: false, error: 'WhatsApp is not connected. Please scan the QR code first.' });
+  }
+  if (!Array.isArray(phones) || phones.length === 0 || !message) {
+    return res.status(400).json({ success: false, error: 'List of phones and message are required.' });
+  }
+
+  const result = await executeBulkBroadcast(phones, message, delayMs);
+  return res.json(result);
+});
+
+// 5. Logout / Reset Endpoint
+app.post('/logout', async (req, res) => {
+  await executeLogout();
   return res.json({ success: true, message: 'Session logged out and cleared.' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+// 6. Cloud Bridge Sync (Ensures https://arkinfravizag.com/admin works even if browser blocks localhost)
+const CLOUD_BRIDGE_URL = 'https://arkinfravizagadminportal.vercel.app/api/admin/whatsapp/bridge-heartbeat';
+let isSyncingBridge = false;
+
+async function syncCloudBridge() {
+  if (isSyncingBridge) return;
+  isSyncingBridge = true;
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(CLOUD_BRIDGE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        connected: isConnected,
+        phone: userPhone,
+        qr: latestQrCode,
+        activeJob: activeSendJob,
+        lastResult: lastBridgeResult
+      }),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.command) {
+        const cmd = data.command;
+        if (cmd.action === 'logout') {
+          console.log('[WhatsApp Gateway] Cloud bridge requested logout.');
+          await executeLogout();
+        } else if (cmd.action === 'bulk-send' && Array.isArray(cmd.phones) && cmd.phones.length > 0 && cmd.message) {
+          console.log(`[WhatsApp Gateway] Cloud bridge requested bulk-send (${cmd.phones.length} contacts).`);
+          if (isConnected && sock && !activeSendJob) {
+            executeBulkBroadcast(cmd.phones, cmd.message, cmd.delayMs || 1500).catch(err => {
+              console.error('[WhatsApp Gateway] Bridge bulk broadcast error:', err);
+            });
+          }
+        }
+      }
+    }
+  } catch (_) {
+    // Ignore transient network errors
+  } finally {
+    isSyncingBridge = false;
+  }
+}
+
+app.listen(PORT, () => {
   console.log(`====================================================`);
   console.log(`🚀 ARK Infra WhatsApp Gateway running on http://localhost:${PORT}`);
   console.log(`📱 Scan your QR code at: http://localhost:${PORT}`);
   console.log(`====================================================`);
   initWhatsApp();
+  setInterval(syncCloudBridge, 2500);
+  setTimeout(syncCloudBridge, 1500);
 });
+
+process.on('uncaughtException', (err) => {
+  console.error('[WhatsApp Gateway] Uncaught Exception (kept alive):', err.message);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('[WhatsApp Gateway] Unhandled Rejection (kept alive):', reason);
+});
+
+
