@@ -7,7 +7,9 @@ const {
   default: makeWASocket,
   useMultiFileAuthState,
   DisconnectReason,
-  fetchLatestBaileysVersion
+  fetchLatestWaWebVersion,
+  fetchLatestBaileysVersion,
+  Browsers
 } = require('@whiskeysockets/baileys');
 const pino = require('pino');
 
@@ -47,14 +49,22 @@ async function initWhatsApp() {
     }
 
     const { state, saveCreds } = await useMultiFileAuthState(AUTH_DIR);
-    const { version } = await fetchLatestBaileysVersion().catch(() => ({ version: [2, 3000, 1015901307] }));
+    let version = [2, 3000, 1049950004];
+    try {
+      const waVer = await fetchLatestWaWebVersion({});
+      if (waVer && waVer.version) version = waVer.version;
+    } catch (_) {
+      try {
+        const bVer = await fetchLatestBaileysVersion();
+        if (bVer && bVer.version) version = bVer.version;
+      } catch (__) {}
+    }
 
     sock = makeWASocket({
       version,
       auth: state,
-      printQRInTerminal: true,
       logger,
-      browser: ['ARK Infra Vizag', 'Chrome', '1.0.0'],
+      browser: Browsers.windows('Chrome'),
       syncFullHistory: false
     });
 
@@ -68,6 +78,7 @@ async function initWhatsApp() {
           latestQrCode = await qrcode.toDataURL(qr, { width: 340, margin: 2 });
           isConnected = false;
           console.log('[WhatsApp Gateway] New QR code generated. Scan with your phone.');
+          syncCloudBridge();
         } catch (err) {
           console.error('[WhatsApp Gateway] Error creating QR image:', err);
         }
@@ -86,15 +97,17 @@ async function initWhatsApp() {
           } catch (_) {}
           latestQrCode = null;
           userPhone = null;
-          setTimeout(initWhatsApp, 2000);
+          syncCloudBridge();
+          setTimeout(initWhatsApp, 1500);
         } else {
-          setTimeout(initWhatsApp, 3000);
+          setTimeout(initWhatsApp, 1500);
         }
       } else if (connection === 'open') {
         isConnected = true;
         latestQrCode = null;
         userPhone = sock.user?.id ? sock.user.id.split(':')[0] : 'Connected';
         console.log(`[WhatsApp Gateway] ✅ WhatsApp Connected Successfully! Linked Phone: +${userPhone}`);
+        syncCloudBridge();
       }
     });
   } catch (err) {
