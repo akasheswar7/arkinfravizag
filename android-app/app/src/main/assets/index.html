@@ -42,7 +42,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; height: 100%; }
     body {
       font-family: var(--font-sans);
       background: var(--navy-deep);
@@ -50,6 +50,7 @@
       line-height: 1.7;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      height: 100%;
     }
     img { max-width: 100%; height: auto; display: block; }
     a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
@@ -1246,8 +1247,8 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       z-index: 999999;
       display: flex;
       flex-direction: column;
@@ -1465,17 +1466,8 @@
   <!-- Inline script to check visited state immediately before rendering body to prevent flicker -->
   <script>
     (function () {
-      let visited = false;
-      try {
-        visited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
-      } catch (e) {
-        console.warn("sessionStorage not available:", e);
-      }
-      if (visited) {
-        document.documentElement.classList.add('preloader-skipped');
-      } else {
-        document.documentElement.classList.add('preloader-active-lock');
-      }
+      // Always play preloader animation on load in the app
+      document.documentElement.classList.add('preloader-active-lock');
     })();
   </script>
 
@@ -1511,7 +1503,7 @@
 
   <header class="site-header" id="header">
     <div class="header-inner">
-      <a href="/" class="logo" aria-label="ARK Infra Home">
+      <a href="index.html" class="logo" aria-label="ARK Infra Home">
         <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
         ARK <span>Infra</span>
       </a>
@@ -1577,7 +1569,7 @@
         <div class="hero-cards-grid">
           <!-- Card 1: Managing Director -->
           <a href="md-details.html" class="hero-card reveal" id="mdCard">
-            <img class="profile-photo" src="images/md-ramakrishna.webp" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
+            <img class="profile-photo" src="images/md-ramakrishna.webp?v=2" alt="Adari Ramakrishna, Managing Director, ARK Infra" width="140" height="140">
             <p class="profile-role">Managing Director</p>
             <h2 class="profile-name">Adari Ramakrishna</h2>
             <p class="profile-quote">"We don't just facilitate property investments—we help families, businesses, and investors secure their future with confidence and trust."</p>
@@ -1686,7 +1678,7 @@
     <footer class="site-footer">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="/" class="logo">
+        <a href="index.html" class="logo">
           <img class="logo-badge-img" src="images/logo.webp" alt="ARK Infra Logo" aria-hidden="true">
           ARK <span>Infra</span>
         </a>
@@ -1860,7 +1852,7 @@
         md: {
           name: "Adari Ramakrishna",
           role: "Managing Director",
-          image: "images/md-ramakrishna.webp",
+          image: "images/md-ramakrishna.webp?v=2",
           quote: `"We don't just facilitate property investments—we help families, businesses, and investors secure their future with confidence and trust."`,
           bio: "Adari Ramakrishna serves as the Managing Director of ARK Infra. He brings extensive expertise in land procurement, joint ventures, and strategic investments. His focus is on selecting high-growth locations and creating win-win propositions for both landowners and home buyers, ensuring that every project delivers maximum value and returns.",
           phone: "+91 98484 98070"
@@ -2016,29 +2008,11 @@
       function initPreloaderTransition() {
         const preloader = document.getElementById('logoPreloader');
         if (!preloader) return;
-        
-        let isVisited = false;
-        try {
-          isVisited = sessionStorage.getItem('arkinfra_preloader_shown') === 'true';
-        } catch (e) {
-          console.warn("sessionStorage not available:", e);
-        }
-
-        if (isVisited) {
-          preloader.style.display = 'none';
-          document.documentElement.classList.remove('preloader-active-lock');
-          return;
-        }
 
         // Wait 3.0 seconds (giving time for the logo swing, progress bar, and sweep animation) then trigger slide gates
         setTimeout(() => {
           preloader.classList.add('fade-out');
           document.documentElement.classList.remove('preloader-active-lock');
-          try {
-            sessionStorage.setItem('arkinfra_preloader_shown', 'true');
-          } catch (e) {
-            console.warn("sessionStorage setItem failed:", e);
-          }
           
           // Remove preloader from DOM after split gate slide transitions complete (1.8 seconds duration)
           setTimeout(() => {
@@ -2049,7 +2023,7 @@
       initPreloaderTransition();
     })();
   </script>
-  <script src="js/api.js"></script>
+  <script src="js/api.js"></script>
   <script src="chatbot.js"></script>
 
   <!-- Ultra-Luxury Featured Projects Showcase Modal -->

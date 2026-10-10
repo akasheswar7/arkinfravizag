@@ -4,9 +4,37 @@
  * with graceful fallbacks if backend is offline.
  */
 
-const ARK_API_BASE = (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"))
-  ? "http://localhost:8000/api"
-  : "https://arkinfravizagadminportal.vercel.app/api";
+const CLOUD_API_BASE = "https://arkinfravizagadminportal.vercel.app/api";
+let ARK_API_BASE = CLOUD_API_BASE;
+
+if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") && window.location.port !== "") {
+  ARK_API_BASE = "http://localhost:8000/api";
+} else {
+  ARK_API_BASE = CLOUD_API_BASE;
+}
+
+async function arkSafeFetch(urlPath) {
+  try {
+    const res = await fetch(`${ARK_API_BASE}${urlPath}`);
+    if (res.ok) return res;
+    if (res.status === 404 && ARK_API_BASE !== CLOUD_API_BASE) {
+      ARK_API_BASE = CLOUD_API_BASE;
+      return await fetch(`${ARK_API_BASE}${urlPath}`);
+    }
+    return res;
+  } catch (err) {
+    if (ARK_API_BASE !== CLOUD_API_BASE) {
+      console.warn("Local API offline, auto-switching to live Cloud API:", CLOUD_API_BASE);
+      ARK_API_BASE = CLOUD_API_BASE;
+      try {
+        return await fetch(`${ARK_API_BASE}${urlPath}`);
+      } catch (cloudErr) {
+        return null;
+      }
+    }
+    return null;
+  }
+}
 
 const ArkApi = {
   /**
@@ -14,8 +42,8 @@ const ArkApi = {
    */
   async getActiveAnnouncement() {
     try {
-      const res = await fetch(`${ARK_API_BASE}/public/announcements/active?t=${Date.now()}`);
-      if (res.ok && res.status === 200) {
+      const res = await arkSafeFetch(`/public/announcements/active?t=${Date.now()}`);
+      if (res && res.ok && res.status === 200) {
         return await res.json();
       }
     } catch (e) {
@@ -29,8 +57,8 @@ const ArkApi = {
    */
   async getDirectors() {
     try {
-      const res = await fetch(`${ARK_API_BASE}/public/directors?t=${Date.now()}`);
-      if (res.ok) {
+      const res = await arkSafeFetch(`/public/directors?t=${Date.now()}`);
+      if (res && res.ok) {
         return await res.json();
       }
     } catch (e) {
@@ -44,8 +72,8 @@ const ArkApi = {
    */
   async getAgentsByDirector(directorId) {
     try {
-      const res = await fetch(`${ARK_API_BASE}/public/directors/${directorId}/agents?t=${Date.now()}`);
-      if (res.ok) {
+      const res = await arkSafeFetch(`/public/directors/${directorId}/agents?t=${Date.now()}`);
+      if (res && res.ok) {
         return await res.json();
       }
     } catch (e) {
@@ -59,14 +87,13 @@ const ArkApi = {
    */
   async getGallery(category = "all") {
     try {
-      let url = `${ARK_API_BASE}/public/gallery`;
       const params = new URLSearchParams();
       if (category && category !== "all") {
         params.append("category", category);
       }
       params.append("t", Date.now().toString());
-      const res = await fetch(`${url}?${params.toString()}`);
-      if (res.ok) {
+      const res = await arkSafeFetch(`/public/gallery?${params.toString()}`);
+      if (res && res.ok) {
         return await res.json();
       }
     } catch (e) {
@@ -80,14 +107,13 @@ const ArkApi = {
    */
   async getProjects(statusFilter = "all") {
     try {
-      let url = `${ARK_API_BASE}/public/projects`;
       const params = new URLSearchParams();
       if (statusFilter && statusFilter !== "all") {
         params.append("status_filter", statusFilter);
       }
       params.append("t", Date.now().toString());
-      const res = await fetch(`${url}?${params.toString()}`);
-      if (res.ok) {
+      const res = await arkSafeFetch(`/public/projects?${params.toString()}`);
+      if (res && res.ok) {
         return await res.json();
       }
     } catch (e) {
