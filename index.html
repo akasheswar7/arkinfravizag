@@ -2342,26 +2342,38 @@
         if (banner) banner.style.display = 'flex';
       }
 
-      function openCeoPhotoModal() {
-        if (!currentActiveCeoAnnouncement || !currentActiveCeoAnnouncement.image_url) return;
+      window.openCeoPhotoModal = function openCeoPhotoModal() {
         const modal = document.getElementById('ceoPhotoModal');
         const modalImg = document.getElementById('ceoModalImg');
+        const photoImg = document.getElementById('ceoUpdatePhotoImg');
+        const textEl = document.getElementById('ceoUpdateText');
+        const titleEl = document.getElementById('ceoUpdateTitle');
         const headlineEl = document.getElementById('ceoModalHeadline');
         const descEl = document.getElementById('ceoModalDesc');
         const downloadBtn = document.getElementById('ceoModalDownloadBtn');
         const whatsappBtn = document.getElementById('ceoModalWhatsappBtn');
 
-        const fullImgUrl = normalizeImageUrl(currentActiveCeoAnnouncement.image_url);
+        const rawUrl = (currentActiveCeoAnnouncement && (currentActiveCeoAnnouncement.image_url || currentActiveCeoAnnouncement.end_date))
+          || (photoImg ? (photoImg.getAttribute('src') || photoImg.src) : "") || "";
+        
+        if (!rawUrl || !rawUrl.trim()) return;
+
+        const fullImgUrl = normalizeImageUrl(rawUrl.trim());
+        const announcementTitle = (currentActiveCeoAnnouncement && currentActiveCeoAnnouncement.title) 
+          || (titleEl ? titleEl.textContent : 'Official CEO Announcement');
+        const announcementMsg = (currentActiveCeoAnnouncement && currentActiveCeoAnnouncement.message) 
+          || (textEl ? textEl.textContent : '');
 
         if (modalImg) modalImg.src = fullImgUrl;
-        if (headlineEl) headlineEl.textContent = currentActiveCeoAnnouncement.title || 'Official CEO Announcement';
-        if (descEl) descEl.textContent = currentActiveCeoAnnouncement.message || '';
+        if (headlineEl) headlineEl.textContent = announcementTitle;
+        if (descEl) descEl.textContent = announcementMsg;
+
         if (downloadBtn) {
           downloadBtn.href = fullImgUrl;
           downloadBtn.setAttribute('target', '_blank');
         }
         if (whatsappBtn) {
-          const encoded = encodeURIComponent(`Hi ARK Infra, I am contacting you regarding the CEO Announcement: "${currentActiveCeoAnnouncement.message}"`);
+          const encoded = encodeURIComponent(`Hi ARK Infra, I am contacting you regarding the CEO Announcement: "${announcementMsg}"`);
           whatsappBtn.href = `https://wa.me/919848498070?text=${encoded}`;
         }
 
@@ -2369,18 +2381,29 @@
           modal.style.display = 'flex';
           document.body.style.overflow = 'hidden';
         }
-      }
+      };
 
-      function closeCeoPhotoModal(e) {
+      window.closeCeoPhotoModal = function closeCeoPhotoModal(e) {
+        if (e && e.target && e.target.closest && e.target.closest('.ceo-photo-modal-dialog') && !e.target.closest('.ceo-modal-close')) {
+          return;
+        }
         const modal = document.getElementById('ceoPhotoModal');
         if (modal) {
           modal.style.display = 'none';
           document.body.style.overflow = '';
         }
-      }
+      };
+
+      // Direct event delegation for maximum reliability
+      document.addEventListener('click', function(e) {
+        if (e.target.closest('.ceo-photo-card') || e.target.closest('#ceoUpdatePhotoWrap')) {
+          e.preventDefault();
+          window.openCeoPhotoModal();
+        }
+      });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeCeoPhotoModal();
+        if (e.key === 'Escape') window.closeCeoPhotoModal();
       });
 
       checkLiveUpdates();
