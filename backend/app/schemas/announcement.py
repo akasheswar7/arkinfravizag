@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 class AnnouncementBase(BaseModel):
     title: str = Field(..., min_length=2, max_length=200)
     message: str = Field(..., min_length=2, max_length=1000)
+    image_url: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     active: bool = True
@@ -15,6 +16,7 @@ class AnnouncementCreate(AnnouncementBase):
 class AnnouncementUpdate(BaseModel):
     title: Optional[str] = None
     message: Optional[str] = None
+    image_url: Optional[str] = None
     start_date: Optional[str] = None
     end_date: Optional[str] = None
     active: Optional[bool] = None

@@ -192,6 +192,41 @@
       border-color: var(--gold);
     }
 
+        .photo-input-group {
+      margin-bottom: 2rem;
+    }
+    .photo-input-field {
+      width: 100%;
+      padding: 0.85rem 1.1rem;
+      background: rgba(5, 13, 26, 0.6);
+      border: 1px solid rgba(201, 169, 98, 0.2);
+      border-radius: 4px;
+      color: var(--white);
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+    .photo-input-field:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    .photo-preview-container {
+      display: none;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: rgba(5, 13, 26, 0.5);
+      border: 1px solid rgba(201, 169, 98, 0.3);
+      border-radius: 6px;
+    }
+    .photo-preview-img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1.5px solid var(--gold);
+    }
+
     .char-count {
       text-align: right;
       font-size: 0.75rem;
@@ -327,6 +362,28 @@
         ></textarea>
         <div class="char-count"><span id="charNum">750</span> characters remaining</div>
 
+        <div class="photo-input-group">
+          <label class="editor-label" for="photoUrlInput" style="display: flex; justify-content: space-between;">
+            <span>Attached Photo / Flyer (Optional)</span>
+            <span style="font-size: 0.75rem; color: var(--gold-light); font-weight: normal; text-transform: none;">Displays on right side in full look</span>
+          </label>
+          <input 
+            type="text" 
+            id="photoUrlInput" 
+            class="photo-input-field" 
+            placeholder="Paste image URL (e.g. https://... or /uploads/...)"
+            oninput="handlePhotoInput(this.value)"
+          >
+          <div id="photoPreviewBox" class="photo-preview-container">
+            <img id="photoPreviewThumb" src="" alt="Photo Preview" class="photo-preview-img" onclick="window.open(this.src, '_blank')" style="cursor: pointer;" title="Click to view full image">
+            <div style="flex: 1;">
+              <div style="font-size: 0.82rem; color: #fff; font-weight: 600;" id="photoPreviewName">Attached Flyer Photo</div>
+              <div style="font-size: 0.72rem; color: #34d399;">✓ Ready to display on website</div>
+            </div>
+            <button type="button" class="btn-signout" onclick="clearPhoto()" style="padding: 0.3rem 0.6rem; font-size: 0.75rem;">Remove</button>
+          </div>
+        </div>
+
         <div class="btn-group">
           <button class="btn btn-outline" type="button" id="clearBtn" onclick="publishUpdate(true)">
             <span>Clear Announcement</span>
@@ -418,9 +475,25 @@
           try {
             const decoded = decodeValue(text);
             if (decoded && decoded.trim() && decoded !== '-') {
-              activeTextEl.textContent = `"${decoded.trim()}"`;
+              let displayMsg = decoded.trim();
+              let photo = "";
+              try {
+                const parsed = JSON.parse(displayMsg);
+                if (parsed && (parsed.text || parsed.message)) {
+                  displayMsg = parsed.text || parsed.message;
+                  photo = parsed.image_url || parsed.photo_url || "";
+                }
+              } catch (e) {}
+
+              activeTextEl.textContent = `"${displayMsg}"`;
               activeTextEl.classList.remove('empty');
-              textarea.value = decoded.trim();
+              textarea.value = displayMsg;
+              if (photo) {
+                document.getElementById('photoUrlInput').value = photo;
+                handlePhotoInput(photo);
+              } else {
+                clearPhoto();
+              }
               updateCount();
               return;
             }
@@ -466,7 +539,12 @@
       }
 
       try {
-        const encodedValue = updateValue ? encodeValue(updateValue) : '-';
+        const photoUrl = document.getElementById('photoUrlInput') ? document.getElementById('photoUrlInput').value.trim() : "";
+        let finalData = updateValue;
+        if (photoUrl && updateValue) {
+          finalData = JSON.stringify({ text: updateValue, image_url: photoUrl });
+        }
+        const encodedValue = (updateValue && finalData) ? encodeValue(finalData) : '-';
         const response = await fetch(`${KV_UPDATE_URL}?value=${encodedValue}`, {
           method: 'POST',
           headers: {
@@ -500,6 +578,26 @@
     }
 
     // 4. Helper Utilities
+    function handlePhotoInput(url) {
+      const box = document.getElementById('photoPreviewBox');
+      const thumb = document.getElementById('photoPreviewThumb');
+      if (url && url.trim()) {
+        thumb.src = url.trim();
+        box.style.display = 'flex';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    function clearPhoto() {
+      const input = document.getElementById('photoUrlInput');
+      const box = document.getElementById('photoPreviewBox');
+      const thumb = document.getElementById('photoPreviewThumb');
+      if (input) input.value = '';
+      if (thumb) thumb.src = '';
+      if (box) box.style.display = 'none';
+    }
+
     function updateCount() {
       const textarea = document.getElementById('updateText');
       const charNum = document.getElementById('charNum');

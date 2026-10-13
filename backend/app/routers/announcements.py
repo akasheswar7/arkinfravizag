@@ -13,6 +13,7 @@ def _format_announcement(doc: dict) -> dict:
         "id": str(doc["_id"]),
         "title": doc.get("title", ""),
         "message": doc.get("message", ""),
+        "image_url": doc.get("image_url", ""),
         "start_date": doc.get("start_date"),
         "end_date": doc.get("end_date"),
         "active": doc.get("active", True),
