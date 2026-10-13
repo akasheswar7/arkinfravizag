@@ -28,7 +28,7 @@ INITIAL_PROJECTS = [
             "Plot Price: ₹12,500/- Per Sq. Yard",
             "Special Payment Plan: 1st Payment ₹1 Lakh, 2nd Payment ₹2 Lakh",
             "Limited Period Offer!",
-            "Contact: 81792 42683"
+            "Contact: +91 82477 85065"
         ],
         "location_highlights": [
             "Near Anakapalle, Andhra Pradesh",

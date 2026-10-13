@@ -88,10 +88,10 @@
     if (document.querySelector('.whatsapp-float')) return;
 
     let waText = "Hello Mr. Hanumantharao (Arun), I would like to inquire about ARK Infra properties.";
-    let label = "WhatsApp CEO Konathala Hanumantharao (Arun) — +91 81255 47801";
+    let label = "WhatsApp ARK Infra — +91 8247785065";
 
     const waButton = document.createElement('a');
-    waButton.href = `https://wa.me/918125547801?text=${encodeURIComponent(waText)}`;
+    waButton.href = `https://wa.me/918247785065?text=${encodeURIComponent(waText)}`;
     waButton.className = "whatsapp-float";
     waButton.target = "_blank";
     waButton.rel = "noopener noreferrer";
@@ -349,8 +349,8 @@
     // Process triggers in order of priority:
     if (isContact) {
       appendAssistantResponse(`
-        <p>You can get in touch with our team directly. The CEO's direct contact handles phone calls and WhatsApp:</p>
-        <p><strong>CEO Mobile/WhatsApp:</strong><br><a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;font-weight:600;">+91 81255 47801</a></p>
+        <p>You can get in touch with our team directly. Our team's direct contact handles phone calls and WhatsApp:</p>
+        <p><strong>Mobile / WhatsApp:</strong><br><a href="tel:+918247785065" style="color:var(--gold);text-decoration:underline;font-weight:600;">+91 82477 85065</a></p>
         <p><strong>Direct Email:</strong><br><a href="mailto:arkinfraproperties@gmail.com" style="color:var(--gold);text-decoration:underline;">arkinfraproperties@gmail.com</a></p>
         <p><strong>Corporate Office Address:</strong><br>
           <span style="color:var(--white);font-size:0.85rem;">
@@ -358,7 +358,7 @@
             80 Feet Road, Gajuwaka, Visakhapatnam, AP 530026
           </span>
         </p>
-        <p style="margin-top:0.5rem;"><a href="https://wa.me/918125547801?text=Hello%20Mr.%20Hanumantharao%20(Arun)%2C%20I%20would%20like%20to%20inquire%20about%20ARK%20Infra%20properties." target="_blank" rel="noopener noreferrer" class="ark-chatbot-project-btn" style="display:inline-block;padding:0.4rem 0.8rem;text-decoration:none;">Chat on WhatsApp</a></p>
+        <p style="margin-top:0.5rem;"><a href="https://wa.me/918247785065?text=Hello%20ARK%20Infra%2C%20I%20would%20like%20to%20inquire%20about%20properties." target="_blank" rel="noopener noreferrer" class="ark-chatbot-project-btn" style="display:inline-block;padding:0.4rem 0.8rem;text-decoration:none;">Chat on WhatsApp</a></p>
       `);
       return;
     }
@@ -405,7 +405,7 @@
         if (isVenkataRao) {
       appendAssistantResponse(`
         <p>Adari Venkata Rao is no longer associated with ARK Infra. For any corporate inquiries, please contact our CEO & Founder, <strong>Konathala Hanumantharao (Arun)</strong>:</p>
-        <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
+        <p>📞 Phone/WhatsApp: <a href="tel:+918247785065" style="color:var(--gold);text-decoration:underline;">+91 82477 85065</a></p>
       `);
       return;
     }
@@ -413,7 +413,7 @@
     if (isVignesh) {
       appendAssistantResponse(`
         <p>Yenamadala Vignesh is no longer the Branch Manager of ARK Infra. For layout visits, site execution, or sales inquiries, please contact our CEO, <strong>Konathala Hanumantharao (Arun)</strong>:</p>
-        <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
+        <p>📞 Phone/WhatsApp: <a href="tel:+918247785065" style="color:var(--gold);text-decoration:underline;">+91 82477 85065</a></p>
       `);
       return;
     }
@@ -421,7 +421,7 @@
     if (isCeo) {
       appendAssistantResponse(`
         <p><strong>Konathala Hanumantharao (Arun)</strong> is the CEO & Founder of ARK Infra. He has nearly 20 years of real estate experience and leads our strategic vision.</p>
-        <p>📞 Phone/WhatsApp: <a href="tel:+918125547801" style="color:var(--gold);text-decoration:underline;">+91 81255 47801</a></p>
+        <p>📞 Phone/WhatsApp: <a href="tel:+918247785065" style="color:var(--gold);text-decoration:underline;">+91 82477 85065</a></p>
         <p><a href="ceo-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;
@@ -430,7 +430,7 @@
     if (isMd) {
       appendAssistantResponse(`
         <p><strong>Adari Ramakrishna</strong> is our Managing Director, focusing on joint ventures, clear titles, land procurement, and strategic growth locations.</p>
-        <p>📞 Contact: <a href="tel:+919848498070" style="color:var(--gold);text-decoration:underline;">+91 98484 98070</a></p>
+        <p>📞 Contact: <a href="tel:+918247785065" style="color:var(--gold);text-decoration:underline;">+91 82477 85065</a></p>
         <p><a href="md-details.html" style="color:var(--gold);font-weight:600;text-decoration:underline;">Read his Full Bio &rarr;</a></p>
       `);
       return;

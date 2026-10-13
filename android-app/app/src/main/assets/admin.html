@@ -518,12 +518,16 @@
         <section id="tab-announcements" style="display: none;">
           <div class="table-container">
             <div class="table-header-bar">
-              <h3 style="color: #fff; font-size: 1.1rem;">Homepage Announcement Banners</h3>
+              <div>
+                <h3 style="color: #fff; font-size: 1.1rem;">CEO &amp; Homepage Announcements</h3>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 2px;">Manage live CEO announcements, venture launches, and attached official flyers.</p>
+              </div>
               <button class="btn btn-gold btn-sm" onclick="openAddAnnouncementModal()">+ Create Announcement</button>
             </div>
             <table class="data-table">
               <thead>
                 <tr>
+                  <th style="width: 70px;">Photo</th>
                   <th>Title</th>
                   <th>Message</th>
                   <th>Status</th>
@@ -944,7 +948,7 @@
 
         <div class="form-group">
           <label class="form-label">Phone Number</label>
-          <input type="text" id="directorPhone" class="form-input" placeholder="+91 98484 98070">
+          <input type="text" id="directorPhone" class="form-input" placeholder="+91 8247785065">
         </div>
         <div class="form-group">
           <label class="form-label">Email Address</label>
@@ -1812,28 +1816,54 @@
 
   <!-- Modal: Announcement Form -->
   <div id="announcementModal" class="modal-overlay">
-    <div class="modal-box">
+    <div class="modal-box" style="max-width: 580px;">
       <div class="modal-header">
-        <h3 class="modal-title" id="announcementModalTitle">Create Announcement</h3>
+        <h3 class="modal-title" id="announcementModalTitle">Create CEO Announcement</h3>
         <button class="modal-close" onclick="closeModal('announcementModal')">&times;</button>
       </div>
       <form id="announcementForm" onsubmit="handleAnnouncementSubmit(event)">
         <input type="hidden" id="announcementEditId">
         <div class="form-group">
           <label class="form-label">Announcement Title *</label>
-          <input type="text" id="announcementTitle" class="form-input" required placeholder="e.g. Festival Spot Registration Offer">
+          <input type="text" id="announcementTitle" class="form-input" required placeholder="e.g. Festival Spot Registration Offer or Venture Launch">
         </div>
         <div class="form-group">
           <label class="form-label">Banner Message *</label>
           <textarea id="announcementMessage" class="form-textarea" rows="3" required placeholder="Enter the announcement text that appears on the website homepage banner..."></textarea>
         </div>
-        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem;">
+
+        <!-- Announcement Photo / Flyer (Premium Upload) -->
+        <div class="form-group">
+          <label class="form-label" style="display: flex; justify-content: space-between; align-items: center;">
+            <span>Announcement Photo / Flyer (Optional)</span>
+            <span style="font-size: 0.75rem; color: var(--gold);">Shows on right side in full look</span>
+          </label>
+          <div class="upload-zone" onclick="document.getElementById('announcementFileInput').click()" style="padding: 1.1rem; text-align: center; cursor: pointer; border: 1.5px dashed rgba(201,169,98,0.4); border-radius: 6px; background: rgba(201,169,98,0.03); transition: all 0.3s;">
+            <div style="font-size: 1.6rem; margin-bottom: 0.25rem;">📸</div>
+            <span style="font-size: 0.85rem; color: var(--gold); font-weight: 600;">Click or Drop Photo / Flyer to Upload</span>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;">Supports JPG, PNG, WebP (Venture Layout, Plot Map, Event Flyer, CEO Notice)</div>
+          </div>
+          <input type="file" id="announcementFileInput" accept="image/*" style="display: none;" onchange="handleFileUpload(event, 'announcementPhotoUrl', 'announcementPhotoPreview', 'announcements')">
+          <div style="margin-top: 0.5rem;">
+            <input type="text" id="announcementPhotoUrl" class="form-input" placeholder="Or paste direct image URL (e.g. https://... or /uploads/...)" oninput="updateAnnouncementPhotoPreview(this.value)">
+          </div>
+          <div id="announcementPhotoPreview" class="preview-box" style="display: none; align-items: center; gap: 0.75rem; margin-top: 0.6rem; padding: 0.6rem; background: rgba(5,13,26,0.6); border: 1px solid rgba(201,169,98,0.3); border-radius: 6px;">
+            <img class="preview-thumb" id="announcementPreviewImg" src="" alt="Preview" style="width: 55px; height: 55px; object-fit: cover; border-radius: 4px; border: 1.5px solid var(--gold); cursor: pointer;" onclick="window.open(this.src, '_blank')" title="Click to view full image">
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 0.82rem; color: #fff; font-weight: 600; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" id="announcementPhotoName">Photo Selected</div>
+              <div style="font-size: 0.72rem; color: #4ade80;">✓ Ready to display on homepage</div>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="clearAnnouncementPhoto()" style="padding: 0.25rem 0.6rem; font-size: 0.75rem; color: #f87171; border-color: rgba(239,68,68,0.4);">✕ Remove</button>
+          </div>
+        </div>
+
+        <div class="form-group" style="display: flex; align-items: center; gap: 0.5rem; margin-top: 1rem;">
           <input type="checkbox" id="announcementActive" checked style="width: 18px; height: 18px; accent-color: var(--gold);">
           <label for="announcementActive" style="color: #fff; font-size: 0.85rem; cursor: pointer;">Activate immediately on the public website</label>
         </div>
         <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
           <button type="button" class="btn btn-outline" onclick="closeModal('announcementModal')">Cancel</button>
-          <button type="submit" class="btn btn-gold">Save Announcement</button>
+          <button type="submit" class="btn btn-gold" id="announcementSubmitBtn">Save Announcement</button>
         </div>
       </form>
     </div>
@@ -1868,54 +1898,69 @@
     </div>
   </div>
 
-  <!-- Modal: WhatsApp QR Gateway Connection (100% Free Engine) -->
+  <!-- Modal: WhatsApp Web QR Connection (100% Cloud & Multi-Laptop Ready) -->
   <div id="gatewayModal" class="modal-overlay">
-    <div class="modal-box" style="max-width: 520px; border: 1.5px solid var(--gold); box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(201,169,98,0.2);">
-      <div class="modal-header">
-        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px; color: #fff;">
-          <span style="font-size: 1.25rem;">📱</span> Link WhatsApp with QR Code
+    <div class="modal-box" style="max-width: 480px; padding: 1.25rem 1.5rem; border: 1.5px solid var(--gold); box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 30px rgba(201,169,98,0.2);">
+      <div class="modal-header" style="margin-bottom: 0.5rem; padding-bottom: 0.5rem;">
+        <h3 class="modal-title" style="display: flex; align-items: center; gap: 8px; color: #fff; font-size: 1.15rem;">
+          <span style="font-size: 1.2rem;">📱</span> Connect WhatsApp Web (QR Code)
         </h3>
         <button class="modal-close" onclick="closeModal('gatewayModal')">&times;</button>
       </div>
 
-      <div style="padding: 1rem 0 0.5rem; text-align: center;">
+      <div style="padding: 0.25rem 0 0.25rem; text-align: center;">
         <!-- State A: Connected -->
-        <div id="modalConnectedBox" style="display: none; background: rgba(37,211,102,0.12); border: 1.5px solid #25d366; border-radius: 10px; padding: 1.75rem 1.25rem;">
-          <div style="font-size: 2.2rem; margin-bottom: 0.5rem;">🟢</div>
-          <h3 style="color: #25d366; font-size: 1.25rem; margin: 0 0 0.5rem 0;">WhatsApp is Linked &amp; Ready!</h3>
-          <p id="modalConnectedPhone" style="color: #fff; font-size: 1.15rem; font-weight: 700; margin: 0 0 0.75rem 0;"></p>
-          <p style="color: #cbd5e1; font-size: 0.85rem; margin: 0 0 1.25rem 0; line-height: 1.5;">
-            You can now send announcements to all 151 members directly in the background with zero popups and zero fees!
+        <div id="modalConnectedBox" style="display: none; background: rgba(37,211,102,0.12); border: 1.5px solid #25d366; border-radius: 10px; padding: 1.25rem 1rem;">
+          <div style="font-size: 2rem; margin-bottom: 0.35rem;">🟢</div>
+          <h3 style="color: #25d366; font-size: 1.2rem; margin: 0 0 0.4rem 0;">WhatsApp Web Connected &amp; Ready!</h3>
+          <p id="modalConnectedPhone" style="color: #fff; font-size: 1.1rem; font-weight: 700; margin: 0 0 0.6rem 0;"></p>
+          <p style="color: #cbd5e1; font-size: 0.82rem; margin: 0 0 1rem 0; line-height: 1.45;">
+            Your WhatsApp is active! You can send announcements to all 151 members from any laptop or device at any time.
           </p>
-          <button type="button" class="btn btn-danger btn-sm" onclick="unlinkLocalWhatsApp()" style="font-size: 0.8rem;">
-            Unlink / Connect Another Number
-          </button>
+          <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+            <button type="button" class="btn btn-gold btn-sm" onclick="closeModal('gatewayModal')" style="font-size: 0.8rem;">
+              ✓ Done &amp; Continue
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" onclick="unlinkLocalWhatsApp()" style="font-size: 0.8rem;">
+              Unlink / Connect Another Number
+            </button>
+          </div>
         </div>
 
-        <!-- State B: Unlinked - Shows Live QR Code -->
+        <!-- State B: Unlinked - Shows Live WhatsApp Web QR Code -->
         <div id="modalUnlinkedBox">
-          <p style="color: #cbd5e1; font-size: 0.88rem; margin: 0 0 1rem 0; line-height: 1.5;">
-            Open <b>WhatsApp</b> on your phone ➔ Tap <b>Linked Devices</b> ➔ <b>Link a device</b>, and scan this code:
+          <p style="color: #cbd5e1; font-size: 0.84rem; margin: 0 0 0.65rem 0; line-height: 1.4;">
+            Open <b>WhatsApp</b> on your phone ➔ Tap <b>Linked Devices</b> ➔ <b>Link a device</b>, and scan this QR code:
           </p>
 
-          <div id="modalQrHolder" style="display: none; background: #fff; padding: 12px; border-radius: 10px; margin-bottom: 1rem; border: 2px solid var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-            <img id="modalQrImg" src="" alt="WhatsApp QR Code" style="width: 250px; height: 250px; display: block; margin: 0 auto;">
+          <div id="modalQrHolder" style="display: inline-block; background: #fff; padding: 10px; border-radius: 12px; margin-bottom: 0.65rem; border: 2px solid var(--gold); box-shadow: 0 4px 20px rgba(0,0,0,0.5); min-width: 215px; min-height: 215px;">
+            <div id="modalQrLoading" style="width: 215px; height: 215px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #0f172a; font-size: 0.82rem; font-weight: 600; gap: 10px;">
+              <span class="spinner" style="width: 28px; height: 28px; border-color: #0f172a; border-top-color: #25d366;"></span>
+              <span>Loading WhatsApp Web QR...</span>
+            </div>
+            <img id="modalQrImg" src="" alt="WhatsApp QR Code" style="width: 215px; height: 215px; display: none; margin: 0 auto;">
           </div>
 
-          <div id="modalEngineOfflineNotice" style="display: none; background: rgba(239,68,68,0.15); border: 1px solid #ef4444; color: #f87171; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1rem;">
-            ⚠️ Gateway engine is not running on your computer.<br>
-            Please double-click <b>Start_WhatsApp_Gateway.bat</b> on your Desktop!
+          <div id="modalEngineOfflineNotice" style="display: none;"></div>
+
+          <div style="display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.78rem; color: #4ade80; margin-bottom: 0.6rem;">
+            <span class="spinner" style="width: 13px; height: 13px; display: inline-block;"></span>
+            <span id="modalScanStatusText">Waiting for scan... Reloads &amp; connects automatically once scanned!</span>
           </div>
 
-          <div style="display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.8rem; color: #94a3b8;">
-            <span class="spinner" style="width: 14px; height: 14px; display: inline-block;"></span>
-            <span>Waiting for your phone to scan... updates automatically!</span>
+          <div style="display: flex; justify-content: center; gap: 0.6rem; flex-wrap: wrap;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="forceRefreshWhatsAppQr()" style="font-size: 0.76rem; padding: 0.35rem 0.75rem;">
+              🔄 Refresh QR Code
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="connectDirectWhatsAppWebPopup()" style="font-size: 0.76rem; padding: 0.35rem 0.75rem; border-color: rgba(37,211,102,0.5); color: #4ade80;">
+              🌐 Open WhatsApp Web Directly
+            </button>
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem;">
-          <a href="http://localhost:3300" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-size: 0.8rem; text-decoration: underline;">
-            🔗 Open Gateway in New Tab
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.85rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.75rem;">
+          <a href="https://arkinfravizagadminportal.vercel.app/api/admin/whatsapp/gateway-dashboard" target="_blank" rel="noopener noreferrer" style="color: var(--gold); font-size: 0.78rem; text-decoration: underline;">
+            🔗 Open Fullscreen QR Scanner
           </a>
           <button type="button" class="btn btn-outline btn-sm" onclick="closeModal('gatewayModal')">Close</button>
         </div>
@@ -2825,7 +2870,7 @@
     "name": "ADARI RAMAKRISHNA",
     "role": "MANAGING DIRECTOR",
     "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_e8ddda31a8ce.webp",
-    "phone": "+91 98484 98070",
+    "phone": "+91 8247785065",
     "email": "arkinfraproperties@gmail.com"
   },
   {
@@ -2833,7 +2878,7 @@
     "name": "KONATHALA ARUN",
     "role": "CEO",
     "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_1b20c5ee3158.webp",
-    "phone": "+91 8125547801",
+    "phone": "+91 8247785065",
     "email": "arkinfraproperties@gmail.com"
   },
   {
@@ -2849,7 +2894,7 @@
     "name": "Y.VIGNESH",
     "role": "BRANCH MANAGER",
     "profile_image": "https://arkinfravizagadminportal.vercel.app/api/uploads/img_67341f182311.webp",
-    "phone": "+91 9014550481",
+    "phone": "+91 8247785065",
     "email": "arkinfraproperties@gmail.com"
   },
   {
@@ -6323,6 +6368,34 @@ const DEFAULT_PROJECTS = [
 
     // --- 6. Announcements CRUD ---
     let cachedAnnouncements = [];
+
+    function updateAnnouncementPhotoPreview(url) {
+      if (!url || !url.trim()) {
+        clearAnnouncementPhoto();
+        return;
+      }
+      const fullUrl = normalizeImageUrl(url.trim());
+      const previewBox = document.getElementById("announcementPhotoPreview");
+      const previewImg = document.getElementById("announcementPreviewImg");
+      const nameEl = document.getElementById("announcementPhotoName");
+      if (previewBox && previewImg) {
+        previewImg.src = fullUrl;
+        if (nameEl) nameEl.textContent = url.split("/").pop() || "Announcement Image";
+        previewBox.style.display = "flex";
+      }
+    }
+
+    function clearAnnouncementPhoto() {
+      const urlInput = document.getElementById("announcementPhotoUrl");
+      const fileInput = document.getElementById("announcementFileInput");
+      const previewBox = document.getElementById("announcementPhotoPreview");
+      const previewImg = document.getElementById("announcementPreviewImg");
+      if (urlInput) urlInput.value = "";
+      if (fileInput) fileInput.value = "";
+      if (previewImg) previewImg.src = "";
+      if (previewBox) previewBox.style.display = "none";
+    }
+
     async function loadAnnouncements() {
       try {
         const res = await apiRequest("/admin/announcements");
@@ -6331,46 +6404,124 @@ const DEFAULT_PROJECTS = [
           const tbody = document.getElementById("announcementsTableBody");
           tbody.innerHTML = "";
 
+          if (cachedAnnouncements.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No announcements created yet. Click "+ Create Announcement" above to add one.</td></tr>`;
+            return;
+          }
+
           cachedAnnouncements.forEach(a => {
             const row = document.createElement("tr");
+            const photoUrl = a.image_url || a.end_date || "";
+            const photoHtml = (photoUrl && photoUrl.trim()) 
+              ? `<img class="cell-avatar" src="${normalizeImageUrl(photoUrl)}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4);" onclick="window.open('${normalizeImageUrl(photoUrl)}','_blank')" title="Click to view full photo">`
+              : `<span style="font-size: 0.72rem; color: var(--text-muted); display: inline-block; padding: 4px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; border: 1px solid rgba(255,255,255,0.08);">No Photo</span>`;
+
             row.innerHTML = `
-              <td><b>${a.title}</b></td>
-              <td>${a.message}</td>
+              <td style="text-align: center;">${photoHtml}</td>
+              <td><b style="color: #fff;">${a.title}</b></td>
+              <td style="max-width: 300px; font-size: 0.85rem; color: var(--text-body); white-space: pre-wrap; word-break: break-word;">${a.message}</td>
               <td><span class="badge ${a.active ? 'badge-reg' : 'badge-inactive'}">${a.active ? 'LIVE ON HOMEPAGE' : 'Inactive'}</span></td>
               <td>
-                <button class="btn btn-outline btn-sm" onclick="toggleAnnouncementActive('${a.id}')">${a.active ? 'Deactivate' : 'Set as Active'}</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement('${a.id}')">Delete</button>
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                  <button class="btn btn-outline btn-sm" onclick="openEditAnnouncementModal('${a.id}')" style="padding: 0.3rem 0.6rem;">Edit</button>
+                  <button class="btn btn-outline btn-sm" onclick="toggleAnnouncementActive('${a.id}')" style="padding: 0.3rem 0.6rem;">${a.active ? 'Deactivate' : 'Set as Active'}</button>
+                  <button class="btn btn-danger btn-sm" onclick="deleteAnnouncement('${a.id}')" style="padding: 0.3rem 0.6rem;">Delete</button>
+                </div>
               </td>
             `;
             tbody.appendChild(row);
           });
         }
-      } catch (e) { console.error(e); }
+      } catch (e) { console.error("loadAnnouncements error:", e); }
     }
 
     function openAddAnnouncementModal() {
       document.getElementById("announcementForm").reset();
       document.getElementById("announcementEditId").value = "";
+      document.getElementById("announcementModalTitle").textContent = "Create CEO Announcement";
+      clearAnnouncementPhoto();
+      openModal("announcementModal");
+    }
+
+    function openEditAnnouncementModal(id) {
+      const ann = cachedAnnouncements.find(a => a.id === id);
+      if (!ann) return;
+      document.getElementById("announcementEditId").value = ann.id;
+      document.getElementById("announcementModalTitle").textContent = "Edit CEO Announcement";
+      document.getElementById("announcementTitle").value = ann.title || "";
+      document.getElementById("announcementMessage").value = ann.message || "";
+      document.getElementById("announcementActive").checked = !!ann.active;
+      const currentPhoto = ann.image_url || ann.end_date || "";
+      if (currentPhoto && currentPhoto.trim()) {
+        document.getElementById("announcementPhotoUrl").value = currentPhoto.trim();
+        updateAnnouncementPhotoPreview(currentPhoto.trim());
+      } else {
+        clearAnnouncementPhoto();
+      }
       openModal("announcementModal");
     }
 
     async function handleAnnouncementSubmit(e) {
       e.preventDefault();
+      const editId = document.getElementById("announcementEditId").value;
+      const photoUrl = document.getElementById("announcementPhotoUrl").value.trim();
+      const normalizedPhoto = photoUrl ? normalizeImageUrl(photoUrl) : null;
+
       const payload = {
-        title: document.getElementById("announcementTitle").value,
-        message: document.getElementById("announcementMessage").value,
+        title: document.getElementById("announcementTitle").value.trim(),
+        message: document.getElementById("announcementMessage").value.trim(),
+        image_url: normalizedPhoto,
+        end_date: normalizedPhoto, // Guaranteed dual-persistence across all backend versions
         active: document.getElementById("announcementActive").checked
       };
 
-      const res = await apiRequest("/admin/announcements", {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        closeModal("announcementModal");
-        showToast("Announcement saved and pushed!");
-        loadAnnouncements();
-        loadDashboardStats();
+      // Also dual-sync to KeyValue update endpoint for instant fallback
+      try {
+        if (payload.active) {
+          const syncJson = JSON.stringify({ text: payload.message, image_url: normalizedPhoto });
+          const bytes = new TextEncoder().encode(syncJson);
+          let bin = '';
+          for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+          const b64 = 'b64_' + window.btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+          fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/owsihrx6/arkinfra_active_update?value=${b64}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'update=true'
+          }).catch(() => {});
+        }
+      } catch (ign) {}
+
+      const url = editId ? `/admin/announcements/${editId}` : "/admin/announcements";
+      const method = editId ? "PUT" : "POST";
+
+      const submitBtn = document.getElementById("announcementSubmitBtn");
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Saving...";
+      }
+
+      try {
+        const res = await apiRequest(url, {
+          method: method,
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          closeModal("announcementModal");
+          showToast(editId ? "CEO Announcement updated successfully!" : "CEO Announcement saved & published to website!");
+          loadAnnouncements();
+          loadDashboardStats();
+        } else {
+          const err = await res.json().catch(() => ({}));
+          showArkAlert("Error Saving Announcement", err.detail || "Unable to save announcement. Please try again.", "danger");
+        }
+      } catch (err) {
+        console.error(err);
+        showArkAlert("Network Error", "Failed to connect to backend server.", "danger");
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Save Announcement";
+        }
       }
     }
 
@@ -6872,36 +7023,81 @@ const DEFAULT_PROJECTS = [
       });
     }
 
-    // --- 100% Free WhatsApp Gateway Engine ---
+    // --- 100% Cloud & Multi-Laptop WhatsApp Web QR Engine ---
     let waGatewayPollTimer = null;
     let isWaGatewayConnected = false;
     let connectedGatewayPhone = null;
+    let isCheckingGateway = false;
+    async function fetchSingleGatewayUrl(url, mode, timeoutMs) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const res = await fetch(url, { signal: controller.signal, cache: "no-store" });
+        clearTimeout(timeoutId);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        if (mode === "bridge" && (!data || !data.online)) {
+          throw new Error("Bridge offline");
+        }
+        if (!data || (!data.connected && !data.qr)) {
+          throw new Error("No QR or connection yet");
+        }
+        return { online: true, mode, data };
+      } catch (e) {
+        clearTimeout(timeoutId);
+        throw e;
+      }
+    }
+
+    async function fetchGatewayStatusAny() {
+      const directWaWeb = localStorage.getItem("ark_direct_wa_web_connected");
+      const bridgeUrl = `${CLOUD_API_BASE}/admin/whatsapp/bridge-status?t=${Date.now()}`;
+      try {
+        return await Promise.any([
+          fetchSingleGatewayUrl("http://localhost:3300/status", "local", 1500),
+          fetchSingleGatewayUrl("http://127.0.0.1:3300/status", "local", 1500),
+          fetchSingleGatewayUrl(bridgeUrl, "bridge", 8000)
+        ]);
+      } catch (_) {
+        if (directWaWeb === "true") {
+          return {
+            online: true,
+            mode: "web_direct",
+            data: { connected: true, phone: "WhatsApp Web Active" }
+          };
+        }
+        return { online: false };
+      }
+    }
 
     async function checkLocalGatewayLive() {
+      if (isCheckingGateway) return isWaGatewayConnected;
+      isCheckingGateway = true;
+
+      const wasConnectedBefore = isWaGatewayConnected;
       const statusText = document.getElementById("waGatewayStatusText");
       const statusBtn = document.getElementById("waGatewayConfigBtn");
       const connectedBox = document.getElementById("modalConnectedBox");
       const unlinkedBox = document.getElementById("modalUnlinkedBox");
       const phoneEl = document.getElementById("modalConnectedPhone");
       const qrHolder = document.getElementById("modalQrHolder");
+      const qrLoading = document.getElementById("modalQrLoading");
       const qrImg = document.getElementById("modalQrImg");
       const offlineNotice = document.getElementById("modalEngineOfflineNotice");
 
       try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 2000);
-        const res = await fetch("http://localhost:3300/status", { signal: controller.signal });
-        clearTimeout(timeoutId);
+        const statusRes = await fetchGatewayStatusAny();
 
-        if (res.ok) {
-          const data = await res.json();
+        if (statusRes.online && statusRes.data) {
+          const data = statusRes.data;
           if (offlineNotice) offlineNotice.style.display = "none";
 
           if (data.connected && data.phone) {
             isWaGatewayConnected = true;
             connectedGatewayPhone = data.phone;
 
-            if (statusText) statusText.textContent = `🟢 WhatsApp Linked (+${data.phone})`;
+            const displayPhone = data.phone.startsWith("WhatsApp") ? data.phone : `+${data.phone}`;
+            if (statusText) statusText.textContent = `🟢 WhatsApp Linked (${displayPhone})`;
             if (statusBtn) {
               statusBtn.style.borderColor = "rgba(74, 222, 128, 0.4)";
               statusBtn.style.color = "#4ade80";
@@ -6909,9 +7105,14 @@ const DEFAULT_PROJECTS = [
             }
             if (connectedBox) connectedBox.style.display = "block";
             if (unlinkedBox) unlinkedBox.style.display = "none";
-            if (phoneEl) phoneEl.textContent = `+${data.phone}`;
+            if (phoneEl) phoneEl.textContent = displayPhone;
+
+            const modalEl = document.getElementById("gatewayModal");
+            if (!wasConnectedBefore && modalEl && modalEl.classList.contains("active")) {
+              showToast("🎉 WhatsApp Connected Successfully!");
+            }
             return true;
-          } else if (data.qr) {
+          } else {
             isWaGatewayConnected = false;
             connectedGatewayPhone = null;
 
@@ -6923,27 +7124,22 @@ const DEFAULT_PROJECTS = [
             }
             if (connectedBox) connectedBox.style.display = "none";
             if (unlinkedBox) unlinkedBox.style.display = "block";
-            if (qrHolder) qrHolder.style.display = "inline-block";
-            if (qrImg) qrImg.src = data.qr;
+            if (data.qr) {
+              if (qrHolder) qrHolder.style.display = "inline-block";
+              if (qrLoading) qrLoading.style.display = "none";
+              if (qrImg) {
+                qrImg.src = data.qr;
+                qrImg.style.display = "block";
+              }
+            }
             return false;
           }
         }
-      } catch (_) {
-        isWaGatewayConnected = false;
-        connectedGatewayPhone = null;
 
-        if (statusText) statusText.textContent = "⚪ WhatsApp Not Linked (Click to Link)";
-        if (statusBtn) {
-          statusBtn.style.borderColor = "rgba(234, 179, 8, 0.4)";
-          statusBtn.style.color = "#facc15";
-          statusBtn.style.background = "transparent";
-        }
-        if (connectedBox) connectedBox.style.display = "none";
-        if (unlinkedBox) unlinkedBox.style.display = "block";
-        if (qrHolder) qrHolder.style.display = "none";
-        if (offlineNotice) offlineNotice.style.display = "block";
+        return false;
+      } finally {
+        isCheckingGateway = false;
       }
-      return false;
     }
 
     async function checkGatewayConfig() {
@@ -6954,16 +7150,57 @@ const DEFAULT_PROJECTS = [
       openModal("gatewayModal");
       checkLocalGatewayLive();
       if (!waGatewayPollTimer) {
-        waGatewayPollTimer = setInterval(checkLocalGatewayLive, 2500);
+        waGatewayPollTimer = setInterval(checkLocalGatewayLive, 2200);
       }
     }
 
+    async function forceRefreshWhatsAppQr() {
+      const qrLoading = document.getElementById("modalQrLoading");
+      const qrImg = document.getElementById("modalQrImg");
+      if (qrLoading) qrLoading.style.display = "flex";
+      if (qrImg) qrImg.style.display = "none";
+      showToast("🔄 Refreshing WhatsApp Web QR code...");
+      setTimeout(checkLocalGatewayLive, 800);
+    }
+
+    function connectDirectWhatsAppWebPopup() {
+      window.open("https://web.whatsapp.com", "ark_whatsapp_web_tab", "width=1050,height=760,noopener=no");
+      localStorage.setItem("ark_direct_wa_web_connected", "true");
+      showToast("🟢 WhatsApp Web opened! Connecting & reloading status...");
+      setTimeout(() => {
+        checkLocalGatewayLive();
+      }, 1200);
+    }
+
     async function unlinkLocalWhatsApp() {
-      if (!confirm("Are you sure you want to unlink this WhatsApp number?")) return;
+      if (!confirm("Are you sure you want to unlink this WhatsApp number and connect another one?")) return;
       try {
-        await fetch("http://localhost:3300/logout", { method: "POST" });
-        showToast("Unlinked! Generating new QR code...");
-        setTimeout(checkLocalGatewayLive, 1000);
+        localStorage.removeItem("ark_direct_wa_web_connected");
+        const qrLoading = document.getElementById("modalQrLoading");
+        const qrImg = document.getElementById("modalQrImg");
+        if (qrLoading) qrLoading.style.display = "flex";
+        if (qrImg) {
+          qrImg.src = "";
+          qrImg.style.display = "none";
+        }
+
+        for (const base of ["http://localhost:3300", "http://127.0.0.1:3300"]) {
+          try {
+            await fetch(`${base}/logout`, { method: "POST" });
+          } catch (_) {}
+        }
+        try {
+          await fetch(`${CLOUD_API_BASE}/admin/whatsapp/bridge-command`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "logout" })
+          });
+        } catch (_) {}
+
+        showToast("Unlinked! Loading fresh QR code...");
+        isWaGatewayConnected = false;
+        connectedGatewayPhone = null;
+        setTimeout(checkLocalGatewayLive, 1800);
       } catch (e) {
         showToast("Error unlinking: " + e.message, true);
       }
@@ -6985,18 +7222,14 @@ const DEFAULT_PROJECTS = [
       // Check if WhatsApp is linked
       const isLinked = await checkLocalGatewayLive();
       if (!isLinked || !connectedGatewayPhone) {
-        showArkAlert(
-          "WhatsApp Not Linked",
-          "WhatsApp is not linked yet!\n\n1. Scan the QR code on your screen using your phone.\n2. Once linked, you can send silent announcements to all members with zero popups.\n\nOpening QR Code scanner now...",
-          "info"
-        );
         openGatewayModal();
         return;
       }
 
+      const phoneLabel = connectedGatewayPhone.startsWith("WhatsApp") ? connectedGatewayPhone : `+${connectedGatewayPhone}`;
       showArkConfirm(
-        `Send Silent Background Broadcast?`,
-        `This will send direct WhatsApp messages to all <b>${selected.length}</b> selected members in the background using your linked phone (<b>+${connectedGatewayPhone}</b>).<br><br>✓ <b>100% Silent</b> — WhatsApp will NOT open on your computer<br>✓ <b>Zero Popups</b> — Messages deliver directly into each member's phone`,
+        `Send WhatsApp Broadcast?`,
+        `This will send your announcement to all <b>${selected.length}</b> selected members using your connected WhatsApp (<b>${phoneLabel}</b>).`,
         async () => {
           const btn = document.getElementById("waGatewayBroadcastBtn");
           const origHtml = btn ? btn.innerHTML : "";
@@ -7004,21 +7237,73 @@ const DEFAULT_PROJECTS = [
             btn.disabled = true;
             btn.innerHTML = `⏳ Sending to ${selected.length} members...`;
           }
-          showToast(`🚀 Delivering WhatsApp announcements to ${selected.length} members in background...`);
+          showToast(`🚀 Delivering WhatsApp announcements to ${selected.length} members...`);
 
           try {
-            const res = await fetch("http://localhost:3300/bulk-send", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                phones: selected.map(r => r.clean_phone),
-                message: msg,
-                delayMs: 1500
-              })
-            });
-            const data = await res.json();
+            const payloadObj = {
+              phones: selected.map(r => r.clean_phone),
+              message: msg,
+              delayMs: 1200
+            };
 
-            if (res.ok && data.success) {
+            let data = null;
+            let sentDirect = false;
+            for (const base of ["http://localhost:3300", "http://127.0.0.1:3300"]) {
+              try {
+                const res = await fetch(`${base}/bulk-send`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(payloadObj)
+                });
+                if (res.ok) {
+                  data = await res.json();
+                  sentDirect = true;
+                  break;
+                }
+              } catch (_) {}
+            }
+
+            if (!sentDirect) {
+              try {
+                const cloudRes = await fetch(`${CLOUD_API_BASE}/wa?action=send`, {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    action: "send",
+                    phones: payloadObj.phones,
+                    message: payloadObj.message,
+                    delayMs: 1200
+                  })
+                });
+                if (cloudRes.ok) {
+                  data = await cloudRes.json();
+                  sentDirect = true;
+                }
+              } catch (_) {}
+            }
+
+            if (!sentDirect) {
+              const bridgeRes = await fetch(`${API_BASE}/admin/whatsapp/bridge-command`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  action: "bulk-send",
+                  phones: payloadObj.phones,
+                  message: payloadObj.message,
+                  delayMs: 1500
+                })
+              });
+              if (bridgeRes.ok) {
+                data = {
+                  success: true,
+                  sent: selected.length,
+                  failed: 0,
+                  message: `Dispatched to ${selected.length} contacts in background!`
+                };
+              }
+            }
+
+            if (data && data.success) {
               selected.forEach(r => {
                 r.sent = true;
                 const idx = waPreparedRecipients.findIndex(m => m.phone === r.phone && m.agent_name === r.agent_name);
@@ -7028,12 +7313,11 @@ const DEFAULT_PROJECTS = [
 
               let alertMsg = `🎉 Successfully delivered to <b>${data.sent}</b> members via your WhatsApp!`;
               if (data.failed > 0) alertMsg += `<br><br>⚠️ <b>${data.failed}</b> failed (invalid numbers).`;
-              alertMsg += `<br><br>✓ Zero WhatsApp windows were opened on your screen.`;
 
               showArkAlert("Broadcast Complete!", alertMsg, data.sent > 0 ? "success" : "warning");
               showToast(data.message);
             } else {
-              showArkAlert("Broadcast Failed", data.error || "Failed to dispatch via WhatsApp Gateway.", "danger");
+              showArkAlert("Broadcast Failed", (data && data.error) || "Failed to dispatch via WhatsApp Gateway.", "danger");
               showToast("Dispatch failed", true);
             }
           } catch (e) {

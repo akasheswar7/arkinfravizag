@@ -669,7 +669,7 @@ async def generate_site_application_pdf(app_data: Dict[str, Any]) -> bytes:
     company_info = [
         Paragraph("<b><font size='14' color='#050d1a'>ARK INFRA AND DEVELOPERS</font></b>", styles['ArkTitle']),
         Paragraph("<font size='8' color='#9a7b3a'><b>OFFICIAL REAL ESTATE &amp; TOWNSHIP PROMOTERS</b></font>", styles['ArkBody']),
-        Paragraph("<font size='7' color='#64748b'>Corporate Office: Visakhapatnam, Andhra Pradesh &bull; Regd. No: 132/2020 &bull; ISO 9001:2015 Certified<br/>Phone: +91 98484 98070 &bull; Email: arkinfraproperties@gmail.com &bull; Web: arkinfravizag.com</font>", styles['ArkBody'])
+        Paragraph("<font size='7' color='#64748b'>Corporate Office: Visakhapatnam, Andhra Pradesh &bull; Regd. No: 132/2020 &bull; ISO 9001:2015 Certified<br/>Phone: +91 82477 85065 &bull; Email: arkinfraproperties@gmail.com &bull; Web: arkinfravizag.com</font>", styles['ArkBody'])
     ]
 
     badge_data = [
