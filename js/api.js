@@ -44,7 +44,11 @@ const ArkApi = {
     try {
       const res = await arkSafeFetch(`/public/announcements/active?t=${Date.now()}`);
       if (res && res.ok && res.status === 200) {
-        return await res.json();
+        const data = await res.json();
+        if (data) {
+          data.image_url = data.image_url || data.end_date || "";
+        }
+        return data;
       }
     } catch (e) {
       console.warn("ARK API: Announcement offline or unreachable, using fallback.");

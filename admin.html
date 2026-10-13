@@ -6411,8 +6411,9 @@ const DEFAULT_PROJECTS = [
 
           cachedAnnouncements.forEach(a => {
             const row = document.createElement("tr");
-            const photoHtml = (a.image_url && a.image_url.trim()) 
-              ? `<img class="cell-avatar" src="${normalizeImageUrl(a.image_url)}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4);" onclick="window.open('${normalizeImageUrl(a.image_url)}','_blank')" title="Click to view full photo">`
+            const photoUrl = a.image_url || a.end_date || "";
+            const photoHtml = (photoUrl && photoUrl.trim()) 
+              ? `<img class="cell-avatar" src="${normalizeImageUrl(photoUrl)}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1.5px solid var(--gold); cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.4);" onclick="window.open('${normalizeImageUrl(photoUrl)}','_blank')" title="Click to view full photo">`
               : `<span style="font-size: 0.72rem; color: var(--text-muted); display: inline-block; padding: 4px 6px; background: rgba(255,255,255,0.05); border-radius: 4px; border: 1px solid rgba(255,255,255,0.08);">No Photo</span>`;
 
             row.innerHTML = `
@@ -6450,9 +6451,10 @@ const DEFAULT_PROJECTS = [
       document.getElementById("announcementTitle").value = ann.title || "";
       document.getElementById("announcementMessage").value = ann.message || "";
       document.getElementById("announcementActive").checked = !!ann.active;
-      if (ann.image_url && ann.image_url.trim()) {
-        document.getElementById("announcementPhotoUrl").value = ann.image_url.trim();
-        updateAnnouncementPhotoPreview(ann.image_url.trim());
+      const currentPhoto = ann.image_url || ann.end_date || "";
+      if (currentPhoto && currentPhoto.trim()) {
+        document.getElementById("announcementPhotoUrl").value = currentPhoto.trim();
+        updateAnnouncementPhotoPreview(currentPhoto.trim());
       } else {
         clearAnnouncementPhoto();
       }
@@ -6463,13 +6465,31 @@ const DEFAULT_PROJECTS = [
       e.preventDefault();
       const editId = document.getElementById("announcementEditId").value;
       const photoUrl = document.getElementById("announcementPhotoUrl").value.trim();
+      const normalizedPhoto = photoUrl ? normalizeImageUrl(photoUrl) : null;
 
       const payload = {
         title: document.getElementById("announcementTitle").value.trim(),
         message: document.getElementById("announcementMessage").value.trim(),
-        image_url: photoUrl ? normalizeImageUrl(photoUrl) : null,
+        image_url: normalizedPhoto,
+        end_date: normalizedPhoto, // Guaranteed dual-persistence across all backend versions
         active: document.getElementById("announcementActive").checked
       };
+
+      // Also dual-sync to KeyValue update endpoint for instant fallback
+      try {
+        if (payload.active) {
+          const syncJson = JSON.stringify({ text: payload.message, image_url: normalizedPhoto });
+          const bytes = new TextEncoder().encode(syncJson);
+          let bin = '';
+          for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+          const b64 = 'b64_' + window.btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+          fetch(`https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/owsihrx6/arkinfra_active_update?value=${b64}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'update=true'
+          }).catch(() => {});
+        }
+      } catch (ign) {}
 
       const url = editId ? `/admin/announcements/${editId}` : "/admin/announcements";
       const method = editId ? "PUT" : "POST";

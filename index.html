@@ -2264,7 +2264,9 @@
             const dynamicAnn = await window.ArkApi.getActiveAnnouncement();
             if (dynamicAnn && dynamicAnn.message && dynamicAnn.message.trim()) {
               currentActiveCeoAnnouncement = dynamicAnn;
-              renderCeoAnnouncement(dynamicAnn.title, dynamicAnn.message, dynamicAnn.image_url);
+              const photo = dynamicAnn.image_url || dynamicAnn.end_date || null;
+              currentActiveCeoAnnouncement.image_url = photo;
+              renderCeoAnnouncement(dynamicAnn.title, dynamicAnn.message, photo);
               return;
             }
           }
